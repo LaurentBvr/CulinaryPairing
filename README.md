@@ -34,7 +34,7 @@
 
 ### Ce qui rend ce projet unique
 
-| Autres sites | Notre approche |
+| Autres sites | Approche du projet |
 |--------------|----------------|
 | IA opaque | Comparaison règles vs IA, tu vois les deux |
 | Accords sans explication | Justification pédagogique systématique |
