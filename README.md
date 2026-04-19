@@ -1,11 +1,11 @@
-# 🍽️ CulinaryPairing - Plateforme d'aide à la décision culinaire
+# 🍽️ CulinaryPairing — Plateforme d'aide à la décision culinaire
 
-[![.NET](https://img.shields.io/badge/.NET-8.0-purple)](https://dotnet.microsoft.com/)
-[![Angular](https://img.shields.io/badge/Angular-17-red)](https://angular.io/)
-[![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-blue)](https://www.microsoft.com/sql-server)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet)
+![Angular](https://img.shields.io/badge/Angular-17-DD0031?logo=angular)
+![SQL Server](https://img.shields.io/badge/SQL_Server-LocalDB-CC2927?logo=microsoftsqlserver)
+![License](https://img.shields.io/badge/License-Academic-blue)
 
-> **Projet TFE** - Application web intelligente pour trouver des recettes personnalisées, découvrir les meilleurs accords mets-boissons, et adapter automatiquement les recettes en version végétarienne ou végane.
+**Projet TFE — Travail de Fin d'Études** — Application web intelligente qui aide à trouver des recettes personnalisées, découvrir les meilleurs accords mets-boissons (fondés sur 7 principes de sommellerie), et adapter automatiquement les recettes en version végétarienne ou végane.
 
 ---
 
@@ -13,11 +13,12 @@
 
 - [Présentation](#-présentation)
 - [Fonctionnalités](#-fonctionnalités)
-- [Technologies](#-technologies)
+- [Le moteur d'accords](#-le-moteur-daccords--le-cœur-du-projet)
+- [Technologies](#️-technologies)
 - [Installation](#-installation)
 - [Structure du projet](#-structure-du-projet)
 - [Documentation](#-documentation)
-- [Roadmap](#-roadmap)
+- [Roadmap](#️-roadmap)
 - [Auteur](#-auteur)
 
 ---
@@ -25,47 +26,52 @@
 ## 🎯 Présentation
 
 **CulinaryPairing** est une plateforme web qui aide les utilisateurs à :
-- Trouver des recettes adaptées à ce qu'ils ont chez eux (mode vide-frigo)
-- **Adapter automatiquement les recettes en version végé/végan** avec ratios et notes de cuisson
-- Découvrir les meilleurs accords mets-boissons avec des **explications claires**
-- Apprendre les bases des accords via un **quiz ludique**
-- Partir d'une bouteille de vin pour trouver quoi cuisiner (**accord inversé**)
-- Planifier une soirée complète avec menu et accords (**mode soirée**)
+
+- 🔍 **Trouver des recettes** adaptées à ce qu'ils ont chez eux (mode vide-frigo)
+- 🌱 **Adapter automatiquement les recettes** en version végé/végan avec ratios et notes de cuisson
+- 🍷 **Découvrir les meilleurs accords mets-boissons** avec des explications claires, fondées sur 7 principes de sommellerie
+- 🎓 **Apprendre les bases des accords** via un quiz ludique
+- 🔁 **Partir d'une bouteille de vin** pour trouver quoi cuisiner (accord inversé)
+- 🎉 **Planifier une soirée complète** avec menu et accords (mode soirée)
 
 ### Ce qui rend ce projet unique
 
-| Autres sites | Notre approche |
-|--------------|----------------|
-| IA opaque | Comparaison règles vs IA, tu vois les deux |
-| Accords sans explication | Justification pédagogique systématique |
-| Plat → boisson uniquement | Boisson → plat aussi (accord inversé) |
-| Recettes fixes | **Substitutions végé/végan automatiques** avec ratios |
-| Pas d'apprentissage | Quiz pour devenir autonome |
+| Autres plateformes | CulinaryPairing |
+|---|---|
+| IA opaque | Comparaison règles vs IA, avec visualisation des deux |
+| Accords sans explication | Justification pédagogique multi-critères systématique |
+| Plat → boisson uniquement | Boisson → plat également (accord inversé) |
+| Recettes fixes | Substitutions végé/végan automatiques avec ratios et notes |
+| Pas d'apprentissage | Quiz progressif pour devenir autonome en accords |
+| Moteur simple (if/else) | Moteur à **18 règles** et **score pondéré sur 100** avec niveau de confiance |
 
 ---
 
 ## ✨ Fonctionnalités
 
 ### Must Have (V1)
-- [x] Authentification (inscription/connexion)
+
+- [ ] Authentification (inscription/connexion JWT)
 - [ ] Recherche de recettes multi-critères
 - [ ] Fiches recettes avec adaptation des portions (fractions supportées)
-- [ ] **Substitutions végé/végan** avec ratios et notes de cuisson
-- [ ] Gestion des contraintes alimentaires
-- [ ] **Moteur de règles d'accords boissons** ⭐
-- [ ] Accords expliqués avec justifications
-- [ ] **Accord inversé** (boisson → recettes)
+- [ ] Substitutions végé/végan avec ratios et notes de cuisson
+- [ ] Gestion des contraintes alimentaires (allergies, régimes, convictions)
+- [ ] **Moteur de règles d'accords à 18 règles avec score pondéré** ⭐
+- [ ] Accords expliqués avec justifications multi-critères
+- [ ] Accord inversé (boisson → recettes)
 - [ ] Favoris et historique
 
 ### Should Have
+
 - [ ] Mode vide-frigo
-- [ ] **Estimation IA des caractéristiques gustatives**
+- [ ] Estimation IA des caractéristiques gustatives
 - [ ] Comparaison règle métier vs IA
-- [ ] **Mode Apprends** (quiz)
-- [ ] **Mode Soirée** (menu complet)
-- [ ] Interface Admin (modération, gestion données)
+- [ ] Mode Apprends (quiz)
+- [ ] Mode Soirée (menu complet)
+- [ ] Interface Admin (modération, gestion des données)
 
 ### Could Have
+
 - [ ] Mode budget avec estimation des coûts
 - [ ] Suggestions saisonnières
 - [ ] Export liste de courses (PDF)
@@ -73,28 +79,62 @@
 
 ---
 
+## 🍷 Le moteur d'accords — le cœur du projet
+
+Le moteur de recommandation d'accords mets-boissons repose sur **7 principes de sommellerie** formalisés et **18 règles** agrégées par un algorithme de score pondéré.
+
+### Les 7 principes
+
+1. **Intensité aromatique** — La boisson ne doit jamais écraser le plat, ni l'inverse.
+2. **Acidité** — L'acidité coupe le gras et doit être au moins équivalente à celle du plat.
+3. **Sucre** — Un dessert appelle une boisson au moins aussi sucrée ; le sucre apaise le piquant.
+4. **Tannins** — Affinité avec les protéines (viande rouge, fromages affinés) ; hostilité avec umami pur, poisson cru, œuf.
+5. **Degré d'alcool** — Un alcool élevé amplifie la brûlure du piquant et la salinité.
+6. **Profil aromatique** — Accords par similitude ou par contraste sur 14 familles aromatiques.
+7. **Préparation culinaire** — Le mode de cuisson et la sauce dominante influencent fortement l'accord.
+
+### Algorithme de score
+
+Pour chaque couple (recette, boisson), le moteur :
+
+1. Applique des **règles éliminatoires** (sans alcool, tannins hostiles, malus alcool > 20)
+2. Calcule un **malus gradué** pour la règle R16bis : `malus = max(0, (degré_alcool − 13) × niveau_épice / 10)`
+3. Évalue les **18 règles** pondérées (poids de 10 à 25)
+4. Normalise : `score = (poids_effectif / poids_max) × 100 − malus`
+5. Calcule le **niveau de confiance** : pourcentage de règles applicables au plat
+
+Le score final est affiché sous la forme : **« Score : 86/100 — basé sur 8 critères sur 12 (confiance 67 %) »**
+
+### Exemple : Risotto aux champignons + Chardonnay
+
+Le risotto a `affinite_tannins = hostile` (umami pur) et `type_sauce = beurre`. Le Chardonnay (niveau_tannins = 2, familles aromatiques = [beurre, boisé, fruits blancs]) satisfait 7 règles sur 8 applicables → **score 86/100**. Les règles R10bis (intensité équivalente), R12 (faibles tannins), R21bis (sauce beurre ↔ Chardonnay boisé) et R19bis (famille beurre partagée) sont déterminantes.
+
+---
+
 ## 🛠️ Technologies
 
 ### Backend
-- **ASP.NET Core 8.0** - Framework web
-- **Entity Framework Core** - ORM
-- **SQL Server** (LocalDB pour dev, SQL Server Express pour prod)
-- **JWT** - Authentification
-- **Swagger** - Documentation API
+- **ASP.NET Core 8.0** — Framework web
+- **Entity Framework Core** — ORM avec migrations
+- **SQL Server** — LocalDB (MSSQLLocalDB) en développement, Express en production
+- **JWT + ASP.NET Core Identity** — Authentification et gestion utilisateurs
+- **Swagger / OpenAPI** — Documentation de l'API
+- **Architecture N-Tier** — Séparation Controllers / Services / Data Access
 
 ### Frontend
-- **Angular 17** - Framework SPA
-- **TypeScript** - Langage
-- **Angular Material** / **Tailwind CSS** - UI
-- **RxJS** - Programmation réactive
+- **Angular 17** — Framework SPA
+- **TypeScript** — Langage
+- **Tailwind CSS** — Framework UI
+- **RxJS** — Programmation réactive
 
 ### Intelligence Artificielle
-- **API externe** (Claude, GPT, ou autre LLM)
-- Utilisée pour : estimation caractéristiques, suggestions, accords alternatifs
+- **API LLM externe** (Claude, GPT ou équivalent) — Appel HTTP/REST depuis le backend
+- **Utilisations** : estimation des caractéristiques gustatives (7 dimensions), identification des familles aromatiques, détection de `affinite_tannins` et `mode_cuisson`, génération de justifications enrichies, suggestions d'amélioration
+- **Fallback** : saisie manuelle toujours disponible ; mise en cache des estimations pour éviter les appels redondants
 
 ### DevOps
-- **Git** + **GitHub** - Versioning
-- **Visual Studio 2022** - IDE principal
+- **Git + GitHub** — Versioning et gestion de projet via issues
+- **VS Code** — IDE principal (C# Dev Kit + Angular Language Service)
 
 ---
 
@@ -102,41 +142,46 @@
 
 ### Prérequis
 
-- [Visual Studio 2022](https://visualstudio.microsoft.com/) avec workload ASP.NET
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/download)
-- [Node.js 18+](https://nodejs.org/)
-- [SQL Server LocalDB](https://docs.microsoft.com/sql/database-engine/configure-windows/sql-server-express-localdb) (inclus avec Visual Studio)
-- [Angular CLI](https://angular.io/cli) : `npm install -g @angular/cli`
+- **Visual Studio 2022** ou VS Code avec C# Dev Kit
+- **.NET 8.0 SDK** — [Télécharger](https://dotnet.microsoft.com/download/dotnet/8.0)
+- **Node.js 18+** et npm
+- **SQL Server LocalDB** (inclus avec Visual Studio ou [installable séparément](https://learn.microsoft.com/sql/database-engine/configure-windows/sql-server-express-localdb))
+- **Angular CLI** : `npm install -g @angular/cli`
+- **Entity Framework CLI** : `dotnet tool install --global dotnet-ef`
+
+### Cloner le projet
+
+```bash
+git clone https://github.com/LaurentBvr/CulinaryPairing.git
+cd CulinaryPairing
+```
 
 ### Backend
 
 ```bash
-# Cloner le repo
-git clone https://github.com/[TON_USERNAME]/tfe-culinary-pairing.git
-cd tfe-culinary-pairing
-
-# Aller dans le backend
 cd backend
 
 # Restaurer les packages
 dotnet restore
 
-# Configurer la connexion BDD (appsettings.json)
-# ConnectionString par défaut : "Server=(localdb)\\mssqllocaldb;Database=CulinaryPairing;Trusted_Connection=True;"
+# La chaîne de connexion par défaut pointe sur LocalDB
+# (voir appsettings.json) :
+# "Server=(localdb)\\MSSQLLocalDB;Database=CulinaryPairing;Trusted_Connection=True;"
 
-# Appliquer les migrations
+# Appliquer les migrations (crée la BDD et les 19 tables)
 dotnet ef database update
 
 # Lancer le serveur
 dotnet run
 ```
 
-Le backend tourne sur `https://localhost:5001`
+Le backend tourne sur **https://localhost:5001** (Swagger disponible sur `/swagger`).
 
 ### Frontend
 
+Dans un nouveau terminal :
+
 ```bash
-# Dans un nouveau terminal
 cd frontend
 
 # Installer les dépendances
@@ -146,120 +191,8 @@ npm install
 ng serve
 ```
 
-L'application est accessible sur `http://localhost:4200`
+L'application est accessible sur **http://localhost:4200**.
 
 ---
 
 ## 📁 Structure du projet
-
-```
-tfe-culinary-pairing/
-├── backend/
-│   ├── Controllers/          # Points d'entrée API
-│   │   ├── AuthController.cs
-│   │   ├── RecipesController.cs
-│   │   ├── PairingController.cs
-│   │   ├── SubstitutionController.cs  
-│   │   ├── QuizController.cs
-│   │   ├── PartyController.cs
-│   │   └── AdminController.cs         
-│   ├── Services/             # Logique métier
-│   │   ├── PairingEngine.cs           # Moteur de règles
-│   │   ├── SubstitutionService.cs     # ⭐ Gestion végé/végan
-│   │   ├── InversePairingService.cs
-│   │   ├── QuizService.cs
-│   │   ├── PartyService.cs
-│   │   └── AiService.cs
-│   ├── Models/               # Entités (17 tables)
-│   ├── DTOs/                 # Data Transfer Objects
-│   ├── Data/                 # DbContext + Migrations
-│   └── Program.cs
-│
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── components/   # Composants réutilisables
-│   │   │   ├── pages/        # Pages/écrans (11 écrans)
-│   │   │   ├── services/     # Services HTTP
-│   │   │   ├── models/       # Interfaces TypeScript
-│   │   │   └── guards/       # Auth guards + Admin guard
-│   │   └── assets/
-│   └── angular.json
-│
-├── docs/
-│   ├── cahier-des-charges-v1.pdf
-│   ├── diagramme-ea.png
-│   └── architecture.png
-│
-├── .gitignore
-└── README.md
-```
-
----
-
-## 📚 Documentation
-
-| Document | Description |
-|----------|-------------|
-| [Cahier des charges V1](docs/cahier-des-charges-v1.pdf) | Spécifications complètes |
-| [Diagramme E-A](docs/diagramme-ea.png) | Modèle de données (17 tables) |
-| [Architecture](docs/architecture.png) | Schéma technique |
-
-### API Endpoints (aperçu)
-
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| POST | `/api/auth/register` | Inscription |
-| POST | `/api/auth/login` | Connexion |
-| GET | `/api/recipes` | Liste des recettes |
-| GET | `/api/recipes/{id}` | Détail d'une recette |
-| GET | `/api/recipes/{id}/substitutions` | ⭐ Substitutions végé/végan |
-| GET | `/api/recipes/{id}/pairings` | Accords pour une recette |
-| GET | `/api/pairings/inverse/{beverageId}` | Accord inversé |
-| GET | `/api/quiz/questions` | Questions du quiz |
-| POST | `/api/party/generate` | Générer menu soirée |
-| GET | `/api/admin/ingredients` | ⭐ Admin - Liste ingrédients |
-| PUT | `/api/admin/ingredients/{id}/price` | ⭐ Admin - MAJ prix |
-
----
-
-## 🗓️ Roadmap
-
-| Semaine | Objectif | Status |
-|---------|----------|--------|
-| S1-S2 | Setup + Auth + BDD + Admin basique | 🔄 En cours |
-| S3-S4 | CRUD Recettes + Recherche | ⏳ À faire |
-| S5-S6 | **Substitutions végé/végan** + Vide-frigo | ⏳ À faire |
-| S7-S8 | Moteur de règles + Accords | ⏳ À faire |
-| S9 | Accord inversé | ⏳ À faire |
-| S10 | Intégration IA | ⏳ À faire |
-| S11 | Mode Apprends (Quiz) | ⏳ À faire |
-| S12-S13 | Mode Soirée | ⏳ À faire |
-| S14 | Tests + Polish | ⏳ À faire |
-
----
-
-## ⚠️ Avertissement
-
-> **L'abus d'alcool est dangereux pour la santé. À consommer avec modération.**
-
----
-
-## 👤 Auteur
-
-BIVER LAURENT
-
-- École : EPHEC
-- Année : 2025-2026
-- Projet : Travail de Fin d'Études (TFE)
-
----
-
-## 📄 License
-
-Ce projet est développé dans un cadre académique. Tous droits réservés.
----
-
-**Projet TFE 2025-2026**
-
-⚠️ *L'abus d'alcool est dangereux pour la santé. À consommer avec modération.*
