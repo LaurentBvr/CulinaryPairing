@@ -17,6 +17,7 @@ public enum NiveauCuisine
 {
     Debutant,
     Intermediaire,
+    Avance,
     Expert
 }
 

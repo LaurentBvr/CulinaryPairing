@@ -65,6 +65,13 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+// ===== Seed de la BDD au démarrage =====
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<CulinaryPairingDbContext>();
+    await CulinaryPairing.DAL.Seed.DbInitializer.SeedAsync(db);
+}
+
 // PIPELINE HTTP
 
 if (app.Environment.IsDevelopment())
