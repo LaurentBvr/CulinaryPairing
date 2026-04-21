@@ -51,21 +51,22 @@ public class AuthController : ControllerBase
     }
 
     // GET /api/auth/me (protégé — nécessite un JWT valide)
-    [HttpGet("me")]
-    [Authorize]
-    public IActionResult Me()
+   [HttpGet("me")]
+[Authorize]
+public IActionResult Me()
+{
+    var idUtilisateur = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    var nom = User.FindFirst(ClaimTypes.Name)?.Value;
+    var prenom = User.FindFirst("prenom")?.Value;
+    var email = User.FindFirst(ClaimTypes.Email)?.Value;
+    var role = User.FindFirst(ClaimTypes.Role)?.Value;
+    return Ok(new
     {
-        var idUtilisateur = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var nom = User.FindFirst(ClaimTypes.Name)?.Value;
-        var email = User.FindFirst(ClaimTypes.Email)?.Value;
-        var role = User.FindFirst(ClaimTypes.Role)?.Value;
-
-        return Ok(new
-        {
-            idUtilisateur,
-            nom,
-            email,
-            role
-        });
-    }
+        idUtilisateur,
+        prenom,
+        nom,
+        email,
+        role
+    });
+}
 }

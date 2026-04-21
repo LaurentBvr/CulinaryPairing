@@ -24,19 +24,17 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
     {
-        // 1. Vérifier que l'email n'est pas déjà utilisé
         var emailExists = await _context.Utilisateurs
             .AnyAsync(u => u.Email == dto.Email);
 
         if (emailExists)
             throw new InvalidOperationException("Cet email est déjà utilisé.");
 
-        // 2. Hasher le mot de passe avec BCrypt (salt auto généré, work factor par défaut = 11)
         var motDePasseHash = BCrypt.Net.BCrypt.HashPassword(dto.MotDePasse);
 
-        // 3. Créer l'utilisateur
         var utilisateur = new Utilisateur
         {
+            Prenom = dto.Prenom,
             Nom = dto.Nom,
             Email = dto.Email,
             MotDePasse = motDePasseHash,
@@ -50,32 +48,27 @@ public class AuthService : IAuthService
         _context.Utilisateurs.Add(utilisateur);
         await _context.SaveChangesAsync();
 
-        // 4. Générer le JWT et retourner la réponse
         return GenerateAuthResponse(utilisateur);
     }
 
     public async Task<AuthResponseDto?> LoginAsync(LoginDto dto)
     {
-        // 1. Trouver l'utilisateur par email
         var utilisateur = await _context.Utilisateurs
             .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
         if (utilisateur == null)
             return null;
 
-        // 2. Vérifier le mot de passe
         var motDePasseValide = BCrypt.Net.BCrypt.Verify(dto.MotDePasse, utilisateur.MotDePasse);
 
         if (!motDePasseValide)
             return null;
 
-        // 3. Générer le JWT
         return GenerateAuthResponse(utilisateur);
     }
 
     private AuthResponseDto GenerateAuthResponse(Utilisateur utilisateur)
     {
-        // Lire la config JWT
         var jwtKey = _configuration["Jwt:Key"]
             ?? throw new InvalidOperationException("Jwt:Key manquante dans la configuration.");
         var jwtIssuer = _configuration["Jwt:Issuer"]
@@ -84,18 +77,17 @@ public class AuthService : IAuthService
             ?? throw new InvalidOperationException("Jwt:Audience manquant.");
         var expirationHours = int.Parse(_configuration["Jwt:ExpirationHours"] ?? "24");
 
-        // Claims = infos stockées dans le token (décodables par le front, mais non modifiables sans la clé)
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, utilisateur.IdUtilisateur.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, utilisateur.Email),
             new Claim(ClaimTypes.NameIdentifier, utilisateur.IdUtilisateur.ToString()),
             new Claim(ClaimTypes.Name, utilisateur.Nom),
+            new Claim("prenom", utilisateur.Prenom),
             new Claim(ClaimTypes.Role, utilisateur.Role.ToString()),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // rend unique token ID
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        // Signature du token avec la clé secrète
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var expiration = DateTime.UtcNow.AddHours(expirationHours);
@@ -115,6 +107,7 @@ public class AuthService : IAuthService
             Token = tokenString,
             Expiration = expiration,
             IdUtilisateur = utilisateur.IdUtilisateur,
+            Prenom = utilisateur.Prenom,
             Nom = utilisateur.Nom,
             Email = utilisateur.Email,
             Role = utilisateur.Role.ToString()

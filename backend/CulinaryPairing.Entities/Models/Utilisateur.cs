@@ -17,6 +17,11 @@ public class Utilisateur
     public string Nom { get; set; } = null!;
 
     [Required]
+    [MaxLength(100)]
+    [Column("prenom")]
+    public string Prenom { get; set; } = null!;
+
+    [Required]
     [MaxLength(255)]
     [Column("email")]
     public string Email { get; set; } = null!;

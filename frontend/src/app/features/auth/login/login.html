@@ -1,0 +1,24 @@
+<div class="login-container">
+  <h2>Connexion</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div>
+      <label>Email</label>
+      <input type="email" formControlName="email" />
+      <span *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+        Email invalide
+      </span>
+    </div>
+    <div>
+      <label>Mot de passe</label>
+      <input type="password" formControlName="password" />
+      <span *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+        Minimum 6 caractères
+      </span>
+    </div>
+    <p *ngIf="error" class="error">{{ error }}</p>
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Connexion...' : 'Se connecter' }}
+    </button>
+    <p>Pas encore de compte ? <a routerLink="/register">S'inscrire</a></p>
+  </form>
+</div>

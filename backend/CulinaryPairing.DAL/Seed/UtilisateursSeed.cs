@@ -3,21 +3,18 @@ using CulinaryPairing.Entities.Models;
 
 namespace CulinaryPairing.DAL.Seed;
 
-// 4 comptes de test du CdC section 3.5.1.
-// Les passwords sont hashés à la volée avec BCrypt pour que les comptes
-// soient réellement utilisables (le CdC contient des faux hashes marqueurs).
 public static class UtilisateursSeed
 {
     public static async Task SeedAsync(CulinaryPairingDbContext context)
     {
-        // Idempotence : si déjà peuplé, on sort
         if (context.Utilisateurs.Any()) return;
 
         var utilisateurs = new List<Utilisateur>
         {
             new()
             {
-                Nom = "Admin",
+                Prenom = "Admin",
+                Nom = "Culinaire",
                 Email = "admin@culinaire.com",
                 MotDePasse = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
                 Role = RoleUtilisateur.Admin,
@@ -27,7 +24,8 @@ public static class UtilisateursSeed
             },
             new()
             {
-                Nom = "Marie Dupont",
+                Prenom = "Marie",
+                Nom = "Dupont",
                 Email = "marie@email.com",
                 MotDePasse = BCrypt.Net.BCrypt.HashPassword("Marie123!"),
                 Role = RoleUtilisateur.Utilisateur,
@@ -37,7 +35,8 @@ public static class UtilisateursSeed
             },
             new()
             {
-                Nom = "Thomas Martin",
+                Prenom = "Thomas",
+                Nom = "Martin",
                 Email = "thomas@email.com",
                 MotDePasse = BCrypt.Net.BCrypt.HashPassword("Thomas123!"),
                 Role = RoleUtilisateur.Utilisateur,
@@ -47,7 +46,8 @@ public static class UtilisateursSeed
             },
             new()
             {
-                Nom = "Sophie Bernard",
+                Prenom = "Sophie",
+                Nom = "Bernard",
                 Email = "sophie@email.com",
                 MotDePasse = BCrypt.Net.BCrypt.HashPassword("Sophie123!"),
                 Role = RoleUtilisateur.Utilisateur,
