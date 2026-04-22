@@ -1,0 +1,16 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <a routerLink="/dashboard">🍽️ CulinaryPairing</a>
+  </div>
+
+  <div class="navbar-menu">
+    <a routerLink="/recettes" routerLinkActive="active">Recettes</a>
+  </div>
+
+  <div class="navbar-user">
+    @if (auth.currentUser$ | async; as user) {
+      <span class="user-name">{{ user.prenom }} {{ user.nom }}</span>
+      <button (click)="auth.logout()">Déconnexion</button>
+    }
+  </div>
+</nav>

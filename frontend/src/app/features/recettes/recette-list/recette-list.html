@@ -1,0 +1,28 @@
+<div class="recette-list-container">
+  <h1>Recettes</h1>
+
+  @if (loading) {
+    <p class="loading">Chargement...</p>
+  }
+
+  @if (error) {
+    <p class="error">{{ error }}</p>
+  }
+
+  <div class="recettes-grid">
+    @for (recette of recettes; track recette.idRecette) {
+      <a class="recette-card" [routerLink]="['/recettes', recette.idRecette]">
+        <div class="card-header">
+          <span class="categorie">{{ recette.categorie }}</span>
+          <span class="difficulte">{{ recette.niveauDifficulte }}</span>
+        </div>
+        <h2>{{ recette.nom }}</h2>
+        <p>{{ recette.description }}</p>
+        <div class="card-footer">
+          <span>⏱ {{ recette.tempsPreparation + recette.tempsCuisson }} min</span>
+          <span>🍽 {{ recette.typeRepas }}</span>
+        </div>
+      </a>
+    }
+  </div>
+</div>

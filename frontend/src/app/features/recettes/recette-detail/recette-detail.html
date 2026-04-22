@@ -1,0 +1,27 @@
+<div class="recette-detail-container">
+  <a routerLink="/recettes" class="back-link">← Retour aux recettes</a>
+
+  @if (loading) {
+    <p class="loading">Chargement...</p>
+  }
+
+  @if (error) {
+    <p class="error">{{ error }}</p>
+  }
+
+  @if (recette) {
+    <div class="recette-header">
+      <div class="badges">
+        <span class="badge">{{ recette.categorie }}</span>
+        <span class="badge">{{ recette.niveauDifficulte }}</span>
+        <span class="badge">{{ recette.typeRepas }}</span>
+      </div>
+      <h1>{{ recette.nom }}</h1>
+      <p class="description">{{ recette.description }}</p>
+      <div class="meta">
+        <span>⏱ Préparation : {{ recette.tempsPreparation }} min</span>
+        <span>🔥 Cuisson : {{ recette.tempsCuisson }} min</span>
+      </div>
+    </div>
+  }
+</div>

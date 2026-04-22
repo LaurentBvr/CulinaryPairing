@@ -26,6 +26,9 @@ public class Recette
     [Column("temps_preparation")]
     public int? TempsPreparation { get; set; }
 
+    [Column("temps_cuisson")]
+    public int? TempsCuisson { get; set; }
+
     [Column("difficulte")]
     public Difficulte? Difficulte { get; set; }
 
