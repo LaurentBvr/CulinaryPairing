@@ -23,5 +23,26 @@
         <span>🔥 Cuisson : {{ recette.tempsCuisson }} min</span>
       </div>
     </div>
+
+    @if (accords.length > 0) {
+      <div class="accords-section">
+        <h2>🍷 Boissons recommandées</h2>
+        <div class="accords-list">
+          @for (accord of accords; track accord.idAccord) {
+            <div class="accord-card">
+              <div class="accord-header">
+                <span class="accord-boisson">{{ accord.nomBoisson }}</span>
+                <span class="accord-score">{{ accord.scoreCompatibilite }}/100</span>
+              </div>
+              <span class="accord-type">{{ accord.typeBoisson }}</span>
+              <p class="accord-justification">{{ accord.justification }}</p>
+              @if (accord.niveauConfiance) {
+                <span class="accord-confiance">Confiance : {{ accord.niveauConfiance }}%</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
   }
 </div>

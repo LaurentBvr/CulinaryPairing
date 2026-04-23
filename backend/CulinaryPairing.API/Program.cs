@@ -62,6 +62,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
+builder.Services.AddScoped<IAccordsService, AccordsService>();
 
 var app = builder.Build();
 
