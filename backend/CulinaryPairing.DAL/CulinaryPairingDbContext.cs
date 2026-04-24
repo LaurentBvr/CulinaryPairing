@@ -16,6 +16,7 @@ public class CulinaryPairingDbContext : DbContext
     // ===== Recettes & Ingrédients =====
     public DbSet<Recette> Recettes => Set<Recette>();
     public DbSet<Ingredient> Ingredients => Set<Ingredient>();
+    public DbSet<IngredientContrainte> IngredientsContraintes => Set<IngredientContrainte>();
     public DbSet<RecetteIngredient> RecettesIngredients => Set<RecetteIngredient>();
     public DbSet<Etape> Etapes => Set<Etape>();
     public DbSet<SubstitutionIngredient> SubstitutionsIngredients => Set<SubstitutionIngredient>();
@@ -42,6 +43,7 @@ public class CulinaryPairingDbContext : DbContext
     // ===== Favoris & Historique =====
     public DbSet<Favori> Favoris => Set<Favori>();
     public DbSet<HistoriqueConsultation> HistoriquesConsultations => Set<HistoriqueConsultation>();
+    public DbSet<FavoriMenu> FavorisMenus => Set<FavoriMenu>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,6 +61,7 @@ public class CulinaryPairingDbContext : DbContext
         modelBuilder.Entity<Recette>().Property(r => r.AffiniteTannins).HasConversion<string>().HasMaxLength(20);
         modelBuilder.Entity<Recette>().Property(r => r.ModeCuisson).HasConversion<string>().HasMaxLength(20);
         modelBuilder.Entity<Recette>().Property(r => r.TypeSauce).HasConversion<string>().HasMaxLength(20);
+        modelBuilder.Entity<Recette>().Property(r => r.Statut).HasConversion<string>().HasMaxLength(20);
 
         modelBuilder.Entity<SubstitutionIngredient>().Property(s => s.TypeSubstitution).HasConversion<string>().HasMaxLength(20);
 
@@ -81,15 +84,20 @@ public class CulinaryPairingDbContext : DbContext
 
         // ========== CLÉS COMPOSITES ==========
         modelBuilder.Entity<UtilisateurContrainte>().HasKey(uc => new { uc.IdUtilisateur, uc.IdContrainte });
+        modelBuilder.Entity<IngredientContrainte>().HasKey(ic => new { ic.IdIngredient, ic.IdContrainte });
         modelBuilder.Entity<RecetteIngredient>().HasKey(ri => new { ri.IdRecette, ri.IdIngredient });
         modelBuilder.Entity<RecetteFamilleAromatique>().HasKey(rf => new { rf.IdRecette, rf.IdFamille });
         modelBuilder.Entity<BoissonFamilleAromatique>().HasKey(bf => new { bf.IdBoisson, bf.IdFamille });
         modelBuilder.Entity<SoireeContrainte>().HasKey(sc => new { sc.IdSoiree, sc.IdContrainte });
         modelBuilder.Entity<Favori>().HasKey(f => new { f.IdUtilisateur, f.IdRecette });
+        modelBuilder.Entity<FavoriMenu>().HasKey(fm => new { fm.IdUtilisateur, fm.IdMenu });
 
         // ========== RELATIONS EXPLICITES (HasForeignKey → pas de shadow) ==========
 
         // ----- Utilisateur -----
+        modelBuilder.Entity<Utilisateur>()
+            .Property(u => u.EstActif)
+            .HasDefaultValue(true);
         modelBuilder.Entity<Recette>()
             .HasOne(r => r.Utilisateur)
             .WithMany(u => u.RecettesCreees)
@@ -144,6 +152,19 @@ public class CulinaryPairingDbContext : DbContext
             .HasForeignKey(s => s.IdIngredientSubstitut)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // ----- IngredientContrainte (M:N) -----
+        modelBuilder.Entity<IngredientContrainte>()
+            .HasOne(ic => ic.Ingredient)
+            .WithMany(i => i.Contraintes)
+            .HasForeignKey(ic => ic.IdIngredient)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<IngredientContrainte>()
+            .HasOne(ic => ic.Contrainte)
+            .WithMany(c => c.Ingredients)
+            .HasForeignKey(ic => ic.IdContrainte)
+            .OnDelete(DeleteBehavior.Cascade);
+
         // ----- Accord -----
         modelBuilder.Entity<Accord>()
             .HasOne(a => a.Recette)
@@ -156,6 +177,10 @@ public class CulinaryPairingDbContext : DbContext
             .WithMany(b => b.Accords)
             .HasForeignKey(a => a.IdBoisson)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<Accord>()
+            .HasIndex(a => new { a.IdRecette, a.IdBoisson, a.TypeAccord })
+            .IsUnique();
 
         // ----- Familles aromatiques (M:N) -----
         modelBuilder.Entity<RecetteFamilleAromatique>()
@@ -274,6 +299,19 @@ public class CulinaryPairingDbContext : DbContext
             .HasOne(f => f.Recette)
             .WithMany(r => r.Favoris)
             .HasForeignKey(f => f.IdRecette)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // ----- FavoriMenu -----
+        modelBuilder.Entity<FavoriMenu>()
+            .HasOne(fm => fm.Utilisateur)
+            .WithMany(u => u.FavorisMenus)
+            .HasForeignKey(fm => fm.IdUtilisateur)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<FavoriMenu>()
+            .HasOne(fm => fm.Menu)
+            .WithMany(m => m.Favoris)
+            .HasForeignKey(fm => fm.IdMenu)
             .OnDelete(DeleteBehavior.Cascade);
 
         // ----- HistoriqueConsultation -----

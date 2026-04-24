@@ -4,6 +4,7 @@ using CulinaryPairing.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CulinaryPairing.DAL.Migrations
 {
     [DbContext(typeof(CulinaryPairingDbContext))]
-    partial class CulinaryPairingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260424061121_AddMissingCheckConstraints")]
+    partial class AddMissingCheckConstraints
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,10 +33,6 @@ namespace CulinaryPairing.DAL.Migrations
                         .HasColumnName("id_accord");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdAccord"));
-
-                    b.Property<DateTime>("DateCalcul")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_calcul");
 
                     b.Property<int>("IdBoisson")
                         .HasColumnType("int")
@@ -69,19 +68,11 @@ namespace CulinaryPairing.DAL.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("type_accord");
 
-                    b.Property<string>("VersionMoteur")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnName("version_moteur");
-
                     b.HasKey("IdAccord");
 
                     b.HasIndex("IdBoisson");
 
-                    b.HasIndex("IdRecette", "IdBoisson", "TypeAccord")
-                        .IsUnique()
-                        .HasFilter("[type_accord] IS NOT NULL");
+                    b.HasIndex("IdRecette");
 
                     b.ToTable("ACCORD");
                 });
@@ -99,16 +90,6 @@ namespace CulinaryPairing.DAL.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("alcoolise");
 
-                    b.Property<string>("Appellation")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("appellation");
-
-                    b.Property<string>("Cepage")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("cepage");
-
                     b.Property<string>("Corps")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)")
@@ -117,10 +98,6 @@ namespace CulinaryPairing.DAL.Migrations
                     b.Property<decimal?>("CoutMoyen")
                         .HasColumnType("decimal(8,2)")
                         .HasColumnName("cout_moyen");
-
-                    b.Property<DateTime?>("DateModification")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_modification");
 
                     b.Property<decimal?>("DegreAlcool")
                         .HasColumnType("decimal(4,1)")
@@ -155,16 +132,6 @@ namespace CulinaryPairing.DAL.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("nom");
-
-                    b.Property<string>("Pays")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("pays");
-
-                    b.Property<string>("Region")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("region");
 
                     b.Property<int?>("TemperatureOptimale")
                         .HasColumnType("int")
@@ -309,27 +276,6 @@ namespace CulinaryPairing.DAL.Migrations
                     b.ToTable("FAVORI");
                 });
 
-            modelBuilder.Entity("CulinaryPairing.Entities.Models.FavoriMenu", b =>
-                {
-                    b.Property<int>("IdUtilisateur")
-                        .HasColumnType("int")
-                        .HasColumnName("id_utilisateur");
-
-                    b.Property<int>("IdMenu")
-                        .HasColumnType("int")
-                        .HasColumnName("id_menu");
-
-                    b.Property<DateTime>("DateAjout")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_ajout");
-
-                    b.HasKey("IdUtilisateur", "IdMenu");
-
-                    b.HasIndex("IdMenu");
-
-                    b.ToTable("FAVORI_MENU");
-                });
-
             modelBuilder.Entity("CulinaryPairing.Entities.Models.HistoriqueConsultation", b =>
                 {
                     b.Property<int>("IdHistorique")
@@ -415,23 +361,6 @@ namespace CulinaryPairing.DAL.Migrations
                         .IsUnique();
 
                     b.ToTable("INGREDIENT");
-                });
-
-            modelBuilder.Entity("CulinaryPairing.Entities.Models.IngredientContrainte", b =>
-                {
-                    b.Property<int>("IdIngredient")
-                        .HasColumnType("int")
-                        .HasColumnName("id_ingredient");
-
-                    b.Property<int>("IdContrainte")
-                        .HasColumnType("int")
-                        .HasColumnName("id_contrainte");
-
-                    b.HasKey("IdIngredient", "IdContrainte");
-
-                    b.HasIndex("IdContrainte");
-
-                    b.ToTable("INGREDIENT_CONTRAINTE");
                 });
 
             modelBuilder.Entity("CulinaryPairing.Entities.Models.MenuSoiree", b =>
@@ -573,10 +502,6 @@ namespace CulinaryPairing.DAL.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("date_creation");
 
-                    b.Property<DateTime?>("DateModification")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_modification");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("description");
@@ -585,6 +510,10 @@ namespace CulinaryPairing.DAL.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)")
                         .HasColumnName("difficulte");
+
+                    b.Property<bool>("EstPubliee")
+                        .HasColumnType("bit")
+                        .HasColumnName("est_publiee");
 
                     b.Property<int?>("IdUtilisateur")
                         .HasColumnType("int")
@@ -640,12 +569,6 @@ namespace CulinaryPairing.DAL.Migrations
                     b.Property<bool>("PreparableAvance")
                         .HasColumnType("bit")
                         .HasColumnName("preparable_avance");
-
-                    b.Property<string>("Statut")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasColumnName("statut");
 
                     b.Property<int?>("TempsCuisson")
                         .HasColumnType("int")
@@ -920,12 +843,6 @@ namespace CulinaryPairing.DAL.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("email");
 
-                    b.Property<bool>("EstActif")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true)
-                        .HasColumnName("est_actif");
-
                     b.Property<string>("MotDePasse")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -1059,25 +976,6 @@ namespace CulinaryPairing.DAL.Migrations
                     b.Navigation("Utilisateur");
                 });
 
-            modelBuilder.Entity("CulinaryPairing.Entities.Models.FavoriMenu", b =>
-                {
-                    b.HasOne("CulinaryPairing.Entities.Models.MenuSoiree", "Menu")
-                        .WithMany("Favoris")
-                        .HasForeignKey("IdMenu")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CulinaryPairing.Entities.Models.Utilisateur", "Utilisateur")
-                        .WithMany("FavorisMenus")
-                        .HasForeignKey("IdUtilisateur")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Menu");
-
-                    b.Navigation("Utilisateur");
-                });
-
             modelBuilder.Entity("CulinaryPairing.Entities.Models.HistoriqueConsultation", b =>
                 {
                     b.HasOne("CulinaryPairing.Entities.Models.Recette", "Recette")
@@ -1095,25 +993,6 @@ namespace CulinaryPairing.DAL.Migrations
                     b.Navigation("Recette");
 
                     b.Navigation("Utilisateur");
-                });
-
-            modelBuilder.Entity("CulinaryPairing.Entities.Models.IngredientContrainte", b =>
-                {
-                    b.HasOne("CulinaryPairing.Entities.Models.ContrainteAlimentaire", "Contrainte")
-                        .WithMany("Ingredients")
-                        .HasForeignKey("IdContrainte")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CulinaryPairing.Entities.Models.Ingredient", "Ingredient")
-                        .WithMany("Contraintes")
-                        .HasForeignKey("IdIngredient")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Contrainte");
-
-                    b.Navigation("Ingredient");
                 });
 
             modelBuilder.Entity("CulinaryPairing.Entities.Models.MenuSoiree", b =>
@@ -1326,8 +1205,6 @@ namespace CulinaryPairing.DAL.Migrations
 
             modelBuilder.Entity("CulinaryPairing.Entities.Models.ContrainteAlimentaire", b =>
                 {
-                    b.Navigation("Ingredients");
-
                     b.Navigation("Soirees");
 
                     b.Navigation("Utilisateurs");
@@ -1342,18 +1219,11 @@ namespace CulinaryPairing.DAL.Migrations
 
             modelBuilder.Entity("CulinaryPairing.Entities.Models.Ingredient", b =>
                 {
-                    b.Navigation("Contraintes");
-
                     b.Navigation("Recettes");
 
                     b.Navigation("SubstitutionsOriginales");
 
                     b.Navigation("SubstitutionsSubstituts");
-                });
-
-            modelBuilder.Entity("CulinaryPairing.Entities.Models.MenuSoiree", b =>
-                {
-                    b.Navigation("Favoris");
                 });
 
             modelBuilder.Entity("CulinaryPairing.Entities.Models.QuestionQuiz", b =>
@@ -1388,8 +1258,6 @@ namespace CulinaryPairing.DAL.Migrations
                     b.Navigation("Contraintes");
 
                     b.Navigation("Favoris");
-
-                    b.Navigation("FavorisMenus");
 
                     b.Navigation("Historique");
 

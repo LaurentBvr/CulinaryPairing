@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CulinaryPairing.DAL;
+using CulinaryPairing.Entities.Enums;
 
 namespace CulinaryPairing.API.Controllers;
 
@@ -21,7 +22,7 @@ public class RecettesController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var recettes = await _context.Recettes
-            .Where(r => r.EstPubliee == true)
+            .Where(r => r.Statut == StatutRecette.Publiee)
             .Select(r => new
             {
                 r.IdRecette,
@@ -43,7 +44,7 @@ public class RecettesController : ControllerBase
     public async Task<IActionResult> GetById(int id)
     {
         var recette = await _context.Recettes
-            .Where(r => r.IdRecette == id && r.EstPubliee == true)
+            .Where(r => r.IdRecette == id && r.Statut == StatutRecette.Publiee)
             .Select(r => new
             {
                 r.IdRecette,

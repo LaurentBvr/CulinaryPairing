@@ -57,6 +57,25 @@ public class Boisson
     [Column("cout_moyen", TypeName = "decimal(8,2)")]
     public decimal? CoutMoyen { get; set; }
 
+    [Column("date_modification")]
+    public DateTime? DateModification { get; set; }
+
+    [MaxLength(50)]
+    [Column("pays")]
+    public string? Pays { get; set; }
+
+    [MaxLength(100)]
+    [Column("region")]
+    public string? Region { get; set; }
+
+    [MaxLength(100)]
+    [Column("appellation")]
+    public string? Appellation { get; set; }
+
+    [MaxLength(100)]
+    [Column("cepage")]
+    public string? Cepage { get; set; }
+
     // Relations
     public ICollection<Accord> Accords { get; set; } = new List<Accord>();
     public ICollection<BoissonFamilleAromatique> FamillesAromatiques { get; set; } = new List<BoissonFamilleAromatique>();

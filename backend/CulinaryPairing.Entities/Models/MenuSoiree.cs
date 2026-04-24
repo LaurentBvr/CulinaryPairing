@@ -43,4 +43,7 @@ public class MenuSoiree
 
     [Column("temps_total_estime")]
     public int? TempsTotalEstime { get; set; }
+
+    // Relations
+    public ICollection<FavoriMenu> Favoris { get; set; } = new List<FavoriMenu>();
 }

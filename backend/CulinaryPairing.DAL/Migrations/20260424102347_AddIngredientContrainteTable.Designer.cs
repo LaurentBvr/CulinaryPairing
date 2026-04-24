@@ -4,6 +4,7 @@ using CulinaryPairing.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CulinaryPairing.DAL.Migrations
 {
     [DbContext(typeof(CulinaryPairingDbContext))]
-    partial class CulinaryPairingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260424102347_AddIngredientContrainteTable")]
+    partial class AddIngredientContrainteTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -307,27 +310,6 @@ namespace CulinaryPairing.DAL.Migrations
                     b.HasIndex("IdRecette");
 
                     b.ToTable("FAVORI");
-                });
-
-            modelBuilder.Entity("CulinaryPairing.Entities.Models.FavoriMenu", b =>
-                {
-                    b.Property<int>("IdUtilisateur")
-                        .HasColumnType("int")
-                        .HasColumnName("id_utilisateur");
-
-                    b.Property<int>("IdMenu")
-                        .HasColumnType("int")
-                        .HasColumnName("id_menu");
-
-                    b.Property<DateTime>("DateAjout")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_ajout");
-
-                    b.HasKey("IdUtilisateur", "IdMenu");
-
-                    b.HasIndex("IdMenu");
-
-                    b.ToTable("FAVORI_MENU");
                 });
 
             modelBuilder.Entity("CulinaryPairing.Entities.Models.HistoriqueConsultation", b =>
@@ -1059,25 +1041,6 @@ namespace CulinaryPairing.DAL.Migrations
                     b.Navigation("Utilisateur");
                 });
 
-            modelBuilder.Entity("CulinaryPairing.Entities.Models.FavoriMenu", b =>
-                {
-                    b.HasOne("CulinaryPairing.Entities.Models.MenuSoiree", "Menu")
-                        .WithMany("Favoris")
-                        .HasForeignKey("IdMenu")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CulinaryPairing.Entities.Models.Utilisateur", "Utilisateur")
-                        .WithMany("FavorisMenus")
-                        .HasForeignKey("IdUtilisateur")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Menu");
-
-                    b.Navigation("Utilisateur");
-                });
-
             modelBuilder.Entity("CulinaryPairing.Entities.Models.HistoriqueConsultation", b =>
                 {
                     b.HasOne("CulinaryPairing.Entities.Models.Recette", "Recette")
@@ -1351,11 +1314,6 @@ namespace CulinaryPairing.DAL.Migrations
                     b.Navigation("SubstitutionsSubstituts");
                 });
 
-            modelBuilder.Entity("CulinaryPairing.Entities.Models.MenuSoiree", b =>
-                {
-                    b.Navigation("Favoris");
-                });
-
             modelBuilder.Entity("CulinaryPairing.Entities.Models.QuestionQuiz", b =>
                 {
                     b.Navigation("Reponses");
@@ -1388,8 +1346,6 @@ namespace CulinaryPairing.DAL.Migrations
                     b.Navigation("Contraintes");
 
                     b.Navigation("Favoris");
-
-                    b.Navigation("FavorisMenus");
 
                     b.Navigation("Historique");
 

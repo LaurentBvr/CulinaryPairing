@@ -26,7 +26,7 @@ public static class RecettesSeed
                 ContientUmamiPur = false, ContientFume = false,
                 AffiniteTannins = AffiniteTannins.Friendly,
                 ModeCuisson = ModeCuisson.Mijote, TypeSauce = TypeSauce.Vin,
-                EstPubliee = true, AdaptableVege = true, AdaptableVegan = true,
+                Statut = StatutRecette.Publiee, AdaptableVege = true, AdaptableVegan = true,
                 CoutEstime = 35.00m, IdUtilisateur = 1
             },
 
@@ -41,7 +41,7 @@ public static class RecettesSeed
                 ContientUmamiPur = true, ContientFume = false,
                 AffiniteTannins = AffiniteTannins.Hostile,  // umami pur + parmesan
                 ModeCuisson = ModeCuisson.Mijote, TypeSauce = TypeSauce.Beurre,
-                EstPubliee = true, AdaptableVege = true, AdaptableVegan = true,
+                Statut = StatutRecette.Publiee, AdaptableVege = true, AdaptableVegan = true,
                 CoutEstime = 15.00m, IdUtilisateur = 1
             },
 
@@ -56,7 +56,7 @@ public static class RecettesSeed
                 ContientUmamiPur = true, ContientFume = false,
                 AffiniteTannins = AffiniteTannins.Hostile,  // œuf cru dans sauce + parmesan
                 ModeCuisson = ModeCuisson.Cru, TypeSauce = TypeSauce.Creme,
-                EstPubliee = true, AdaptableVege = true, AdaptableVegan = true,
+                Statut = StatutRecette.Publiee, AdaptableVege = true, AdaptableVegan = true,
                 CoutEstime = 10.00m, IdUtilisateur = 2
             },
 
@@ -68,7 +68,7 @@ public static class RecettesSeed
                 NombrePersonnesBase = 4,
                 NiveauGras = 4, NiveauAcidite = 2, NiveauPiquant = 0, NiveauUmami = 3,
                 // Pas d'UPDATE V1.2 dans le CdC pour cette recette : on laisse les défauts du schéma
-                EstPubliee = true, AdaptableVege = true, AdaptableVegan = true,
+                Statut = StatutRecette.Publiee, AdaptableVege = true, AdaptableVegan = true,
                 CoutEstime = 8.00m, IdUtilisateur = 1
             },
 
@@ -83,7 +83,7 @@ public static class RecettesSeed
                 ContientUmamiPur = false, ContientFume = false,
                 AffiniteTannins = AffiniteTannins.Neutre,
                 ModeCuisson = ModeCuisson.Roti, TypeSauce = TypeSauce.Jus,
-                EstPubliee = true, AdaptableVege = true, AdaptableVegan = true,
+                Statut = StatutRecette.Publiee, AdaptableVege = true, AdaptableVegan = true,
                 CoutEstime = 18.00m, IdUtilisateur = 2
             },
 
@@ -98,7 +98,7 @@ public static class RecettesSeed
                 ContientUmamiPur = false, ContientFume = false,
                 AffiniteTannins = AffiniteTannins.Neutre,
                 ModeCuisson = ModeCuisson.Cru, TypeSauce = TypeSauce.Sans,
-                EstPubliee = true, AdaptableVege = true, AdaptableVegan = false,  // contient crème + gélatine
+                Statut = StatutRecette.Publiee, AdaptableVege = true, AdaptableVegan = false,  // contient crème + gélatine
                 CoutEstime = 12.00m, IdUtilisateur = 1
             }
         };

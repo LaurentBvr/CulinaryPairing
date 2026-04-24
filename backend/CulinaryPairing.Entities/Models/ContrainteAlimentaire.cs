@@ -23,4 +23,5 @@ public class ContrainteAlimentaire
     // Relations
     public ICollection<UtilisateurContrainte> Utilisateurs { get; set; } = new List<UtilisateurContrainte>();
     public ICollection<SoireeContrainte> Soirees { get; set; } = new List<SoireeContrainte>();
+    public ICollection<IngredientContrainte> Ingredients { get; set; } = new List<IngredientContrainte>();
 }

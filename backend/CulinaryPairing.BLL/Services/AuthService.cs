@@ -53,18 +53,21 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponseDto?> LoginAsync(LoginDto dto)
     {
-        var utilisateur = await _context.Utilisateurs
-            .FirstOrDefaultAsync(u => u.Email == dto.Email);
+    var utilisateur = await _context.Utilisateurs
+        .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
-        if (utilisateur == null)
-            return null;
+    if (utilisateur == null)
+        return null;
 
-        var motDePasseValide = BCrypt.Net.BCrypt.Verify(dto.MotDePasse, utilisateur.MotDePasse);
+    var motDePasseValide = BCrypt.Net.BCrypt.Verify(dto.MotDePasse, utilisateur.MotDePasse);
 
-        if (!motDePasseValide)
-            return null;
+    if (!motDePasseValide)
+        return null;
 
-        return GenerateAuthResponse(utilisateur);
+    if (!utilisateur.EstActif)
+        throw new UnauthorizedAccessException("Ce compte a été désactivé.");
+
+    return GenerateAuthResponse(utilisateur);
     }
 
     private AuthResponseDto GenerateAuthResponse(Utilisateur utilisateur)

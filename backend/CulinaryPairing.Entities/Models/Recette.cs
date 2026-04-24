@@ -80,8 +80,9 @@ public class Recette
     [Column("type_sauce")]
     public TypeSauce? TypeSauce { get; set; }
 
-    [Column("est_publiee")]
-    public bool EstPubliee { get; set; } = false;
+    [Column("statut")]  
+    [MaxLength(20)]
+    public StatutRecette Statut { get; set; } = StatutRecette.Brouillon;
 
     [Column("adaptable_vege")]
     public bool AdaptableVege { get; set; } = false;
@@ -100,6 +101,9 @@ public class Recette
 
     [Column("date_creation")]
     public DateTime DateCreation { get; set; } = DateTime.UtcNow;
+
+    [Column("date_modification")]
+    public DateTime? DateModification { get; set; }
 
     [Column("id_utilisateur")]
     public int? IdUtilisateur { get; set; }

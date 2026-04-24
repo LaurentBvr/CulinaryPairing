@@ -30,6 +30,13 @@ public class Accord
     [Column("malus_applique")]
     public int? MalusApplique { get; set; }
 
+    [Column("date_calcul")]
+    public DateTime DateCalcul { get; set; } = DateTime.UtcNow;
+
+    [MaxLength(10)]
+    [Column("version_moteur")]
+    public string VersionMoteur { get; set; } = "1.2";
+
     [Column("id_recette")]
     public int IdRecette { get; set; }
     public Recette Recette { get; set; } = null!;

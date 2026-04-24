@@ -45,4 +45,5 @@ public class Ingredient
     public ICollection<RecetteIngredient> Recettes { get; set; } = new List<RecetteIngredient>();
     public ICollection<SubstitutionIngredient> SubstitutionsOriginales { get; set; } = new List<SubstitutionIngredient>();
     public ICollection<SubstitutionIngredient> SubstitutionsSubstituts { get; set; } = new List<SubstitutionIngredient>();
+    public ICollection<IngredientContrainte> Contraintes { get; set; } = new List<IngredientContrainte>();
 }

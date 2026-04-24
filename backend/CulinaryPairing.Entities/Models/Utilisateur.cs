@@ -43,6 +43,9 @@ public class Utilisateur
     [Column("niveau_cuisine")]
     public NiveauCuisine NiveauCuisine { get; set; } = NiveauCuisine.Debutant;
 
+    [Column("est_actif")]
+    public bool EstActif { get; set; } = true;
+
     [Column("date_creation")]
     public DateTime DateCreation { get; set; } = DateTime.UtcNow;
 
@@ -53,4 +56,5 @@ public class Utilisateur
     public ICollection<HistoriqueConsultation> Historique { get; set; } = new List<HistoriqueConsultation>();
     public ICollection<ScoreQuiz> Scores { get; set; } = new List<ScoreQuiz>();
     public ICollection<Soiree> Soirees { get; set; } = new List<Soiree>();
+    public ICollection<FavoriMenu> FavorisMenus { get; set; } = new List<FavoriMenu>();
 }
