@@ -36,8 +36,25 @@
               </div>
               <span class="accord-type">{{ accord.typeBoisson }}</span>
               <p class="accord-justification">{{ accord.justification }}</p>
-              @if (accord.niveauConfiance) {
-                <span class="accord-confiance">Confiance : {{ accord.niveauConfiance }}%</span>
+
+              <div class="accord-meta">
+                @if (accord.niveauConfiance !== null) {
+                  <span class="accord-confiance" [title]="'Score basé sur ' + accord.niveauConfiance + '% des règles applicables'">
+                      Fiabilité : {{ labelConfiance(accord.niveauConfiance) }}
+                  </span>
+                }
+                @if (accord.malusApplique && accord.malusApplique > 0) {
+                  <span class="accord-malus">Malus : −{{ accord.malusApplique }}</span>
+                }
+              </div>
+
+              @if (splitRegles(accord.reglesSatisfaites).length > 0) {
+                <div class="accord-regles">
+                  <span class="regles-label">Règles :</span>
+                  @for (r of splitRegles(accord.reglesSatisfaites); track r) {
+                    <span class="regle-badge">{{ r }}</span>
+                  }
+                </div>
               }
             </div>
           }

@@ -35,4 +35,20 @@ export class RecetteDetail implements OnInit {
       error: () => { this.error = 'Recette introuvable.'; this.loading = false; }
     });
   }
+
+  /** Convertit "R10bis,R10,R14bis" en tableau pour affichage en badges. */
+  splitRegles(regles: string | null): string[] {
+    if (!regles) return [];
+    return regles.split(',').map(r => r.trim()).filter(r => r.length > 0);
+  }
+
+ /** Mappe la confiance numérique en label lisible pour l'utilisateur. */
+  labelConfiance(c: number | null): string {
+    if (c === null) return '';
+    if (c >= 60) return 'Élevée';
+    if (c >= 35) return 'Bonne';
+    if (c >= 20) return 'Modérée';
+    return 'Faible';
+  }
+
 }

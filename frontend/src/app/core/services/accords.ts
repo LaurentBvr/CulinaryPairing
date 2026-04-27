@@ -9,6 +9,9 @@ export interface Accord {
   scoreCompatibilite: number;
   niveauConfiance: number | null;
   malusApplique: number | null;
+  reglesSatisfaites: string | null;   // V1.3 : "R10bis,R10,R14bis,..."
+  dateCalcul: string;                  // V1.3
+  versionMoteur: string;               // V1.3
   nomBoisson: string;
   typeBoisson: string;
 }

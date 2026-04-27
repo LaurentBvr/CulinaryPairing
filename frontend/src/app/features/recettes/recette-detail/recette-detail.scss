@@ -56,3 +56,42 @@
     color: #888;
   }
 }
+
+// === V1.3 - Affichage moteur d'accords (confiance, malus, règles) ===
+.accord-meta {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.accord-malus {
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.accord-regles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.regles-label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-right: 0.25rem;
+}
+
+.regle-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  background: #eef4fb;
+  color: #2c5282;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
