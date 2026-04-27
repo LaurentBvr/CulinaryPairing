@@ -9,6 +9,11 @@ public class AccordDto
     public int? NiveauConfiance { get; set; }
     public int? MalusApplique { get; set; }
     public string? ReglesSatisfaites { get; set; }
+
+    // V1.3 — traçabilité et invalidation cache
+    public DateTime DateCalcul { get; set; }
+    public string VersionMoteur { get; set; } = "1.3";
+
     public int IdBoisson { get; set; }
     public string? NomBoisson { get; set; }
     public string? TypeBoisson { get; set; }
