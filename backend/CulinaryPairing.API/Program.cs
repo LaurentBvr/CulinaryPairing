@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using CulinaryPairing.BLL.PairingEngine;
 using CulinaryPairing.BLL.PairingEngine.Rules;
+using CulinaryPairing.BLL.VideFrigo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,8 +70,6 @@ builder.Services.AddScoped<IPairingRule, R22bis_Amertume>();
 builder.Services.AddScoped<IPairingRule, R19bis_SimilitudeAromatique>();
 builder.Services.AddScoped<IPairingRule, R23bis_SelTannins>();
 builder.Services.AddScoped<IPairingRule, R25bis_AromesEpices>();
-// TODO étape 7 : ajouter les 12 règles restantes (R11, R11bis, R12, R13, R13bis,
-//                R19bis, R20bis, R21bis, R22bis, R23bis, R24bis, R25bis)
 
 // ----- CORS (autoriser Angular à appeler l'API) -----
 builder.Services.AddCors(options =>
@@ -88,6 +87,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IAccordsService, AccordsService>();
+builder.Services.AddScoped<VideFrigoService>();
 
 var app = builder.Build();
 

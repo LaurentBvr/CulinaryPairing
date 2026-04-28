@@ -24,5 +24,9 @@ export const routes: Routes = [
     path: 'recettes/:id',
     loadComponent: () => import('./features/recettes/recette-detail/recette-detail').then(m => m.RecetteDetail),
   },
+  {
+  path: 'vide-frigo',
+  loadComponent: () => import('./vide-frigo/vide-frigo').then(m => m.VideFrigo)
+  },
   { path: '**', redirectTo: 'login' }
 ];

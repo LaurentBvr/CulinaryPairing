@@ -1,0 +1,564 @@
+Structure du dossier pour le volume Windows-SSD
+Le numéro de série du volume est 22DF-91AB
+C:.
+|   CulinaryPairing.sln
+|   tree.txt
+|   
++---CulinaryPairing.API
+|   |   appsettings.Development.json
+|   |   appsettings.json
+|   |   CulinaryPairing.API.csproj
+|   |   CulinaryPairing.API.http
+|   |   Program.cs
+|   |   
+|   +---bin
+|   |   \---Debug
+|   |       \---net10.0
+|   |           |   appsettings.Development.json
+|   |           |   appsettings.json
+|   |           |   Azure.Core.dll
+|   |           |   Azure.Identity.dll
+|   |           |   BCrypt.Net-Next.dll
+|   |           |   CulinaryPairing.API.deps.json
+|   |           |   CulinaryPairing.API.dll
+|   |           |   CulinaryPairing.API.exe
+|   |           |   CulinaryPairing.API.pdb
+|   |           |   CulinaryPairing.API.runtimeconfig.json
+|   |           |   CulinaryPairing.API.staticwebassets.endpoints.json
+|   |           |   CulinaryPairing.BLL.dll
+|   |           |   CulinaryPairing.BLL.pdb
+|   |           |   CulinaryPairing.DAL.dll
+|   |           |   CulinaryPairing.DAL.pdb
+|   |           |   CulinaryPairing.Entities.dll
+|   |           |   CulinaryPairing.Entities.pdb
+|   |           |   Humanizer.dll
+|   |           |   Microsoft.AspNetCore.Authentication.JwtBearer.dll
+|   |           |   Microsoft.AspNetCore.OpenApi.dll
+|   |           |   Microsoft.Bcl.AsyncInterfaces.dll
+|   |           |   Microsoft.Bcl.Cryptography.dll
+|   |           |   Microsoft.Build.Framework.dll
+|   |           |   Microsoft.CodeAnalysis.CSharp.dll
+|   |           |   Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+|   |           |   Microsoft.CodeAnalysis.dll
+|   |           |   Microsoft.CodeAnalysis.ExternalAccess.RazorCompiler.dll
+|   |           |   Microsoft.CodeAnalysis.Workspaces.dll
+|   |           |   Microsoft.CodeAnalysis.Workspaces.MSBuild.dll
+|   |           |   Microsoft.Data.SqlClient.dll
+|   |           |   Microsoft.EntityFrameworkCore.Abstractions.dll
+|   |           |   Microsoft.EntityFrameworkCore.Design.dll
+|   |           |   Microsoft.EntityFrameworkCore.dll
+|   |           |   Microsoft.EntityFrameworkCore.Relational.dll
+|   |           |   Microsoft.EntityFrameworkCore.SqlServer.dll
+|   |           |   Microsoft.Extensions.DependencyModel.dll
+|   |           |   Microsoft.Identity.Client.dll
+|   |           |   Microsoft.Identity.Client.Extensions.Msal.dll
+|   |           |   Microsoft.IdentityModel.Abstractions.dll
+|   |           |   Microsoft.IdentityModel.JsonWebTokens.dll
+|   |           |   Microsoft.IdentityModel.Logging.dll
+|   |           |   Microsoft.IdentityModel.Protocols.dll
+|   |           |   Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+|   |           |   Microsoft.IdentityModel.Tokens.dll
+|   |           |   Microsoft.OpenApi.dll
+|   |           |   Microsoft.SqlServer.Server.dll
+|   |           |   Microsoft.VisualStudio.SolutionPersistence.dll
+|   |           |   Mono.TextTemplating.dll
+|   |           |   Newtonsoft.Json.dll
+|   |           |   System.ClientModel.dll
+|   |           |   System.CodeDom.dll
+|   |           |   System.Composition.AttributedModel.dll
+|   |           |   System.Composition.Convention.dll
+|   |           |   System.Composition.Hosting.dll
+|   |           |   System.Composition.Runtime.dll
+|   |           |   System.Composition.TypedParts.dll
+|   |           |   System.Configuration.ConfigurationManager.dll
+|   |           |   System.IdentityModel.Tokens.Jwt.dll
+|   |           |   System.Memory.Data.dll
+|   |           |   System.Security.Cryptography.ProtectedData.dll
+|   |           |   
+|   |           +---BuildHost-net472
+|   |           |   |   Microsoft.Build.Locator.dll
+|   |           |   |   Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe
+|   |           |   |   Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe.config
+|   |           |   |   Microsoft.IO.Redist.dll
+|   |           |   |   Newtonsoft.Json.dll
+|   |           |   |   System.Buffers.dll
+|   |           |   |   System.Collections.Immutable.dll
+|   |           |   |   System.CommandLine.dll
+|   |           |   |   System.Memory.dll
+|   |           |   |   System.Numerics.Vectors.dll
+|   |           |   |   System.Runtime.CompilerServices.Unsafe.dll
+|   |           |   |   System.Threading.Tasks.Extensions.dll
+|   |           |   |   
+|   |           |   +---cs
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---de
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---es
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---fr
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---it
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---ja
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---ko
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---pl
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---pt-BR
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---ru
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---tr
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---zh-Hans
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   \---zh-Hant
+|   |           |           System.CommandLine.resources.dll
+|   |           |           
+|   |           +---BuildHost-netcore
+|   |           |   |   Microsoft.Build.Locator.dll
+|   |           |   |   Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.deps.json
+|   |           |   |   Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll
+|   |           |   |   Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.runtimeconfig.json
+|   |           |   |   Newtonsoft.Json.dll
+|   |           |   |   System.Collections.Immutable.dll
+|   |           |   |   System.CommandLine.dll
+|   |           |   |   
+|   |           |   +---cs
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---de
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---es
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---fr
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---it
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---ja
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---ko
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---pl
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---pt-BR
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---ru
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---tr
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   +---zh-Hans
+|   |           |   |       System.CommandLine.resources.dll
+|   |           |   |       
+|   |           |   \---zh-Hant
+|   |           |           System.CommandLine.resources.dll
+|   |           |           
+|   |           +---cs
+|   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |           |       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |           |       Microsoft.Data.SqlClient.resources.dll
+|   |           |       
+|   |           +---de
+|   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |           |       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |           |       Microsoft.Data.SqlClient.resources.dll
+|   |           |       
+|   |           +---es
+|   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |           |       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |           |       Microsoft.Data.SqlClient.resources.dll
+|   |           |       
+|   |           +---fr
+|   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |           |       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |           |       Microsoft.Data.SqlClient.resources.dll
+|   |           |       
+|   |           +---it
+|   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |           |       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |           |       Microsoft.Data.SqlClient.resources.dll
+|   |           |       
+|   |           +---ja
+|   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |           |       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |           |       Microsoft.Data.SqlClient.resources.dll
+|   |           |       
+|   |           +---ko
+|   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |           |       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |           |       Microsoft.Data.SqlClient.resources.dll
+|   |           |       
+|   |           +---pl
+|   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |           |       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |           |       Microsoft.Data.SqlClient.resources.dll
+|   |           |       
+|   |           +---pt-BR
+|   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |           |       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |           |       Microsoft.Data.SqlClient.resources.dll
+|   |           |       
+|   |           +---ru
+|   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |           |       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |           |       Microsoft.Data.SqlClient.resources.dll
+|   |           |       
+|   |           +---runtimes
+|   |           |   +---unix
+|   |           |   |   \---lib
+|   |           |   |       \---net9.0
+|   |           |   |               Microsoft.Data.SqlClient.dll
+|   |           |   |               
+|   |           |   +---win
+|   |           |   |   \---lib
+|   |           |   |       \---net9.0
+|   |           |   |               Microsoft.Data.SqlClient.dll
+|   |           |   |               
+|   |           |   +---win-arm64
+|   |           |   |   \---native
+|   |           |   |           Microsoft.Data.SqlClient.SNI.dll
+|   |           |   |           
+|   |           |   +---win-x64
+|   |           |   |   \---native
+|   |           |   |           Microsoft.Data.SqlClient.SNI.dll
+|   |           |   |           
+|   |           |   \---win-x86
+|   |           |       \---native
+|   |           |               Microsoft.Data.SqlClient.SNI.dll
+|   |           |               
+|   |           +---tr
+|   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |           |       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |           |       Microsoft.Data.SqlClient.resources.dll
+|   |           |       
+|   |           +---zh-Hans
+|   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |           |       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |           |       Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |           |       Microsoft.Data.SqlClient.resources.dll
+|   |           |       
+|   |           \---zh-Hant
+|   |                   Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |                   Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+|   |                   Microsoft.CodeAnalysis.resources.dll
+|   |                   Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+|   |                   Microsoft.CodeAnalysis.Workspaces.resources.dll
+|   |                   Microsoft.Data.SqlClient.resources.dll
+|   |                   
+|   +---Controllers
+|   |       AccordsController.cs
+|   |       AuthController.cs
+|   |       RecettesController.cs
+|   |       
+|   +---obj
+|   |   |   CulinaryPairing.API.csproj.nuget.dgspec.json
+|   |   |   CulinaryPairing.API.csproj.nuget.g.props
+|   |   |   CulinaryPairing.API.csproj.nuget.g.targets
+|   |   |   project.assets.json
+|   |   |   project.nuget.cache
+|   |   |   
+|   |   \---Debug
+|   |       \---net10.0
+|   |           |   .NETCoreApp,Version=v10.0.AssemblyAttributes.cs
+|   |           |   apphost.exe
+|   |           |   Culinary.9EA5695D.Up2Date
+|   |           |   CulinaryPairing.API.AssemblyInfo.cs
+|   |           |   CulinaryPairing.API.AssemblyInfoInputs.cache
+|   |           |   CulinaryPairing.API.assets.cache
+|   |           |   CulinaryPairing.API.csproj.AssemblyReference.cache
+|   |           |   CulinaryPairing.API.csproj.CoreCompileInputs.cache
+|   |           |   CulinaryPairing.API.csproj.FileListAbsolute.txt
+|   |           |   CulinaryPairing.API.dll
+|   |           |   CulinaryPairing.API.GeneratedMSBuildEditorConfig.editorconfig
+|   |           |   CulinaryPairing.API.genruntimeconfig.cache
+|   |           |   CulinaryPairing.API.GlobalUsings.g.cs
+|   |           |   CulinaryPairing.API.MvcApplicationPartsAssemblyInfo.cache
+|   |           |   CulinaryPairing.API.MvcApplicationPartsAssemblyInfo.cs
+|   |           |   CulinaryPairing.API.pdb
+|   |           |   CulinaryPairing.API.sourcelink.json
+|   |           |   rjsmcshtml.dswa.cache.json
+|   |           |   rjsmrazor.dswa.cache.json
+|   |           |   rpswa.dswa.cache.json
+|   |           |   staticwebassets.build.endpoints.json
+|   |           |   staticwebassets.build.json
+|   |           |   staticwebassets.build.json.cache
+|   |           |   swae.build.ex.cache
+|   |           |   
+|   |           +---ref
+|   |           |       CulinaryPairing.API.dll
+|   |           |       
+|   |           +---refint
+|   |           |       CulinaryPairing.API.dll
+|   |           |       
+|   |           \---staticwebassets
+|   \---Properties
+|           launchSettings.json
+|           
++---CulinaryPairing.BLL
+|   |   CulinaryPairing.BLL.csproj
+|   |   
+|   +---bin
+|   |   \---Debug
+|   |       \---net10.0
+|   |               CulinaryPairing.BLL.deps.json
+|   |               CulinaryPairing.BLL.dll
+|   |               CulinaryPairing.BLL.pdb
+|   |               CulinaryPairing.DAL.dll
+|   |               CulinaryPairing.DAL.pdb
+|   |               CulinaryPairing.Entities.dll
+|   |               CulinaryPairing.Entities.pdb
+|   |               
+|   +---DTOs
+|   |   |   AuthResponseDto.cs
+|   |   |   LoginDto.cs
+|   |   |   RegisterDto.cs
+|   |   |   
+|   |   +---Accords
+|   |   |       AccordDto.cs
+|   |   |       
+|   |   \---Auth
+|   +---obj
+|   |   |   CulinaryPairing.BLL.csproj.nuget.dgspec.json
+|   |   |   CulinaryPairing.BLL.csproj.nuget.g.props
+|   |   |   CulinaryPairing.BLL.csproj.nuget.g.targets
+|   |   |   project.assets.json
+|   |   |   project.nuget.cache
+|   |   |   
+|   |   \---Debug
+|   |       \---net10.0
+|   |           |   .NETCoreApp,Version=v10.0.AssemblyAttributes.cs
+|   |           |   Culinary.3C3226ED.Up2Date
+|   |           |   CulinaryPairing.BLL.AssemblyInfo.cs
+|   |           |   CulinaryPairing.BLL.AssemblyInfoInputs.cache
+|   |           |   CulinaryPairing.BLL.assets.cache
+|   |           |   CulinaryPairing.BLL.csproj.AssemblyReference.cache
+|   |           |   CulinaryPairing.BLL.csproj.CoreCompileInputs.cache
+|   |           |   CulinaryPairing.BLL.csproj.FileListAbsolute.txt
+|   |           |   CulinaryPairing.BLL.dll
+|   |           |   CulinaryPairing.BLL.GeneratedMSBuildEditorConfig.editorconfig
+|   |           |   CulinaryPairing.BLL.GlobalUsings.g.cs
+|   |           |   CulinaryPairing.BLL.pdb
+|   |           |   CulinaryPairing.BLL.sourcelink.json
+|   |           |   
+|   |           +---ref
+|   |           |       CulinaryPairing.BLL.dll
+|   |           |       
+|   |           \---refint
+|   |                   CulinaryPairing.BLL.dll
+|   |                   
+|   \---Services
+|           AccordsService.cs
+|           AuthService.cs
+|           IAccordsService.cs
+|           IAuthService.cs
+|           
++---CulinaryPairing.DAL
+|   |   CulinaryPairing.DAL.csproj
+|   |   CulinaryPairingDbContext.cs
+|   |   
+|   +---bin
+|   |   \---Debug
+|   |       \---net10.0
+|   |               CulinaryPairing.DAL.deps.json
+|   |               CulinaryPairing.DAL.dll
+|   |               CulinaryPairing.DAL.pdb
+|   |               CulinaryPairing.DAL.runtimeconfig.json
+|   |               CulinaryPairing.Entities.dll
+|   |               CulinaryPairing.Entities.pdb
+|   |               
+|   +---Migrations
+|   |       20260419220329_InitialCreate.cs
+|   |       20260419220329_InitialCreate.Designer.cs
+|   |       20260421221156_AddPrenomToUtilisateur.cs
+|   |       20260421221156_AddPrenomToUtilisateur.Designer.cs
+|   |       20260422202544_AddTempsCuissonToRecette.cs
+|   |       20260422202544_AddTempsCuissonToRecette.Designer.cs
+|   |       20260424061121_AddMissingCheckConstraints.cs
+|   |       20260424061121_AddMissingCheckConstraints.Designer.cs
+|   |       20260424064946_AddUniqueAccordIndex.cs
+|   |       20260424064946_AddUniqueAccordIndex.Designer.cs
+|   |       20260424070358_AddAuditFieldsAndEngineVersion.cs
+|   |       20260424070358_AddAuditFieldsAndEngineVersion.Designer.cs
+|   |       20260424092427_ReplaceEstPublieeWithStatut.cs
+|   |       20260424092427_ReplaceEstPublieeWithStatut.Designer.cs
+|   |       20260424094308_AddEstActifToUtilisateur.cs
+|   |       20260424094308_AddEstActifToUtilisateur.Designer.cs
+|   |       20260424095548_FixEstActifDefault.cs
+|   |       20260424095548_FixEstActifDefault.Designer.cs
+|   |       20260424100855_AddOriginFieldsToBoisson.cs
+|   |       20260424100855_AddOriginFieldsToBoisson.Designer.cs
+|   |       20260424102347_AddIngredientContrainteTable.cs
+|   |       20260424102347_AddIngredientContrainteTable.Designer.cs
+|   |       20260424103904_AddFavoriMenuTable.cs
+|   |       20260424103904_AddFavoriMenuTable.Designer.cs
+|   |       CulinaryPairingDbContextModelSnapshot.cs
+|   |       
+|   +---obj
+|   |   |   CulinaryPairing.DAL.csproj.nuget.dgspec.json
+|   |   |   CulinaryPairing.DAL.csproj.nuget.g.props
+|   |   |   CulinaryPairing.DAL.csproj.nuget.g.targets
+|   |   |   project.assets.json
+|   |   |   project.nuget.cache
+|   |   |   
+|   |   \---Debug
+|   |       \---net10.0
+|   |           |   .NETCoreApp,Version=v10.0.AssemblyAttributes.cs
+|   |           |   Culinary.49791E6F.Up2Date
+|   |           |   CulinaryPairing.DAL.AssemblyInfo.cs
+|   |           |   CulinaryPairing.DAL.AssemblyInfoInputs.cache
+|   |           |   CulinaryPairing.DAL.assets.cache
+|   |           |   CulinaryPairing.DAL.csproj.AssemblyReference.cache
+|   |           |   CulinaryPairing.DAL.csproj.CoreCompileInputs.cache
+|   |           |   CulinaryPairing.DAL.csproj.FileListAbsolute.txt
+|   |           |   CulinaryPairing.DAL.dll
+|   |           |   CulinaryPairing.DAL.GeneratedMSBuildEditorConfig.editorconfig
+|   |           |   CulinaryPairing.DAL.genruntimeconfig.cache
+|   |           |   CulinaryPairing.DAL.GlobalUsings.g.cs
+|   |           |   CulinaryPairing.DAL.pdb
+|   |           |   CulinaryPairing.DAL.sourcelink.json
+|   |           |   
+|   |           +---ref
+|   |           |       CulinaryPairing.DAL.dll
+|   |           |       
+|   |           \---refint
+|   |                   CulinaryPairing.DAL.dll
+|   |                   
+|   \---Seed
+|           AccordsSeed.cs
+|           AssociationsAromatiquesSeed.cs
+|           BoissonsSeed.cs
+|           ContraintesSeed.cs
+|           DbInitializer.cs
+|           EtapesSeed.cs
+|           FamillesAromatiquesSeed.cs
+|           IngredientsSeed.cs
+|           QuizSeed.cs
+|           RecetteIngredientsSeed.cs
+|           RecettesSeed.cs
+|           SubstitutionsSeed.cs
+|           UtilisateursSeed.cs
+|           
+\---CulinaryPairing.Entities
+    |   CulinaryPairing.Entities.csproj
+    |   
+    +---bin
+    |   \---Debug
+    |       \---net10.0
+    |               CulinaryPairing.Entities.deps.json
+    |               CulinaryPairing.Entities.dll
+    |               CulinaryPairing.Entities.pdb
+    |               
+    +---Enums
+    |       Enums.cs
+    |       StatutRecette.cs
+    |       
+    +---Models
+    |       Accord.cs
+    |       Boisson.cs
+    |       BoissonFamilleAromatique.cs
+    |       ContrainteAlimentaire.cs
+    |       Etape.cs
+    |       FamilleAromatique.cs
+    |       Favori.cs
+    |       FavoriMenu.cs
+    |       HistoriqueConsultation.cs
+    |       Ingredient.cs
+    |       IngredientContrainte.cs
+    |       MenuSoiree.cs
+    |       QuestionQuiz.cs
+    |       Recette.cs
+    |       RecetteFamilleAromatique.cs
+    |       RecetteIngredient.cs
+    |       ReponseQuiz.cs
+    |       ScoreQuiz.cs
+    |       Soiree.cs
+    |       SoireeContrainte.cs
+    |       SubstitutionIngredient.cs
+    |       Utilisateur.cs
+    |       UtilisateurContrainte.cs
+    |       
+    \---obj
+        |   CulinaryPairing.Entities.csproj.nuget.dgspec.json
+        |   CulinaryPairing.Entities.csproj.nuget.g.props
+        |   CulinaryPairing.Entities.csproj.nuget.g.targets
+        |   project.assets.json
+        |   project.nuget.cache
+        |   
+        \---Debug
+            \---net10.0
+                |   .NETCoreApp,Version=v10.0.AssemblyAttributes.cs
+                |   CulinaryPairing.Entities.AssemblyInfo.cs
+                |   CulinaryPairing.Entities.AssemblyInfoInputs.cache
+                |   CulinaryPairing.Entities.assets.cache
+                |   CulinaryPairing.Entities.csproj.CoreCompileInputs.cache
+                |   CulinaryPairing.Entities.csproj.FileListAbsolute.txt
+                |   CulinaryPairing.Entities.dll
+                |   CulinaryPairing.Entities.GeneratedMSBuildEditorConfig.editorconfig
+                |   CulinaryPairing.Entities.GlobalUsings.g.cs
+                |   CulinaryPairing.Entities.pdb
+                |   CulinaryPairing.Entities.sourcelink.json
+                |   
+                +---ref
+                |       CulinaryPairing.Entities.dll
+                |       
+                \---refint
+                        CulinaryPairing.Entities.dll
+                        
