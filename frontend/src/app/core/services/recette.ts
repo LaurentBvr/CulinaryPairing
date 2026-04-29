@@ -3,6 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
+export interface IngredientRecette {
+  idIngredient: number;
+  nom: string;
+  quantite: number;
+  unite: string;
+  estVege: boolean;
+  estVegan: boolean;
+}
+
+export interface Etape {
+  numeroEtape: number;
+  description: string;
+}
+
 export interface Recette {
   idRecette: number;
   nom: string;
@@ -13,6 +27,11 @@ export interface Recette {
   typeRepas: string;
   categorie: string;
   imageUrl?: string;
+  nombrePersonnesBase?: number;
+  adaptableVege?: boolean;
+  adaptableVegan?: boolean;
+  ingredients?: IngredientRecette[];
+  etapes?: Etape[];
 }
 
 @Injectable({ providedIn: 'root' })

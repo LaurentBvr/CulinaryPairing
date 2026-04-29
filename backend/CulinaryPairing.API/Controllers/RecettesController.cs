@@ -54,7 +54,30 @@ public class RecettesController : ControllerBase
                 TempsCuisson = r.TempsCuisson ?? 0,
                 NiveauDifficulte = r.Difficulte.ToString(),
                 TypeRepas = r.TypePlat.ToString(),
-                Categorie = r.TypePlat.ToString()
+                Categorie = r.TypePlat.ToString(),
+                NombrePersonnesBase = r.NombrePersonnesBase ?? 4,
+                AdaptableVege = r.AdaptableVege,
+                AdaptableVegan = r.AdaptableVegan,
+                Ingredients = r.Ingredients
+                    .OrderBy(ri => ri.Ingredient.Nom)
+                    .Select(ri => new
+                    {
+                        ri.IdIngredient,
+                        Nom = ri.Ingredient.Nom,
+                        Quantite = ri.Quantite,
+                        Unite = ri.Ingredient.UniteDefaut,
+                        EstVege = ri.Ingredient.EstVege,
+                        EstVegan = ri.Ingredient.EstVegan
+                    })
+                    .ToList(),
+                Etapes = r.Etapes
+                    .OrderBy(e => e.NumeroEtape)
+                    .Select(e => new
+                    {
+                        e.NumeroEtape,
+                        e.Description
+                    })
+                    .ToList()
             })
             .FirstOrDefaultAsync();
 

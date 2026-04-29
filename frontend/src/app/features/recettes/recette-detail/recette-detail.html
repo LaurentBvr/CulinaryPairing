@@ -23,7 +23,37 @@
         <span>🔥 Cuisson : {{ recette.tempsCuisson }} min</span>
       </div>
     </div>
+    @if (recette.ingredients && recette.ingredients.length > 0) {
+      <div class="ingredients-section">
+        <h2>🥕 Ingrédients</h2>
+        <p class="portions-info">Pour {{ recette.nombrePersonnesBase ?? 4 }} personnes</p>
+        <ul class="ingredients-list">
+          @for (ing of recette.ingredients; track ing.idIngredient) {
+            <li class="ingredient-item">
+              <span class="ingredient-quantite">{{ ing.quantite }} {{ ing.unite }}</span>
+              <span class="ingredient-nom">{{ ing.nom }}</span>
+              @if (!ing.estVege) {
+                <span class="ingredient-tag tag-non-vege" title="Non végétarien">🥩</span>
+              } @else if (!ing.estVegan) {
+                <span class="ingredient-tag tag-non-vegan" title="Non végan">🥛</span>
+              }
+            </li>
+          }
+        </ul>
+      </div>
+    }
 
+    @if (recette.etapes && recette.etapes.length > 0) {
+      <div class="etapes-section">
+        <h2>👨‍🍳 Préparation</h2>
+        <ol class="etapes-list">
+          @for (etape of recette.etapes; track etape.numeroEtape) {
+            <li class="etape-item">{{ etape.description }}</li>
+          }
+        </ol>
+      </div>
+    }
+    
     @if (accords.length > 0) {
       <div class="accords-section">
         <h2>🍷 Boissons recommandées</h2>
