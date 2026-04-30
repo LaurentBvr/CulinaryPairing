@@ -174,3 +174,81 @@
   color: #374151;
   padding-left: 0.5rem;
 }
+
+// === V1.3 - R17/R18 : toggle mode + substitutions ===
+.mode-toggle {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0 0 1rem 0;
+  flex-wrap: wrap;
+}
+
+.mode-btn {
+  padding: 0.45rem 1rem;
+  font-size: 0.9rem;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #374151;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover:not(:disabled):not(.active) {
+    border-color: #e94560;
+    color: #e94560;
+  }
+
+  &.active {
+    background: #e94560;
+    border-color: #e94560;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.ingredient-item.has-substitut {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  border-left-color: #10b981;
+  background: #f0fdf4;
+
+  .ingredient-original-line,
+  .ingredient-substitut-line {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+  }
+
+  .struck {
+    text-decoration: line-through;
+    color: #9ca3af;
+  }
+
+  .arrow {
+    color: #10b981;
+    font-weight: 700;
+    margin-left: auto;
+  }
+
+  .ingredient-substitut-line {
+    .ingredient-nom { font-weight: 600; color: #065f46; }
+  }
+
+  .substitut-note {
+    margin: 0.25rem 0 0 0;
+    padding: 0.4rem 0.6rem;
+    background: #fff;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #4b5563;
+    width: 100%;
+  }
+}

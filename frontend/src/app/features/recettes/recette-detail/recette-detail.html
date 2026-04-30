@@ -23,19 +23,59 @@
         <span>🔥 Cuisson : {{ recette.tempsCuisson }} min</span>
       </div>
     </div>
+
     @if (recette.ingredients && recette.ingredients.length > 0) {
       <div class="ingredients-section">
-        <h2>🥕 Ingrédients</h2>
+        <h2>🥗 Ingrédients</h2>
         <p class="portions-info">Pour {{ recette.nombrePersonnesBase ?? 4 }} personnes</p>
+
+        <div class="mode-toggle" role="group" aria-label="Mode d'adaptation">
+          <button type="button"
+                  class="mode-btn"
+                  [class.active]="mode === 'original'"
+                  (click)="changeMode('original')">
+            Original
+          </button>
+          <button type="button"
+                  class="mode-btn"
+                  [class.active]="mode === 'vegetarien'"
+                  [disabled]="!recette.adaptableVege"
+                  (click)="changeMode('vegetarien')">
+            Végétarien
+          </button>
+          <button type="button"
+                  class="mode-btn"
+                  [class.active]="mode === 'vegan'"
+                  [disabled]="!recette.adaptableVegan"
+                  (click)="changeMode('vegan')">
+            Végan
+          </button>
+        </div>
+
         <ul class="ingredients-list">
           @for (ing of recette.ingredients; track ing.idIngredient) {
-            <li class="ingredient-item">
-              <span class="ingredient-quantite">{{ ing.quantite }} {{ ing.unite }}</span>
-              <span class="ingredient-nom">{{ ing.nom }}</span>
-              @if (!ing.estVege) {
-                <span class="ingredient-tag tag-non-vege" title="Non végétarien">🥩</span>
-              } @else if (!ing.estVegan) {
-                <span class="ingredient-tag tag-non-vegan" title="Non végan">🥛</span>
+            <li class="ingredient-item" [class.has-substitut]="ing.substitut">
+              @if (ing.substitut) {
+                <div class="ingredient-original-line">
+                  <span class="ingredient-quantite struck">{{ ing.quantite }} {{ ing.unite }}</span>
+                  <span class="ingredient-nom struck">{{ ing.nom }}</span>
+                  <span class="arrow">→</span>
+                </div>
+                <div class="ingredient-substitut-line">
+                  <span class="ingredient-quantite">{{ ing.substitut.quantiteAdaptee | number:'1.0-2' }} {{ ing.substitut.unite }}</span>
+                  <span class="ingredient-nom">{{ ing.substitut.nom }}</span>
+                </div>
+                @if (ing.substitut.noteCuisson) {
+                  <p class="substitut-note">💡 {{ ing.substitut.noteCuisson }}</p>
+                }
+              } @else {
+                <span class="ingredient-quantite">{{ ing.quantite }} {{ ing.unite }}</span>
+                <span class="ingredient-nom">{{ ing.nom }}</span>
+                @if (!ing.estVege) {
+                  <span class="ingredient-tag tag-non-vege" title="Non végétarien">🥩</span>
+                } @else if (!ing.estVegan) {
+                  <span class="ingredient-tag tag-non-vegan" title="Non végan">🥛</span>
+                }
               }
             </li>
           }
@@ -53,7 +93,7 @@
         </ol>
       </div>
     }
-    
+
     @if (accords.length > 0) {
       <div class="accords-section">
         <h2>🍷 Boissons recommandées</h2>
@@ -70,7 +110,7 @@
               <div class="accord-meta">
                 @if (accord.niveauConfiance !== null) {
                   <span class="accord-confiance" [title]="'Score basé sur ' + accord.niveauConfiance + '% des règles applicables'">
-                      Fiabilité : {{ labelConfiance(accord.niveauConfiance) }}
+                    Fiabilité : {{ labelConfiance(accord.niveauConfiance) }}
                   </span>
                 }
                 @if (accord.malusApplique && accord.malusApplique > 0) {

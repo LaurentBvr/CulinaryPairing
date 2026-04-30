@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { RecetteService, Recette } from '../../../core/services/recette';
+import { RecetteService, Recette, ModeAdaptation } from '../../../core/services/recette';
 import { AccordsService, Accord } from '../../../core/services/accords';
 import { CommonModule } from '@angular/common';
 
@@ -20,18 +20,30 @@ export class RecetteDetail implements OnInit {
   accords: Accord[] = [];
   loading = true;
   error = '';
+  mode: ModeAdaptation = 'original';
+  private idRecette = 0;
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.recetteService.getById(id).subscribe({
-      next: data => {
-        this.recette = data;
-        this.loading = false;
-        this.accordsService.getByRecette(id).subscribe({
-          next: accords => this.accords = accords,
-          error: () => {}
-        });
-      },
+    this.idRecette = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadRecette();
+
+    // Accords chargés une seule fois (Option 1 : pas de recalcul en mode végé/végan)
+    this.accordsService.getByRecette(this.idRecette).subscribe({
+      next: accords => this.accords = accords,
+      error: () => {}
+    });
+  }
+
+  changeMode(newMode: ModeAdaptation) {
+    if (this.mode === newMode) return;
+    this.mode = newMode;
+    this.loadRecette();
+  }
+
+  private loadRecette() {
+    this.loading = true;
+    this.recetteService.getById(this.idRecette, this.mode).subscribe({
+      next: data => { this.recette = data; this.loading = false; },
       error: () => { this.error = 'Recette introuvable.'; this.loading = false; }
     });
   }
@@ -42,7 +54,7 @@ export class RecetteDetail implements OnInit {
     return regles.split(',').map(r => r.trim()).filter(r => r.length > 0);
   }
 
- /** Mappe la confiance numérique en label lisible pour l'utilisateur. */
+  /** Mappe la confiance numérique en label lisible pour l'utilisateur. */
   labelConfiance(c: number | null): string {
     if (c === null) return '';
     if (c >= 60) return 'Élevée';
@@ -50,5 +62,4 @@ export class RecetteDetail implements OnInit {
     if (c >= 20) return 'Modérée';
     return 'Faible';
   }
-
 }
