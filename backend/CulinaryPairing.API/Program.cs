@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using CulinaryPairing.BLL.PairingEngine;
 using CulinaryPairing.BLL.PairingEngine.Rules;
 using CulinaryPairing.BLL.VideFrigo;
+using CulinaryPairing.BLL.Substitution;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,6 +89,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IAccordsService, AccordsService>();
 builder.Services.AddScoped<VideFrigoService>();
+builder.Services.AddScoped<ISubstitutionService, SubstitutionService>();
 
 var app = builder.Build();
 
