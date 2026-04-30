@@ -1,7 +1,17 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+
+export type ModeAdaptation = 'original' | 'vegetarien' | 'vegan';
+
+export interface SubstitutIngredient {
+  idIngredient: number;
+  nom: string;
+  quantiteAdaptee: number;
+  unite: string;
+  noteCuisson: string | null;
+}
 
 export interface IngredientRecette {
   idIngredient: number;
@@ -10,6 +20,7 @@ export interface IngredientRecette {
   unite: string;
   estVege: boolean;
   estVegan: boolean;
+  substitut?: SubstitutIngredient | null;
 }
 
 export interface Etape {
@@ -30,7 +41,10 @@ export interface Recette {
   nombrePersonnesBase?: number;
   adaptableVege?: boolean;
   adaptableVegan?: boolean;
+  mode?: ModeAdaptation;
   ingredients?: IngredientRecette[];
+  ingredientsSansSubstitution?: string[];
+  estCompletementAdaptable?: boolean;
   etapes?: Etape[];
 }
 
@@ -43,7 +57,11 @@ export class RecetteService {
     return this.http.get<Recette[]>(this.apiUrl);
   }
 
-  getById(id: number): Observable<Recette> {
-    return this.http.get<Recette>(`${this.apiUrl}/${id}`);
+  getById(id: number, mode?: ModeAdaptation): Observable<Recette> {
+    let params = new HttpParams();
+    if (mode && mode !== 'original') {
+      params = params.set('mode', mode);
+    }
+    return this.http.get<Recette>(`${this.apiUrl}/${id}`, { params });
   }
 }
