@@ -252,3 +252,23 @@
     width: 100%;
   }
 }
+
+.adaptation-banner {
+  margin: 0 0 1rem 0;
+  padding: 0.65rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.adaptation-success {
+  background: #ecfdf5;
+  color: #065f46;
+  border-left: 3px solid #10b981;
+}
+
+.adaptation-warning {
+  background: #fffbeb;
+  color: #92400e;
+  border-left: 3px solid #f59e0b;
+}

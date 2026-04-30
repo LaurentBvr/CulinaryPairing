@@ -51,7 +51,19 @@
             Végan
           </button>
         </div>
-
+        @if (mode !== 'original' && recette.ingredients && recette.ingredients.length > 0) {
+  @if (recette.estCompletementAdaptable) {
+    <div class="adaptation-banner adaptation-success">
+      ✓ Recette {{ mode === 'vegan' ? 'adaptable végan' : 'adaptable végétarienne' }}
+    </div>
+  } @else {
+    <div class="adaptation-banner adaptation-warning">
+      ⚠ Recette partiellement adaptable :
+      {{ recette.ingredientsSansSubstitution?.length }} ingrédient(s) sans substitution
+      ({{ recette.ingredientsSansSubstitution?.join(', ') }})
+    </div>
+  }
+}
         <ul class="ingredients-list">
           @for (ing of recette.ingredients; track ing.idIngredient) {
             <li class="ingredient-item" [class.has-substitut]="ing.substitut">
