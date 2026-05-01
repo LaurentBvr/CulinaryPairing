@@ -8,6 +8,7 @@ using CulinaryPairing.BLL.PairingEngine;
 using CulinaryPairing.BLL.PairingEngine.Rules;
 using CulinaryPairing.BLL.VideFrigo;
 using CulinaryPairing.BLL.Substitution;
+using CulinaryPairing.BLL.Favoris;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -90,6 +91,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<IAccordsService, AccordsService>();
 builder.Services.AddScoped<VideFrigoService>();
 builder.Services.AddScoped<ISubstitutionService, SubstitutionService>();
+builder.Services.AddScoped<IFavorisService, FavorisService>();
 
 var app = builder.Build();
 
