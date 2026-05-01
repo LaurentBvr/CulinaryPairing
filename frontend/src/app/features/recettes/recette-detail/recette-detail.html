@@ -27,66 +27,115 @@
     @if (recette.ingredients && recette.ingredients.length > 0) {
       <div class="ingredients-section">
         <h2>🥗 Ingrédients</h2>
-        <p class="portions-info">Pour {{ recette.nombrePersonnesBase ?? 4 }} personnes</p>
+        <div class="portions-control">
+          <label for="personnes">Pour</label>
+          <input
+            type="number"
+            id="personnes"
+            min="1"
+            max="10"
+            [ngModel]="personnesAffichees"
+            (ngModelChange)="changePersonnes($event)"
+          />
+          <span>personne(s)</span>
+          @if (
+            recette.nombrePersonnesBase &&
+            personnesAffichees !== recette.nombrePersonnesBase
+          ) {
+            <span class="portions-base"
+              >(base : {{ recette.nombrePersonnesBase }})</span
+            >
+          }
+        </div>
 
         <div class="mode-toggle" role="group" aria-label="Mode d'adaptation">
-          <button type="button"
-                  class="mode-btn"
-                  [class.active]="mode === 'original'"
-                  (click)="changeMode('original')">
+          <button
+            type="button"
+            class="mode-btn"
+            [class.active]="mode === 'original'"
+            (click)="changeMode('original')"
+          >
             Original
           </button>
-          <button type="button"
-                  class="mode-btn"
-                  [class.active]="mode === 'vegetarien'"
-                  [disabled]="!recette.adaptableVege"
-                  (click)="changeMode('vegetarien')">
+          <button
+            type="button"
+            class="mode-btn"
+            [class.active]="mode === 'vegetarien'"
+            [disabled]="!recette.adaptableVege"
+            (click)="changeMode('vegetarien')"
+          >
             Végétarien
           </button>
-          <button type="button"
-                  class="mode-btn"
-                  [class.active]="mode === 'vegan'"
-                  [disabled]="!recette.adaptableVegan"
-                  (click)="changeMode('vegan')">
+          <button
+            type="button"
+            class="mode-btn"
+            [class.active]="mode === 'vegan'"
+            [disabled]="!recette.adaptableVegan"
+            (click)="changeMode('vegan')"
+          >
             Végan
           </button>
         </div>
-        @if (mode !== 'original' && recette.ingredients && recette.ingredients.length > 0) {
-  @if (recette.estCompletementAdaptable) {
-    <div class="adaptation-banner adaptation-success">
-      ✓ Recette {{ mode === 'vegan' ? 'adaptable végan' : 'adaptable végétarienne' }}
-    </div>
-  } @else {
-    <div class="adaptation-banner adaptation-warning">
-      ⚠ Recette partiellement adaptable :
-      {{ recette.ingredientsSansSubstitution?.length }} ingrédient(s) sans substitution
-      ({{ recette.ingredientsSansSubstitution?.join(', ') }})
-    </div>
-  }
-}
+        @if (
+          mode !== "original" &&
+          recette.ingredients &&
+          recette.ingredients.length > 0
+        ) {
+          @if (recette.estCompletementAdaptable) {
+            <div class="adaptation-banner adaptation-success">
+              ✓ Recette
+              {{
+                mode === "vegan" ? "adaptable végan" : "adaptable végétarienne"
+              }}
+            </div>
+          } @else {
+            <div class="adaptation-banner adaptation-warning">
+              ⚠ Recette partiellement adaptable :
+              {{ recette.ingredientsSansSubstitution?.length }} ingrédient(s)
+              sans substitution ({{
+                recette.ingredientsSansSubstitution?.join(", ")
+              }})
+            </div>
+          }
+        }
         <ul class="ingredients-list">
           @for (ing of recette.ingredients; track ing.idIngredient) {
             <li class="ingredient-item" [class.has-substitut]="ing.substitut">
               @if (ing.substitut) {
                 <div class="ingredient-original-line">
-                  <span class="ingredient-quantite struck">{{ ing.quantite }} {{ ing.unite }}</span>
+                  <span class="ingredient-quantite struck"
+                    >{{ calculerQuantite(ing.quantite, ing.unite) }} {{ ing.unite }}</span
+                  >
                   <span class="ingredient-nom struck">{{ ing.nom }}</span>
                   <span class="arrow">→</span>
                 </div>
                 <div class="ingredient-substitut-line">
-                  <span class="ingredient-quantite">{{ ing.substitut.quantiteAdaptee | number:'1.0-2' }} {{ ing.substitut.unite }}</span>
+                  <span class="ingredient-quantite"
+                    >{{ calculerQuantite(ing.substitut.quantiteAdaptee, ing.substitut.unite) }}
+                    {{ ing.substitut.unite }}</span
+                  >
                   <span class="ingredient-nom">{{ ing.substitut.nom }}</span>
                 </div>
                 @if (ing.substitut.noteCuisson) {
-                  <p class="substitut-note">💡 {{ ing.substitut.noteCuisson }}</p>
+                  <p class="substitut-note">
+                    💡 {{ ing.substitut.noteCuisson }}
+                  </p>
                 }
               } @else {
-                <span class="ingredient-quantite">{{ ing.quantite }} {{ ing.unite }}</span>
+                <span class="ingredient-quantite"
+                  >{{ calculerQuantite(ing.quantite, ing.unite) }} {{ ing.unite }}</span
+                >
                 <span class="ingredient-nom">{{ ing.nom }}</span>
                 @if (!ing.estVege) {
-                  <span class="ingredient-tag tag-non-vege" title="Non végétarien">🥩</span>
+                  <span
+                    class="ingredient-tag tag-non-vege"
+                    title="Non végétarien"
+                    >🥩</span
+                  >
                 } @else if (!ing.estVegan) {
-                  <span class="ingredient-tag tag-non-vegan" title="Non végan">🥛</span>
+                  <span class="ingredient-tag tag-non-vegan" title="Non végan"
+                    >🥛</span
+                  >
                 }
               }
             </li>
@@ -114,19 +163,30 @@
             <div class="accord-card">
               <div class="accord-header">
                 <span class="accord-boisson">{{ accord.nomBoisson }}</span>
-                <span class="accord-score">{{ accord.scoreCompatibilite }}/100</span>
+                <span class="accord-score"
+                  >{{ accord.scoreCompatibilite }}/100</span
+                >
               </div>
               <span class="accord-type">{{ accord.typeBoisson }}</span>
               <p class="accord-justification">{{ accord.justification }}</p>
 
               <div class="accord-meta">
                 @if (accord.niveauConfiance !== null) {
-                  <span class="accord-confiance" [title]="'Score basé sur ' + accord.niveauConfiance + '% des règles applicables'">
+                  <span
+                    class="accord-confiance"
+                    [title]="
+                      'Score basé sur ' +
+                      accord.niveauConfiance +
+                      '% des règles applicables'
+                    "
+                  >
                     Fiabilité : {{ labelConfiance(accord.niveauConfiance) }}
                   </span>
                 }
                 @if (accord.malusApplique && accord.malusApplique > 0) {
-                  <span class="accord-malus">Malus : −{{ accord.malusApplique }}</span>
+                  <span class="accord-malus"
+                    >Malus : −{{ accord.malusApplique }}</span
+                  >
                 }
               </div>
 
