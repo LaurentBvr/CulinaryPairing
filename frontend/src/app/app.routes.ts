@@ -30,6 +30,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'profile',
+    loadComponent: () => import('./features/profile/profile').then(m => m.Profile),
+    canActivate: [authGuard]
+  },
+  {
   path: 'vide-frigo',
   loadComponent: () => import('./vide-frigo/vide-frigo').then(m => m.VideFrigo)
   },

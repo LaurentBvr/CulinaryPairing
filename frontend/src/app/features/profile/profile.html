@@ -1,0 +1,53 @@
+<div class="profile-container">
+  <h1>👤 Mon profil</h1>
+
+  @if (auth.currentUser$ | async; as user) {
+    <section class="user-info">
+      <p><strong>{{ user.prenom }} {{ user.nom }}</strong></p>
+      <p class="email">{{ user.email }}</p>
+    </section>
+  }
+
+  <h2>Mes contraintes alimentaires</h2>
+  <p class="hint">
+    Activez les contraintes qui vous concernent. Les recettes incompatibles seront masquées
+    par défaut sur la liste des recettes (vous pourrez les ré-afficher).
+  </p>
+
+  @if (loading) {
+    <p class="loading">Chargement...</p>
+  }
+
+  @if (error) {
+    <p class="error">{{ error }}</p>
+  }
+
+  @if (!loading && !error) {
+    <div class="contraintes-groups">
+      @for (group of groups; track group.type) {
+        <fieldset class="group">
+          <legend>{{ group.label }}</legend>
+          <div class="checkbox-list">
+            @for (c of group.items; track c.idContrainte) {
+              <label class="checkbox-item">
+                <input
+                  type="checkbox"
+                  [checked]="isSelected(c.idContrainte)"
+                  (change)="toggle(c.idContrainte)"
+                />
+                <span>{{ c.nom }}</span>
+              </label>
+            }
+          </div>
+        </fieldset>
+      }
+    </div>
+
+    <div class="actions">
+      <button type="button" (click)="save()" [disabled]="saving">
+        {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
+      </button>
+      @if (message) { <span class="success">{{ message }}</span> }
+    </div>
+  }
+</div>
