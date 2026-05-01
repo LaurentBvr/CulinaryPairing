@@ -26,6 +26,7 @@
 
 .recette-card {
   display: block;
+  position: relative;
   background: white;
   border-radius: 8px;
   padding: 1.5rem;
@@ -76,5 +77,31 @@
     gap: 1rem;
     font-size: 0.85rem;
     color: #888;
+  }
+}
+
+.btn-favori {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #888;
+  transition: all 0.15s ease;
+  z-index: 2;
+
+  &:hover {
+    transform: scale(1.1);
+    color: #d4af37;
+  }
+
+  &.active {
+    color: #d4af37;
   }
 }

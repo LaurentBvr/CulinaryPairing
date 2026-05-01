@@ -1,7 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RecetteService, Recette, ModeAdaptation } from '../../../core/services/recette';
 import { AccordsService, Accord } from '../../../core/services/accords';
+import { FavorisService } from '../../../core/services/favoris';
+import { AuthService } from '../../../core/services/auth';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -16,6 +18,9 @@ export class RecetteDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private recetteService = inject(RecetteService);
   private accordsService = inject(AccordsService);
+  protected favorisService = inject(FavorisService);
+  private auth = inject(AuthService);
+  private router = inject(Router);
 
   recette: Recette | null = null;
   accords: Accord[] = [];
@@ -48,6 +53,14 @@ export class RecetteDetail implements OnInit {
     this.personnesAffichees = value;
   }
 
+  onToggleFavori(): void {
+    if (!this.auth.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.favorisService.toggle(this.idRecette).subscribe();
+  }
+
   private loadRecette() {
     this.loading = true;
     this.recetteService.getById(this.idRecette, this.mode).subscribe({
@@ -75,17 +88,11 @@ export class RecetteDetail implements OnInit {
     if (estPiece) {
       return this.formatFraction(valeur);
     }
-    // R6 : valeurs continues — arrondi à 1 décimale, ou entier si rond
     return Number.isInteger(valeur)
       ? valeur.toString()
       : valeur.toFixed(1).replace(/\.0$/, '');
   }
 
-  /**
-   * R7 : pour les pièces non divisibles (gousse, pièce), arrondi à l'entier le plus proche.
-   * Choix pragmatique vs fractions strictes du CdC : reflète l'usage culinaire réel
-   * (on ne va pas couper les gousses d'ails en quarts).
-   */
   private formatFraction(v: number): string {
     return Math.max(1, Math.round(v)).toString();
   }

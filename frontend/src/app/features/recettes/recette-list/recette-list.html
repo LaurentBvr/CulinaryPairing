@@ -12,6 +12,15 @@
   <div class="recettes-grid">
     @for (recette of recettes; track recette.idRecette) {
       <a class="recette-card" [routerLink]="['/recettes', recette.idRecette]">
+        <button
+          type="button"
+          class="btn-favori"
+          [class.active]="favorisService.isFavori(recette.idRecette)"
+          (click)="onToggleFavori($event, recette.idRecette)"
+          [attr.aria-label]="favorisService.isFavori(recette.idRecette) ? 'Retirer des favoris' : 'Ajouter aux favoris'"
+        >
+          {{ favorisService.isFavori(recette.idRecette) ? '★' : '☆' }}
+        </button>
         <div class="card-header">
           <span class="categorie">{{ recette.categorie }}</span>
           <span class="difficulte">{{ recette.niveauDifficulte }}</span>

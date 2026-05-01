@@ -16,7 +16,18 @@
         <span class="badge">{{ recette.niveauDifficulte }}</span>
         <span class="badge">{{ recette.typeRepas }}</span>
       </div>
-      <h1>{{ recette.nom }}</h1>
+      <div class="title-row">
+        <h1>{{ recette.nom }}</h1>
+        <button
+          type="button"
+          class="btn-favori-detail"
+          [class.active]="favorisService.isFavori(recette.idRecette)"
+          (click)="onToggleFavori()"
+          [attr.aria-label]="favorisService.isFavori(recette.idRecette) ? 'Retirer des favoris' : 'Ajouter aux favoris'"
+        >
+          {{ favorisService.isFavori(recette.idRecette) ? '★' : '☆' }}
+        </button>
+      </div>
       <p class="description">{{ recette.description }}</p>
       <div class="meta">
         <span>⏱ Préparation : {{ recette.tempsPreparation }} min</span>

@@ -303,3 +303,40 @@
     font-style: italic;
   }
 }
+
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  h1 {
+    margin: 0;
+    flex: 1;
+  }
+}
+
+.btn-favori-detail {
+  background: transparent;
+  border: 2px solid #d4af37;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #d4af37;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    transform: scale(1.05);
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  &.active {
+    background: #d4af37;
+    color: white;
+  }
+}

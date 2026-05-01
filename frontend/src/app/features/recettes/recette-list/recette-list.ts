@@ -1,7 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 import { RecetteService, Recette } from '../../../core/services/recette';
+import { FavorisService } from '../../../core/services/favoris';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
   selector: 'app-recette-list',
@@ -12,6 +13,9 @@ import { RecetteService, Recette } from '../../../core/services/recette';
 })
 export class RecetteList implements OnInit {
   private recetteService = inject(RecetteService);
+  protected favorisService = inject(FavorisService);
+  private auth = inject(AuthService);
+  private router = inject(Router);
 
   recettes: Recette[] = [];
   loading = true;
@@ -22,5 +26,15 @@ export class RecetteList implements OnInit {
       next: data => { this.recettes = data; this.loading = false; },
       error: () => { this.error = 'Erreur lors du chargement des recettes.'; this.loading = false; }
     });
+  }
+
+  onToggleFavori(event: Event, idRecette: number): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!this.auth.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.favorisService.toggle(idRecette).subscribe();
   }
 }
