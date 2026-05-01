@@ -4,8 +4,11 @@
   </div>
 
   <div class="navbar-menu">
-  <a routerLink="/recettes" routerLinkActive="active">Recettes</a>
-  <a routerLink="/vide-frigo" routerLinkActive="active">🧊 Vide-frigo</a>
+    <a routerLink="/recettes" routerLinkActive="active">Recettes</a>
+    <a routerLink="/vide-frigo" routerLinkActive="active">🧊 Vide-frigo</a>
+    @if (auth.currentUser$ | async) {
+      <a routerLink="/mes-favoris" routerLinkActive="active">★ Mes favoris</a>
+    }
   </div>
 
   <div class="navbar-user">

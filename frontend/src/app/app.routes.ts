@@ -25,6 +25,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/recettes/recette-detail/recette-detail').then(m => m.RecetteDetail),
   },
   {
+    path: 'mes-favoris',
+    loadComponent: () => import('./features/favoris/favoris-list/favoris-list').then(m => m.FavorisList),
+    canActivate: [authGuard]
+  },
+  {
   path: 'vide-frigo',
   loadComponent: () => import('./vide-frigo/vide-frigo').then(m => m.VideFrigo)
   },

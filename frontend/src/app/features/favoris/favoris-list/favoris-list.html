@@ -1,0 +1,45 @@
+<div class="favoris-list-container">
+  <h1>★ Mes favoris</h1>
+
+  @if (loading) {
+    <p class="loading">Chargement...</p>
+  }
+
+  @if (error) {
+    <p class="error">{{ error }}</p>
+  }
+
+  @if (!loading && !error && favoris.length === 0) {
+    <p class="empty">
+      Vous n'avez pas encore de recettes en favoris.
+      <a routerLink="/recettes">Découvrez nos recettes →</a>
+    </p>
+  }
+
+  @if (favoris.length > 0) {
+    <div class="favoris-grid">
+      @for (fav of favoris; track fav.idRecette) {
+        <a class="favori-card" [routerLink]="['/recettes', fav.idRecette]">
+          <button
+            type="button"
+            class="btn-retirer"
+            (click)="onRetirer($event, fav.idRecette)"
+            aria-label="Retirer des favoris"
+            title="Retirer des favoris"
+          >★</button>
+          <div class="card-header">
+            @if (fav.typePlat) { <span class="badge">{{ fav.typePlat }}</span> }
+            @if (fav.difficulte) { <span class="badge">{{ fav.difficulte }}</span> }
+          </div>
+          <h2>{{ fav.titre }}</h2>
+          <div class="card-footer">
+            @if (fav.tempsPreparation) {
+              <span>⏱ {{ (fav.tempsPreparation || 0) + (fav.tempsCuisson || 0) }} min</span>
+            }
+            <span class="date-ajout">Ajouté le {{ fav.dateAjout | date:'dd/MM/yyyy' }}</span>
+          </div>
+        </a>
+      }
+    </div>
+  }
+</div>
