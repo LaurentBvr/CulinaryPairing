@@ -34,7 +34,17 @@
         <span>🔥 Cuisson : {{ recette.tempsCuisson }} min</span>
       </div>
     </div>
-
+    
+    @if (recette.contraintesViolees && recette.contraintesViolees.length > 0) {
+  <div class="warning-contraintes">
+    <strong>⚠️ Recette incompatible avec vos contraintes</strong>
+    <p>Cette recette enfreint :
+      @for (c of recette.contraintesViolees; track c.idContrainte; let last = $last) {
+        <span class="tag-contrainte">{{ c.nom }}</span>{{ last ? '' : ' ' }}
+      }
+    </p>
+  </div>
+}
     @if (recette.ingredients && recette.ingredients.length > 0) {
       <div class="ingredients-section">
         <h2>🥗 Ingrédients</h2>

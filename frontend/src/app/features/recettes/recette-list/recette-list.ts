@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { RecetteService, Recette } from '../../../core/services/recette';
 import { FavorisService } from '../../../core/services/favoris';
@@ -17,13 +17,30 @@ export class RecetteList implements OnInit {
   private auth = inject(AuthService);
   private router = inject(Router);
 
-  recettes: Recette[] = [];
+  // Signals : permettent un filtrage réactif via computed()
+  recettes = signal<Recette[]>([]);
+  masquerIncompatibles = signal(true); // R9 strict par défaut, override possible
   loading = true;
   error = '';
 
+  // Vue filtrée : si toggle activé, exclut les recettes ayant ≥1 contrainte violée
+  recettesAffichees = computed(() => {
+    const all = this.recettes();
+    if (!this.masquerIncompatibles()) return all;
+    return all.filter(r => !r.contraintesViolees || r.contraintesViolees.length === 0);
+  });
+
+  // Compteur masqué pour info utilisateur
+  nbMasquees = computed(() =>
+    this.recettes().filter(r => r.contraintesViolees && r.contraintesViolees.length > 0).length
+  );
+
+  // Helper : visible si l'user est connecté ET qu'au moins 1 recette est incompatible
+  toggleVisible = computed(() => this.auth.isLoggedIn() && this.nbMasquees() > 0);
+
   ngOnInit() {
     this.recetteService.getAll().subscribe({
-      next: data => { this.recettes = data; this.loading = false; },
+      next: data => { this.recettes.set(data); this.loading = false; },
       error: () => { this.error = 'Erreur lors du chargement des recettes.'; this.loading = false; }
     });
   }
@@ -36,5 +53,14 @@ export class RecetteList implements OnInit {
       return;
     }
     this.favorisService.toggle(idRecette).subscribe();
+  }
+
+  toggleMasquer(): void {
+    this.masquerIncompatibles.update(v => !v);
+  }
+
+  // Concatène les noms de contraintes violées pour l'affichage badge
+  contraintesLabel(r: Recette): string {
+    return (r.contraintesViolees ?? []).map(c => c.nom).join(', ');
   }
 }

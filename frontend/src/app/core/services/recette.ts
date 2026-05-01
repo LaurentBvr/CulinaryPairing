@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { ContrainteDto } from './contraintes';
 
 export type ModeAdaptation = 'original' | 'vegetarien' | 'vegan';
 
@@ -46,6 +47,7 @@ export interface Recette {
   ingredientsSansSubstitution?: string[];
   estCompletementAdaptable?: boolean;
   etapes?: Etape[];
+  contraintesViolees?: ContrainteDto[];
 }
 
 @Injectable({ providedIn: 'root' })

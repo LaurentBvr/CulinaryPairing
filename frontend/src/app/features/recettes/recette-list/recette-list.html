@@ -9,9 +9,30 @@
     <p class="error">{{ error }}</p>
   }
 
+  @if (toggleVisible()) {
+    <div class="filtre-incompatibles">
+      <label>
+        <input
+          type="checkbox"
+          [checked]="masquerIncompatibles()"
+          (change)="toggleMasquer()"
+        />
+        Masquer les recettes incompatibles avec mes contraintes
+        <span class="count">
+          ({{ nbMasquees() }} {{ nbMasquees() === 1 ? 'recette masquée' : 'recettes masquées' }})
+        </span>
+      </label>
+    </div>
+  }
+
   <div class="recettes-grid">
-    @for (recette of recettes; track recette.idRecette) {
-      <a class="recette-card" [routerLink]="['/recettes', recette.idRecette]">
+    @for (recette of recettesAffichees(); track recette.idRecette) {
+
+      <a
+        class="recette-card"
+        [class.incompatible]="recette.contraintesViolees && recette.contraintesViolees.length > 0"
+        [routerLink]="['/recettes', recette.idRecette]"
+      >
         <button
           type="button"
           class="btn-favori"
@@ -21,17 +42,30 @@
         >
           {{ favorisService.isFavori(recette.idRecette) ? '★' : '☆' }}
         </button>
+
+        @if (recette.contraintesViolees && recette.contraintesViolees.length > 0) {
+          <div
+            class="badge-incompatible"
+            [title]="'Contraintes violées : ' + contraintesLabel(recette)"
+          >
+            ⚠️ {{ contraintesLabel(recette) }}
+          </div>
+        }
+
         <div class="card-header">
           <span class="categorie">{{ recette.categorie }}</span>
           <span class="difficulte">{{ recette.niveauDifficulte }}</span>
         </div>
+
         <h2>{{ recette.nom }}</h2>
         <p>{{ recette.description }}</p>
+
         <div class="card-footer">
           <span>⏱ {{ recette.tempsPreparation + recette.tempsCuisson }} min</span>
-          <span>🍽 {{ recette.typeRepas }}</span>
+          <span>🍴 {{ recette.typeRepas }}</span>
         </div>
       </a>
+
     }
   </div>
 </div>
