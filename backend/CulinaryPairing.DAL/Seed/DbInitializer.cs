@@ -16,6 +16,7 @@ public static class DbInitializer
         await UtilisateursSeed.SeedAsync(context);
         await ContraintesSeed.SeedAsync(context);
         await IngredientsSeed.SeedAsync(context);
+        await IngredientsContraintesSeed.SeedAsync(context);
         await BoissonsSeed.SeedAsync(context);
         await FamillesAromatiquesSeed.SeedAsync(context);
 

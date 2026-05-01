@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using CulinaryPairing.BLL.Contraintes;
 using CulinaryPairing.BLL.Substitution;
 using CulinaryPairing.DAL;
 using CulinaryPairing.Entities.Enums;
@@ -14,13 +16,25 @@ public class RecettesController : ControllerBase
 {
     private readonly CulinaryPairingDbContext _context;
     private readonly ISubstitutionService _substitutionService;
+    private readonly IContraintesService _contraintesService;
 
     public RecettesController(
         CulinaryPairingDbContext context,
-        ISubstitutionService substitutionService)
+        ISubstitutionService substitutionService,
+        IContraintesService contraintesService)
     {
         _context = context;
         _substitutionService = substitutionService;
+        _contraintesService = contraintesService;
+    }
+
+    /// <summary>
+    /// Lit l'id user depuis le JWT. Retourne null si anonyme ou claim non parsable.
+    /// </summary>
+    private int? GetUserId()
+    {
+        var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return int.TryParse(claim, out var id) ? id : null;
     }
 
     [HttpGet]
@@ -41,7 +55,30 @@ public class RecettesController : ControllerBase
                 Categorie = r.TypePlat.ToString()
             })
             .ToListAsync();
-        return Ok(recettes);
+
+        // R9/R16 : si user authentifié, calculer les contraintes violées en batch (1 seule requête)
+        var userId = GetUserId();
+        var violations = userId.HasValue
+            ? await _contraintesService.GetContraintesVioleesAsync(
+                userId.Value,
+                recettes.Select(r => r.IdRecette).ToList())
+            : new Dictionary<int, List<ContrainteDto>>();
+
+        // Enrichir le payload : tableau vide si pas d'auth ou aucune violation
+        var enrichies = recettes.Select(r => new
+        {
+            r.IdRecette,
+            r.Nom,
+            r.Description,
+            r.TempsPreparation,
+            r.TempsCuisson,
+            r.NiveauDifficulte,
+            r.TypeRepas,
+            r.Categorie,
+            ContraintesViolees = violations.TryGetValue(r.IdRecette, out var v) ? v : new List<ContrainteDto>()
+        });
+
+        return Ok(enrichies);
     }
 
     [HttpGet("{id}")]
@@ -59,7 +96,6 @@ public class RecettesController : ControllerBase
         else
             return BadRequest(new { error = $"Mode invalide : '{mode}'. Valeurs acceptées : original, vegetarien, vegan." });
 
-        // Charge la recette avec ingrédients + étapes (Include nécessaire pour passer au service)
         var recette = await _context.Recettes
             .Include(r => r.Ingredients)
                 .ThenInclude(ri => ri.Ingredient)
@@ -68,7 +104,6 @@ public class RecettesController : ControllerBase
 
         if (recette == null) return NotFound();
 
-        // Substitutions chargées uniquement si nécessaire (économie en mode original)
         List<SubstitutionIngredient> substitutions;
         if (modeAdaptation == ModeAdaptation.Original)
         {
@@ -85,6 +120,13 @@ public class RecettesController : ControllerBase
 
         var adaptee = _substitutionService.AdapterRecette(recette.Ingredients, substitutions, modeAdaptation);
 
+        // R9/R16 : contraintes violées pour cette recette (vide si anonyme)
+        var userId = GetUserId();
+        var contraintesViolees = userId.HasValue
+            ? (await _contraintesService.GetContraintesVioleesAsync(userId.Value, new List<int> { id }))
+                .GetValueOrDefault(id, new List<ContrainteDto>())
+            : new List<ContrainteDto>();
+
         return Ok(new
         {
             recette.IdRecette,
@@ -99,6 +141,7 @@ public class RecettesController : ControllerBase
             AdaptableVege = recette.AdaptableVege,
             AdaptableVegan = recette.AdaptableVegan,
             Mode = modeAdaptation.ToString().ToLowerInvariant(),
+            ContraintesViolees = contraintesViolees,
             Ingredients = adaptee.Ingredients
                 .OrderBy(i => i.Nom)
                 .Select(i => new

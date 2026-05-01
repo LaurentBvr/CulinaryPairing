@@ -75,4 +75,45 @@ public class ContraintesService : IContraintesService
 
         await _db.SaveChangesAsync();
     }
+    
+    public async Task<Dictionary<int, List<ContrainteDto>>> GetContraintesVioleesAsync(
+        int idUtilisateur,
+        List<int> idsRecettes)
+    {
+        if (idsRecettes.Count == 0)
+            return new Dictionary<int, List<ContrainteDto>>();
+
+        // 1. Récupérer les ids contraintes activées par le user
+        var userContraintesIds = await _db.UtilisateursContraintes
+            .Where(uc => uc.IdUtilisateur == idUtilisateur)
+            .Select(uc => uc.IdContrainte)
+            .ToListAsync();
+
+        if (userContraintesIds.Count == 0)
+            return new Dictionary<int, List<ContrainteDto>>();
+
+        // 2. Joindre RECETTE_INGREDIENT → INGREDIENT_CONTRAINTE → CONTRAINTE_ALIMENTAIRE
+        //    Filtrer sur les recettes demandées + contraintes du user
+        var raw = await (
+            from ri in _db.RecettesIngredients
+            where idsRecettes.Contains(ri.IdRecette)
+            join ic in _db.IngredientsContraintes on ri.IdIngredient equals ic.IdIngredient
+            where userContraintesIds.Contains(ic.IdContrainte)
+            join c in _db.ContraintesAlimentaires on ic.IdContrainte equals c.IdContrainte
+            select new { ri.IdRecette, c.IdContrainte, c.Nom, c.Type }
+        ).Distinct().ToListAsync();
+
+        // 3. Grouper par recette
+        return raw
+            .GroupBy(x => x.IdRecette)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(x => new ContrainteDto
+                {
+                    IdContrainte = x.IdContrainte,
+                    Nom = x.Nom,
+                    Type = x.Type.ToString()
+                }).ToList()
+            );
+    }
 }
