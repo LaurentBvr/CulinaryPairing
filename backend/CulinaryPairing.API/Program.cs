@@ -9,6 +9,7 @@ using CulinaryPairing.BLL.PairingEngine.Rules;
 using CulinaryPairing.BLL.VideFrigo;
 using CulinaryPairing.BLL.Substitution;
 using CulinaryPairing.BLL.Favoris;
+using CulinaryPairing.BLL.Contraintes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,6 +93,7 @@ builder.Services.AddScoped<IAccordsService, AccordsService>();
 builder.Services.AddScoped<VideFrigoService>();
 builder.Services.AddScoped<ISubstitutionService, SubstitutionService>();
 builder.Services.AddScoped<IFavorisService, FavorisService>();
+builder.Services.AddScoped<IContraintesService, ContraintesService>();
 
 var app = builder.Build();
 
@@ -111,7 +113,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AngularDev");
-app.UseAuthentication();  // test avant UseAuthorization
+app.UseAuthentication();  
 app.UseAuthorization();
 app.MapControllers();
 
