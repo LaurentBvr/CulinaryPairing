@@ -182,6 +182,12 @@ public class CulinaryPairingDbContext : DbContext
             .HasIndex(a => new { a.IdRecette, a.IdBoisson, a.TypeAccord })
             .IsUnique();
 
+        // V1.3 - Accord inversé : index symétrique pour optimiser le tri par score
+        // côté boisson (GET /api/boissons/{id}/accords).
+        modelBuilder.Entity<Accord>()
+            .HasIndex(a => new { a.IdBoisson, a.ScoreCompatibilite })
+            .HasDatabaseName("IX_Accord_Boisson_Score");
+
         // ----- Familles aromatiques (M:N) -----
         modelBuilder.Entity<RecetteFamilleAromatique>()
             .HasOne(rf => rf.Recette)

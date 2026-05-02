@@ -90,6 +90,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IAccordsService, AccordsService>();
+builder.Services.AddScoped<IBoissonsService, BoissonsService>();
 builder.Services.AddScoped<VideFrigoService>();
 builder.Services.AddScoped<ISubstitutionService, SubstitutionService>();
 builder.Services.AddScoped<IFavorisService, FavorisService>();
