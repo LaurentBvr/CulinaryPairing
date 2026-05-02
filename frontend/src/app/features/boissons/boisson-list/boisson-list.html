@@ -1,0 +1,59 @@
+<div class="boissons-container">
+  <h1>Boissons</h1>
+  <p class="intro">
+    Sélectionnez une boisson pour découvrir les recettes qui s'accordent le mieux avec elle.
+  </p>
+
+  @if (loading) {
+    <p class="loading">Chargement...</p>
+  }
+
+  @if (error) {
+    <p class="error">{{ error }}</p>
+  }
+
+  @if (!loading && !error) {
+    <div class="filtre-section">
+      <label for="filtre-type">Filtrer par type :</label>
+      <select id="filtre-type" [(ngModel)]="filtreType">
+        <option value="tous">Tous ({{ boissons.length }})</option>
+        @for (t of typesDisponibles; track t) {
+          <option [value]="t">{{ t }}</option>
+        }
+      </select>
+    </div>
+
+    @if (boissonsFiltrees.length === 0) {
+      <p class="empty">Aucune boisson pour ce filtre.</p>
+    } @else {
+      <ul class="boissons-grid">
+        @for (b of boissonsFiltrees; track b.idBoisson) {
+          <li class="boisson-card">
+            <a [routerLink]="['/boissons', b.idBoisson]" class="boisson-link">
+              <div class="boisson-header">
+                <span class="boisson-nom">{{ b.nom }}</span>
+                @if (b.typeBoisson) {
+                  <span class="boisson-type">{{ b.typeBoisson }}</span>
+                }
+              </div>
+              <div class="boisson-meta">
+                @if (b.degreAlcool !== null) {
+                  <span>{{ b.degreAlcool }}°</span>
+                }
+                @if (b.corps) {
+                  <span>{{ b.corps }}</span>
+                }
+                @if (formaterOrigine(b)) {
+                  <span class="origine">{{ formaterOrigine(b) }}</span>
+                }
+                @if (!b.alcoolise) {
+                  <span class="badge-no-alcool">Sans alcool</span>
+                }
+              </div>
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  }
+</div>

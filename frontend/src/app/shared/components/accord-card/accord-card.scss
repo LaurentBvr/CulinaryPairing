@@ -1,0 +1,82 @@
+.accord-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: box-shadow 0.2s ease;
+}
+
+.accord-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.accord-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.accord-titre {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.accord-score {
+  font-weight: 700;
+  color: #6b4226;
+  white-space: nowrap;
+}
+
+.accord-sous-titre {
+  font-size: 0.85rem;
+  color: #888;
+  font-style: italic;
+}
+
+.accord-justification {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: #444;
+}
+
+.accord-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+}
+
+.accord-confiance {
+  color: #555;
+}
+
+.accord-malus {
+  color: #b85c00;
+  font-weight: 500;
+}
+
+.accord-regles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+
+.regles-label {
+  color: #777;
+}
+
+.regle-badge {
+  background: #f3eee8;
+  color: #6b4226;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+}

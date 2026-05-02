@@ -25,6 +25,14 @@ export const routes: Routes = [
     loadComponent: () => import('./features/recettes/recette-detail/recette-detail').then(m => m.RecetteDetail),
   },
   {
+    path: 'boissons',
+    loadComponent: () => import('./features/boissons/boisson-list/boisson-list').then(m => m.BoissonList),
+  },
+  {
+    path: 'boissons/:id',
+    loadComponent: () => import('./features/boissons/boisson-detail/boisson-detail').then(m => m.BoissonDetail),
+  },
+  {
     path: 'mes-favoris',
     loadComponent: () => import('./features/favoris/favoris-list/favoris-list').then(m => m.FavorisList),
     canActivate: [authGuard]

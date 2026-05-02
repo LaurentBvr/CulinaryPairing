@@ -1,0 +1,114 @@
+<div class="boisson-detail-container">
+  <a routerLink="/boissons" class="back-link">← Retour aux boissons</a>
+
+  @if (loading) {
+    <p class="loading">Chargement...</p>
+  }
+
+  @if (error) {
+    <p class="error">{{ error }}</p>
+  }
+
+  @if (boisson) {
+    <div class="boisson-header">
+      <div class="badges">
+        @if (boisson.typeBoisson) {
+          <span class="badge">{{ boisson.typeBoisson }}</span>
+        }
+        @if (!boisson.alcoolise) {
+          <span class="badge badge-no-alcool">Sans alcool</span>
+        }
+        @if (boisson.corps) {
+          <span class="badge">{{ boisson.corps }}</span>
+        }
+      </div>
+      <h1>{{ boisson.nom }}</h1>
+      @if (formaterOrigine()) {
+        <p class="origine">{{ formaterOrigine() }}</p>
+      }
+      @if (boisson.cepage) {
+        <p class="cepage">Cépage : {{ boisson.cepage }}</p>
+      }
+    </div>
+
+    <div class="boisson-info-grid">
+      <section class="info-section">
+        <h2>Profil gustatif</h2>
+        <ul class="profile-list">
+          @if (boisson.degreAlcool !== null) {
+            <li><span>Degré d'alcool</span><strong>{{ boisson.degreAlcool }}°</strong></li>
+          }
+          @if (boisson.niveauAcidite !== null) {
+            <li><span>Acidité</span><strong>{{ boisson.niveauAcidite }}/10</strong></li>
+          }
+          @if (boisson.niveauSucre !== null) {
+            <li><span>Sucre</span><strong>{{ boisson.niveauSucre }}/10</strong></li>
+          }
+          @if (boisson.niveauTannins !== null) {
+            <li><span>Tannins</span><strong>{{ boisson.niveauTannins }}/10</strong></li>
+          }
+          @if (boisson.niveauAmertume !== null) {
+            <li><span>Amertume</span><strong>{{ boisson.niveauAmertume }}/10</strong></li>
+          }
+          @if (boisson.intensiteAromatique !== null) {
+            <li><span>Intensité aromatique</span><strong>{{ boisson.intensiteAromatique }}/10</strong></li>
+          }
+          @if (boisson.niveauFume !== null && boisson.niveauFume > 0) {
+            <li><span>Fumé</span><strong>{{ boisson.niveauFume }}/10</strong></li>
+          }
+        </ul>
+      </section>
+
+      @if (formaterTemperatureService() || boisson.coutMoyen !== null) {
+        <section class="info-section">
+          <h2>Service</h2>
+          <ul class="profile-list">
+            @if (formaterTemperatureService()) {
+              <li><span>Température optimale</span><strong>{{ formaterTemperatureService() }}</strong></li>
+            }
+            @if (boisson.coutMoyen !== null) {
+              <li><span>Coût moyen</span><strong>{{ boisson.coutMoyen }} €</strong></li>
+            }
+          </ul>
+        </section>
+      }
+
+      @if (boisson.famillesAromatiques.length > 0) {
+        <section class="info-section">
+          <h2>Familles aromatiques</h2>
+          <div class="familles-list">
+            @for (f of boisson.famillesAromatiques; track f) {
+              <span class="famille-badge">{{ f }}</span>
+            }
+          </div>
+        </section>
+      }
+    </div>
+
+    <section class="accords-section">
+      <h2>🍽️ Recettes qui s'accordent</h2>
+
+      @if (loadingAccords) {
+        <p class="loading">Calcul des accords...</p>
+      } @else if (accordsError) {
+        <p class="error">{{ accordsError }}</p>
+      } @else if (accords.length === 0) {
+        <p class="empty">Aucune recette publiée ne s'accorde actuellement avec cette boisson.</p>
+      } @else {
+        <p class="accords-intro">
+          {{ accords.length }} recette(s), triée(s) par score d'accord (moteur v1.3).
+        </p>
+        <div class="accords-grid">
+          @for (a of accords; track a.idAccord) {
+            <a [routerLink]="['/recettes', a.idRecette]" class="accord-link">
+              <app-accord-card
+                [accord]="toAccordCardData(a)"
+                mode="boisson"
+              ></app-accord-card>
+            </a>
+          }
+        </div>
+      }
+    </section>
+  }
+</div>

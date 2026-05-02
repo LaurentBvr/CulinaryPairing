@@ -1,0 +1,35 @@
+<div class="accord-card" [attr.data-mode]="mode">
+  <div class="accord-header">
+    <span class="accord-titre">{{ accord.titre }}</span>
+    <span class="accord-score">{{ accord.scoreCompatibilite }}/100</span>
+  </div>
+
+  @if (accord.sousTitre) {
+    <span class="accord-sous-titre">{{ accord.sousTitre }}</span>
+  }
+
+  <p class="accord-justification">{{ accord.justification }}</p>
+
+  <div class="accord-meta">
+    @if (accord.niveauConfiance !== null) {
+      <span
+        class="accord-confiance"
+        [title]="'Score basé sur ' + accord.niveauConfiance + '% des règles applicables'"
+      >
+        Fiabilité : {{ labelConfiance(accord.niveauConfiance) }}
+      </span>
+    }
+    @if (accord.malusApplique && accord.malusApplique > 0) {
+      <span class="accord-malus">Malus : −{{ accord.malusApplique }}</span>
+    }
+  </div>
+
+  @if (splitRegles(accord.reglesSatisfaites).length > 0) {
+    <div class="accord-regles">
+      <span class="regles-label">Règles :</span>
+      @for (r of splitRegles(accord.reglesSatisfaites); track r) {
+        <span class="regle-badge">{{ r }}</span>
+      }
+    </div>
+  }
+</div>
