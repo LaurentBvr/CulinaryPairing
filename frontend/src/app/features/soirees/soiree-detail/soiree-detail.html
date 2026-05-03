@@ -118,7 +118,9 @@
                         (click)="desassigner(s.key)">
                   {{ slotEnCours === s.key ? '...' : 'Retirer' }}
                 </button>
-                <button class="btn-primary" disabled title="Disponible au cycle 12">
+                <button class="btn-primary"
+                        [disabled]="slotEnCours === s.key"
+                        (click)="ouvrirPicker(s.key)">
                   Changer
                 </button>
               </footer>
@@ -127,7 +129,9 @@
                 <p>Aucune recette assignée.</p>
               </div>
               <footer class="slot-actions">
-                <button class="btn-primary" disabled title="Disponible au cycle 12">
+                <button class="btn-primary"
+                        [disabled]="slotEnCours === s.key"
+                        (click)="ouvrirPicker(s.key)">
                   Choisir une recette
                 </button>
               </footer>
@@ -137,4 +141,14 @@
       </div>
     </section>
   }
+
+  @if (slotPickerOuvert && soiree) {
+      <app-recette-picker
+        [idSoiree]="soiree.idSoiree"
+        [slot]="slotPickerOuvert"
+        [idRecetteCourante]="recetteDuSlot(slotPickerOuvert)?.idRecette ?? null"
+        (recetteChoisie)="onRecetteChoisie($event)"
+        (ferme)="fermerPicker()">
+      </app-recette-picker>
+    }
 </div>

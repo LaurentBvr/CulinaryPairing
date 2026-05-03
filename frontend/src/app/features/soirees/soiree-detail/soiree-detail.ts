@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
+import { RecettePicker } from '../../../shared/components/recette-picker/recette-picker';
 import { CommonModule } from '@angular/common';
 import {
   SoireesService, SoireeDetail as SoireeDetailDto,
@@ -15,7 +16,7 @@ interface SlotConfig {
 @Component({
   selector: 'app-soiree-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, RecettePicker],
   templateUrl: './soiree-detail.html',
   styleUrl: './soiree-detail.scss'
 })
@@ -31,6 +32,9 @@ export class SoireeDetail implements OnInit {
 
   // Action en cours sur un slot (pour désactiver les boutons pendant l'appel)
   slotEnCours: MenuSlot | null = null;
+
+  /** Slot dont la modale RecettePicker est ouverte (null = fermée). */
+  slotPickerOuvert: MenuSlot | null = null;
 
   readonly slots: SlotConfig[] = [
     { key: 'entree',  label: 'Entrée',  icone: '🥗' },
@@ -97,6 +101,32 @@ export class SoireeDetail implements OnInit {
     this.soirees.delete(this.soiree.idSoiree).subscribe({
       next: () => this.router.navigate(['/soirees']),
       error: () => alert('Suppression échouée.')
+    });
+  }
+
+  ouvrirPicker(slot: MenuSlot) {
+    this.slotPickerOuvert = slot;
+  }
+
+  fermerPicker() {
+    this.slotPickerOuvert = null;
+  }
+
+  onRecetteChoisie(r: RecetteSlot) {
+    if (!this.soiree || !this.slotPickerOuvert) return;
+    const slot = this.slotPickerOuvert;
+    this.slotEnCours = slot;
+    this.soirees.assignSlot(this.soiree.idSoiree, slot, r.idRecette).subscribe({
+      next: m => {
+        this.menu = m;
+        this.slotEnCours = null;
+        this.slotPickerOuvert = null;
+      },
+      error: err => {
+        const msg = err.error?.detail || err.error?.title || 'Assignation refusée par le serveur.';
+        alert(msg);
+        this.slotEnCours = null;
+      }
     });
   }
 

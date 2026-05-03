@@ -1,0 +1,60 @@
+<div class="modale-backdrop" (click)="fermer()">
+  <div class="modale" (click)="stopPropagation($event)">
+
+    <header class="modale-header">
+      <h2>Choisir une recette — {{ slotLabel }}</h2>
+      <button class="btn-close" (click)="fermer()" aria-label="Fermer">×</button>
+    </header>
+
+    <div class="modale-body">
+      @if (loading) {
+        <p class="loading">Chargement des recettes éligibles...</p>
+      }
+
+      @if (error) {
+        <p class="error">{{ error }}</p>
+      }
+
+      @if (!loading && !error) {
+        <p class="hint">
+          Recettes filtrées selon le slot et les contraintes alimentaires de la soirée.
+        </p>
+
+        @if (recettes.length === 0) {
+          <p class="empty">
+            Aucune recette ne correspond à ce slot avec les contraintes définies.
+            Essayez de réduire les contraintes de la soirée.
+          </p>
+        } @else {
+          <ul class="recettes-list">
+            @for (r of recettes; track r.idRecette) {
+              <li class="recette-item"
+                  [class.recette-courante]="r.idRecette === idRecetteCourante">
+                <div class="recette-info">
+                  <h3>{{ r.titre }}</h3>
+                  <div class="recette-meta">
+                    @if (r.tempsPreparation !== null) {
+                      <span>Prép. {{ r.tempsPreparation }} min</span>
+                    }
+                    @if (r.tempsCuisson !== null) {
+                      <span>Cuiss. {{ r.tempsCuisson }} min</span>
+                    }
+                    @if (r.coutEstime !== null) {
+                      <span>{{ r.coutEstime | number:'1.2-2' }} €</span>
+                    }
+                  </div>
+                </div>
+                <button class="btn-choisir"
+                        [disabled]="r.idRecette === idRecetteCourante"
+                        (click)="choisir(r)">
+                  {{ r.idRecette === idRecetteCourante ? 'Sélectionnée' : 'Choisir' }}
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      }
+    </div>
+
+  </div>
+</div>
