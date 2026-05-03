@@ -10,6 +10,7 @@ using CulinaryPairing.BLL.VideFrigo;
 using CulinaryPairing.BLL.Substitution;
 using CulinaryPairing.BLL.Favoris;
 using CulinaryPairing.BLL.Contraintes;
+using CulinaryPairing.BLL.Soirees;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,7 +87,12 @@ builder.Services.AddCors(options =>
 });
 
 // ----- Controllers + OpenAPI -----
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.Converters.Add(
+            new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IAccordsService, AccordsService>();
@@ -95,6 +101,7 @@ builder.Services.AddScoped<VideFrigoService>();
 builder.Services.AddScoped<ISubstitutionService, SubstitutionService>();
 builder.Services.AddScoped<IFavorisService, FavorisService>();
 builder.Services.AddScoped<IContraintesService, ContraintesService>();
+builder.Services.AddScoped<ISoireesService, SoireesService>();
 
 var app = builder.Build();
 
