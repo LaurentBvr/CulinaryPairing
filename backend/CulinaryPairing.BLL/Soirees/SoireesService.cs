@@ -31,7 +31,10 @@ public class SoireesService : ISoireesService
                 TypeSoiree = s.TypeSoiree.HasValue ? s.TypeSoiree.Value.ToString() : null,
                 DateCreation = s.DateCreation,
                 NbContraintes = s.Contraintes.Count,
-                MenuComplet = false // cycle 6 : sera calculé sur 3 slots remplis
+                MenuComplet = s.Menus.Any(m =>
+                    m.IdRecetteEntree != null &&
+                    m.IdRecettePlat != null &&
+                    m.IdRecetteDessert != null)
             })
             .ToListAsync();
     }

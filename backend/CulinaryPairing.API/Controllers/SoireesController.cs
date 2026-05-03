@@ -12,8 +12,13 @@ namespace CulinaryPairing.API.Controllers;
 public class SoireesController : ControllerBase
 {
     private readonly ISoireesService _service;
+    private readonly IMenusService _menus;
 
-    public SoireesController(ISoireesService service) => _service = service;
+    public SoireesController(ISoireesService service, IMenusService menus)
+    {
+        _service = service;
+        _menus = menus;
+    }
 
     /// <summary>Récupère l'id user depuis le claim JWT. Levée si absent (devrait jamais arriver avec [Authorize]).</summary>
     private int GetUserId()
@@ -73,5 +78,46 @@ public class SoireesController : ControllerBase
     {
         var ok = await _service.DeleteAsync(id, GetUserId());
         return ok ? NoContent() : NotFound();
+    }
+
+    // ===== MENU =====
+
+    // GET /api/soirees/{id}/menu
+    [HttpGet("{id:int}/menu")]
+    public async Task<ActionResult<MenuDto>> GetMenu(int id)
+    {
+        var menu = await _menus.GetOrCreateAsync(id, GetUserId());
+        return menu == null ? NotFound() : Ok(menu);
+    }
+
+    // PUT /api/soirees/{id}/menu/slot/{slot}
+    [HttpPut("{id:int}/menu/slot/{slot}")]
+    public async Task<ActionResult<MenuDto>> AssignSlot(int id, string slot, [FromBody] AssignSlotDto dto)
+    {
+        try
+        {
+            var menu = await _menus.AssignSlotAsync(id, slot, dto.IdRecette, GetUserId());
+            return menu == null ? NotFound() : Ok(menu);
+        }
+        catch (ArgumentException ex)
+        {
+            // ProblemDetails ASP.NET Core (RFC 7807) - format standard remontant un message lisible
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Assignation invalide");
+        }
+    }
+
+    // DELETE /api/soirees/{id}/menu/slot/{slot}
+    [HttpDelete("{id:int}/menu/slot/{slot}")]
+    public async Task<ActionResult<MenuDto>> UnassignSlot(int id, string slot)
+    {
+        try
+        {
+            var menu = await _menus.UnassignSlotAsync(id, slot, GetUserId());
+            return menu == null ? NotFound() : Ok(menu);
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Slot invalide");
+        }
     }
 }

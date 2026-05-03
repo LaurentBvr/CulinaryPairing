@@ -102,6 +102,7 @@ builder.Services.AddScoped<ISubstitutionService, SubstitutionService>();
 builder.Services.AddScoped<IFavorisService, FavorisService>();
 builder.Services.AddScoped<IContraintesService, ContraintesService>();
 builder.Services.AddScoped<ISoireesService, SoireesService>();
+builder.Services.AddScoped<IMenusService, MenusService>();
 
 var app = builder.Build();
 
