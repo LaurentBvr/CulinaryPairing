@@ -43,6 +43,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'soirees/:id',
+    loadComponent: () => import('./features/soirees/soiree-detail/soiree-detail').then(m => m.SoireeDetail),
+    canActivate: [authGuard]
+  },
+  {
     path: 'mes-favoris',
     loadComponent: () => import('./features/favoris/favoris-list/favoris-list').then(m => m.FavorisList),
     canActivate: [authGuard]

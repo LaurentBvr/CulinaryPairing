@@ -1,0 +1,140 @@
+<div class="detail-container">
+
+  @if (loading) {
+    <p class="loading">Chargement...</p>
+  }
+
+  @if (error) {
+    <p class="error">{{ error }}</p>
+    <a routerLink="/soirees" class="btn-secondary">← Retour à mes soirées</a>
+  }
+
+  @if (!loading && !error && soiree) {
+    <a routerLink="/soirees" class="back-link">← Mes soirées</a>
+
+    <header class="header">
+      <div>
+        <h1>{{ soiree.typeSoiree || 'Soirée' }}</h1>
+        <p class="subtitle">
+          {{ soiree.nombrePersonnes }} personnes
+          @if (soiree.nombreVegetariens > 0) {
+            · {{ soiree.nombreVegetariens }} végétarien(s)
+          }
+          @if (soiree.nombreVegans > 0) {
+            · {{ soiree.nombreVegans }} végan(s)
+          }
+        </p>
+      </div>
+      <button class="btn-delete-large" (click)="supprimer()">Supprimer la soirée</button>
+    </header>
+
+    <section class="info-section">
+      <div class="info-grid">
+        <div class="info-cell">
+          <span class="info-label">Budget</span>
+          <span class="info-value">
+            {{ soiree.budget !== null ? (soiree.budget | number:'1.2-2') + ' €' : '—' }}
+          </span>
+        </div>
+        <div class="info-cell">
+          <span class="info-label">Temps disponible</span>
+          <span class="info-value">{{ formaterTemps(soiree.tempsDisponible) }}</span>
+        </div>
+        <div class="info-cell">
+          <span class="info-label">Préférence alcool</span>
+          <span class="info-value">{{ soiree.preferenceAlcool }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="contraintes-section">
+      <h2>Contraintes appliquées au menu</h2>
+      @if (soiree.contraintesAgregees.length === 0) {
+        <p class="empty">Aucune contrainte alimentaire.</p>
+      } @else {
+        <p class="hint">
+          Les recettes proposées respecteront automatiquement ces contraintes
+          (incluant les régimes végétarien/végan déduits des cohortes).
+        </p>
+        <div class="tags">
+          @for (c of soiree.contraintesAgregees; track c.idContrainte) {
+            <span class="tag" [class.tag-sante]="c.type === 'Sante'"
+                              [class.tag-religieux]="c.type === 'Religieux'"
+                              [class.tag-choix]="c.type === 'Choix'">
+              {{ c.nom }}
+            </span>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="menu-section">
+      <div class="menu-header">
+        <h2>Menu de la soirée</h2>
+        @if (menu) {
+          <div class="totaux">
+            <span>
+              Coût :
+              <strong>
+                {{ menu.coutTotalEstime !== null
+                    ? (menu.coutTotalEstime | number:'1.2-2') + ' €'
+                    : '—' }}
+              </strong>
+            </span>
+            <span>
+              Temps :
+              <strong>{{ formaterTemps(menu.tempsTotalEstime) }}</strong>
+            </span>
+          </div>
+        }
+      </div>
+
+      <div class="slots-grid">
+        @for (s of slots; track s.key) {
+          <article class="slot-card" [class.slot-empty]="!recetteDuSlot(s.key)">
+            <header class="slot-header">
+              <span class="slot-icone">{{ s.icone }}</span>
+              <span class="slot-label">{{ s.label }}</span>
+            </header>
+
+            @if (recetteDuSlot(s.key); as r) {
+              <div class="slot-body">
+                <h3 class="recette-titre">{{ r.titre }}</h3>
+                <div class="recette-meta">
+                  @if (r.tempsPreparation !== null) {
+                    <span>Prép. {{ r.tempsPreparation }} min</span>
+                  }
+                  @if (r.tempsCuisson !== null) {
+                    <span>Cuiss. {{ r.tempsCuisson }} min</span>
+                  }
+                  @if (r.coutEstime !== null) {
+                    <span>{{ r.coutEstime | number:'1.2-2' }} €</span>
+                  }
+                </div>
+              </div>
+              <footer class="slot-actions">
+                <button class="btn-secondary"
+                        [disabled]="slotEnCours === s.key"
+                        (click)="desassigner(s.key)">
+                  {{ slotEnCours === s.key ? '...' : 'Retirer' }}
+                </button>
+                <button class="btn-primary" disabled title="Disponible au cycle 12">
+                  Changer
+                </button>
+              </footer>
+            } @else {
+              <div class="slot-body slot-vide">
+                <p>Aucune recette assignée.</p>
+              </div>
+              <footer class="slot-actions">
+                <button class="btn-primary" disabled title="Disponible au cycle 12">
+                  Choisir une recette
+                </button>
+              </footer>
+            }
+          </article>
+        }
+      </div>
+    </section>
+  }
+</div>
