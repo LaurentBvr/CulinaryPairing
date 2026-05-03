@@ -24,4 +24,11 @@ public interface IMenusService
 
     /// <summary>Retire la recette d'un slot. Recalcule. Returns null si soirée non détenue.</summary>
     Task<MenuDto?> UnassignSlotAsync(int idSoiree, string slot, int idUtilisateur);
+
+    /// <summary>
+    /// Recettes Statut=Publiee qui matchent le slot demandé ET ne violent aucune
+    /// contrainte agrégée de la soirée. Tri par titre.
+    /// Returns null si soirée non détenue. Throws ArgumentException si slot invalide.
+    /// </summary>
+    Task<List<RecetteSlotDto>?> GetRecettesEligiblesAsync(int idSoiree, string slot, int idUtilisateur);
 }

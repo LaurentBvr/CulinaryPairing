@@ -120,4 +120,21 @@ public class SoireesController : ControllerBase
             return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Slot invalide");
         }
     }
+
+    // ===== RECETTES ÉLIGIBLES =====
+
+    // GET /api/soirees/{id}/recettes-eligibles?slot=entree|plat|dessert
+    [HttpGet("{id:int}/recettes-eligibles")]
+    public async Task<ActionResult<List<RecetteSlotDto>>> GetRecettesEligibles(int id, [FromQuery] string slot)
+    {
+        try
+        {
+            var recettes = await _menus.GetRecettesEligiblesAsync(id, slot, GetUserId());
+            return recettes == null ? NotFound() : Ok(recettes);
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Slot invalide");
+        }
+    }
 }

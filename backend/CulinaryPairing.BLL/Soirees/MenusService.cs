@@ -90,6 +90,47 @@ public class MenusService : IMenusService
         return MapToDto(menuComplet!);
     }
 
+    // ---------- RECETTES ÉLIGIBLES ----------
+    public async Task<List<RecetteSlotDto>?> GetRecettesEligiblesAsync(int idSoiree, string slot, int idUtilisateur)
+    {
+        if (!await SoireeAppartientAuUserAsync(idSoiree, idUtilisateur)) return null;
+
+        var typePlat = ParseSlot(slot); // throws si invalide
+
+        var contraintesAgregees = await _soirees.GetContraintesAgregeesAsync(idSoiree, idUtilisateur);
+        var idsContraintesAgregees = contraintesAgregees.Select(c => c.IdContrainte).ToHashSet();
+
+        // Base : recettes publiées du bon type
+        var query = _db.Recettes
+            .AsNoTracking()
+            .Where(r => r.Statut == StatutRecette.Publiee && r.TypePlat == typePlat);
+
+        // Filtre contraintes : si aucune agrégée, toutes les recettes du type passent
+        if (idsContraintesAgregees.Count > 0)
+        {
+            // Une recette est éligible si AUCUN de ses ingrédients ne porte une contrainte interdite.
+            // Traduit en SQL : NOT EXISTS (ingredients dont une contrainte est dans idsContraintesAgregees).
+            query = query.Where(r =>
+                !r.Ingredients.Any(ri =>
+                    ri.Ingredient.Contraintes.Any(ic =>
+                        idsContraintesAgregees.Contains(ic.IdContrainte))));
+        }
+
+        return await query
+            .OrderBy(r => r.Titre)
+            .Select(r => new RecetteSlotDto
+            {
+                IdRecette = r.IdRecette,
+                Titre = r.Titre,
+                ImageUrl = r.ImageUrl,
+                TypePlat = r.TypePlat!.Value.ToString(),
+                TempsPreparation = r.TempsPreparation,
+                TempsCuisson = r.TempsCuisson,
+                CoutEstime = r.CoutEstime
+            })
+            .ToListAsync();
+    }
+    
     // ========== HELPERS ==========
 
     private async Task<bool> SoireeAppartientAuUserAsync(int idSoiree, int idUtilisateur)
