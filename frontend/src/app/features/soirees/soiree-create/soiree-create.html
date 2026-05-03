@@ -1,0 +1,119 @@
+<div class="create-container">
+  <h1>Nouvelle soirée</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+
+    <fieldset>
+      <legend>Convives</legend>
+
+      <div class="field">
+        <label for="nbPersonnes">Nombre de personnes *</label>
+        <input id="nbPersonnes" type="number" formControlName="nombrePersonnes" min="1" max="50" />
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="nbVeg">Dont végétariens</label>
+          <input id="nbVeg" type="number" formControlName="nombreVegetariens" min="0" />
+        </div>
+        <div class="field">
+          <label for="nbVegan">Dont végans</label>
+          <input id="nbVegan" type="number" formControlName="nombreVegans" min="0" />
+        </div>
+      </div>
+      <p class="hint">
+        Les recettes du menu seront automatiquement filtrées pour respecter ces régimes.
+      </p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Contraintes alimentaires des invités</legend>
+      <p class="hint">Cochez toutes les contraintes à respecter pour le menu.</p>
+
+      @if (contraintesParType('Sante').length > 0) {
+        <div class="contraintes-group">
+          <h4>Santé / Allergies</h4>
+          <div class="contraintes-list">
+            @for (c of contraintesParType('Sante'); track c.idContrainte) {
+              <label class="contrainte-chip" [class.selected]="estSelectionnee(c.idContrainte)">
+                <input type="checkbox" [checked]="estSelectionnee(c.idContrainte)"
+                       (change)="toggleContrainte(c.idContrainte)" />
+                {{ c.nom }}
+              </label>
+            }
+          </div>
+        </div>
+      }
+
+      @if (contraintesParType('Religieux').length > 0) {
+        <div class="contraintes-group">
+          <h4>Convictions religieuses</h4>
+          <div class="contraintes-list">
+            @for (c of contraintesParType('Religieux'); track c.idContrainte) {
+              <label class="contrainte-chip" [class.selected]="estSelectionnee(c.idContrainte)">
+                <input type="checkbox" [checked]="estSelectionnee(c.idContrainte)"
+                       (change)="toggleContrainte(c.idContrainte)" />
+                {{ c.nom }}
+              </label>
+            }
+          </div>
+        </div>
+      }
+
+      @if (contraintesParType('Choix').length > 0) {
+        <div class="contraintes-group">
+          <h4>Régimes / Choix personnels</h4>
+          <div class="contraintes-list">
+            @for (c of contraintesParType('Choix'); track c.idContrainte) {
+              <label class="contrainte-chip" [class.selected]="estSelectionnee(c.idContrainte)">
+                <input type="checkbox" [checked]="estSelectionnee(c.idContrainte)"
+                       (change)="toggleContrainte(c.idContrainte)" />
+                {{ c.nom }}
+              </label>
+            }
+          </div>
+        </div>
+      }
+    </fieldset>
+
+    <fieldset>
+      <legend>Détails (optionnel)</legend>
+
+      <div class="field">
+        <label for="type">Type de soirée</label>
+        <input id="type" type="text" formControlName="typeSoiree"
+               placeholder="ex. Anniversaire, Chic, Décontracté..." />
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="budget">Budget total (€)</label>
+          <input id="budget" type="number" formControlName="budget" min="0" step="0.01" />
+        </div>
+        <div class="field">
+          <label for="temps">Temps disponible (min)</label>
+          <input id="temps" type="number" formControlName="tempsDisponible" min="0" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="alcool">Préférence alcool *</label>
+        <select id="alcool" formControlName="preferenceAlcool">
+          <option value="Avec">Avec alcool</option>
+          <option value="Sans">Sans alcool</option>
+        </select>
+      </div>
+    </fieldset>
+
+    @if (error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    <div class="actions">
+      <a routerLink="/soirees" class="btn-secondary">Annuler</a>
+      <button type="submit" class="btn-primary" [disabled]="loading">
+        {{ loading ? 'Création...' : 'Créer la soirée' }}
+      </button>
+    </div>
+  </form>
+</div>
