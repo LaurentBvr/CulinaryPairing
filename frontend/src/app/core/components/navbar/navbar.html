@@ -7,6 +7,7 @@
     <a routerLink="/boissons" routerLinkActive="active">Boissons</a>
     <a routerLink="/vide-frigo" routerLinkActive="active">Vide-frigo</a>
     @if (auth.currentUser$ | async) {
+      <a routerLink="/soirees" routerLinkActive="active">Mes soirées</a>
       <a routerLink="/mes-favoris" routerLinkActive="active">Mes favoris</a>
       <a routerLink="/profile" routerLinkActive="active">Mon profil</a>
     }

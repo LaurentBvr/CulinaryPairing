@@ -33,6 +33,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/boissons/boisson-detail/boisson-detail').then(m => m.BoissonDetail),
   },
   {
+    path: 'soirees',
+    loadComponent: () => import('./features/soirees/soiree-list/soiree-list').then(m => m.SoireeList),
+    canActivate: [authGuard]
+  },
+  {
     path: 'mes-favoris',
     loadComponent: () => import('./features/favoris/favoris-list/favoris-list').then(m => m.FavorisList),
     canActivate: [authGuard]

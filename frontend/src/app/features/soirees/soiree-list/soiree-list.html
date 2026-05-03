@@ -1,0 +1,48 @@
+<div class="soirees-container">
+  <div class="header">
+    <h1>Mes soirées</h1>
+    <a routerLink="/soirees/nouveau" class="btn-primary">+ Nouvelle soirée</a>
+  </div>
+
+  @if (loading) {
+    <p class="loading">Chargement...</p>
+  }
+
+  @if (error) {
+    <p class="error">{{ error }}</p>
+  }
+
+  @if (!loading && !error) {
+    @if (soirees.length === 0) {
+      <p class="empty">
+        Vous n'avez pas encore de soirée. Cliquez sur "Nouvelle soirée" pour commencer.
+      </p>
+    } @else {
+      <ul class="soirees-grid">
+        @for (s of soirees; track s.idSoiree) {
+          <li class="soiree-card">
+            <a [routerLink]="['/soirees', s.idSoiree]" class="soiree-link">
+              <div class="soiree-header">
+                <span class="soiree-titre">
+                  {{ s.typeSoiree || 'Soirée' }} — {{ s.nombrePersonnes }} pers.
+                </span>
+                @if (s.menuComplet) {
+                  <span class="badge-complet">Menu complet</span>
+                } @else {
+                  <span class="badge-incomplet">Menu à composer</span>
+                }
+              </div>
+              <div class="soiree-meta">
+                <span>{{ s.dateCreation | date:'dd/MM/yyyy' }}</span>
+                @if (s.nbContraintes > 0) {
+                  <span>{{ s.nbContraintes }} contrainte(s)</span>
+                }
+              </div>
+            </a>
+            <button class="btn-delete" (click)="supprimer(s)" title="Supprimer">×</button>
+          </li>
+        }
+      </ul>
+    }
+  }
+</div>
