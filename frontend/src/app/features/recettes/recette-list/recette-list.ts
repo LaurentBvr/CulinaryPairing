@@ -1,13 +1,17 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { RecetteService, Recette } from '../../../core/services/recette';
 import { FavorisService } from '../../../core/services/favoris';
 import { AuthService } from '../../../core/services/auth';
 
+type FiltreType = 'Toutes' | 'Entrée' | 'Plat' | 'Dessert';
+type FiltreDifficulte = 'Toutes' | 'Facile' | 'Moyen' | 'Difficile';
+
 @Component({
   selector: 'app-recette-list',
   standalone: true,
-  imports: [RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './recette-list.html',
   styleUrl: './recette-list.scss'
 })
@@ -17,18 +21,50 @@ export class RecetteList implements OnInit {
   private auth = inject(AuthService);
   private router = inject(Router);
 
-  // Signals : permettent un filtrage réactif via computed()
+  // Données brutes
   recettes = signal<Recette[]>([]);
-  masquerIncompatibles = signal(true); // R9 strict par défaut, override possible
   loading = true;
   error = '';
 
-  // Vue filtrée : si toggle activé, exclut les recettes ayant ≥1 contrainte violée
-  recettesAffichees = computed(() => {
-    const all = this.recettes();
-    if (!this.masquerIncompatibles()) return all;
-    return all.filter(r => !r.contraintesViolees || r.contraintesViolees.length === 0);
-  });
+  // Filtres
+  filtreType = signal<FiltreType>('Toutes');
+  filtreDifficulte = signal<FiltreDifficulte>('Toutes');
+  masquerIncompatibles = signal(true); // R9 strict par défaut, override possible
+
+  // Helper : compare 2 strings en ignorant accents et casse
+private normalize(s: string): string {
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+// Vue filtrée : type + difficulté + masquer incompatibles
+recettesAffichees = computed(() => {
+  let result = this.recettes();
+
+  // Filtre type (tolérant aux accents)
+  if (this.filtreType() !== 'Toutes') {
+    const target = this.normalize(this.filtreType());
+    result = result.filter(r => this.normalize(r.typeRepas) === target);
+  }
+
+  // Filtre difficulté (tolérant aux accents)
+  if (this.filtreDifficulte() !== 'Toutes') {
+    const target = this.normalize(this.filtreDifficulte());
+    result = result.filter(r => this.normalize(r.niveauDifficulte) === target);
+  }
+
+  // Masquer incompatibles
+  if (this.masquerIncompatibles()) {
+    result = result.filter(r => !r.contraintesViolees || r.contraintesViolees.length === 0);
+  }
+
+  return result;
+});
+
+  // Compteurs pour les chips de filtre (calculés sur l'ensemble brut, pas sur le filtré)
+  countToutes = computed(() => this.recettes().length);
+  countEntrees = computed(() => this.recettes().filter(r => this.normalize(r.typeRepas) === 'entree').length);
+  countPlats = computed(() => this.recettes().filter(r => this.normalize(r.typeRepas) === 'plat').length);
+  countDesserts = computed(() => this.recettes().filter(r => this.normalize(r.typeRepas) === 'dessert').length);
 
   // Compteur masqué pour info utilisateur
   nbMasquees = computed(() =>
@@ -57,6 +93,14 @@ export class RecetteList implements OnInit {
 
   toggleMasquer(): void {
     this.masquerIncompatibles.update(v => !v);
+  }
+
+  setFiltreType(type: FiltreType): void {
+    this.filtreType.set(type);
+  }
+
+  setFiltreDifficulte(diff: FiltreDifficulte): void {
+    this.filtreDifficulte.set(diff);
   }
 
   // Concatène les noms de contraintes violées pour l'affichage badge

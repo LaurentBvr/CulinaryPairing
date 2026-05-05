@@ -1,71 +1,118 @@
-<div class="recette-list-container">
-  <h1>Recettes</h1>
+<div class="page-wrap">
+  <div class="page-content">
 
-  @if (loading) {
-    <p class="loading">Chargement...</p>
-  }
-
-  @if (error) {
-    <p class="error">{{ error }}</p>
-  }
-
-  @if (toggleVisible()) {
-    <div class="filtre-incompatibles">
-      <label>
-        <input
-          type="checkbox"
-          [checked]="masquerIncompatibles()"
-          (change)="toggleMasquer()"
-        />
-        Masquer les recettes incompatibles avec mes contraintes
-        <span class="count">
-          ({{ nbMasquees() }} {{ nbMasquees() === 1 ? 'recette masquée' : 'recettes masquées' }})
-        </span>
-      </label>
+    <!-- Header éditorial -->
+    <div class="page-head">
+      <div>
+        <div class="eyebrow">— Bibliothèque —</div>
+        <h1>Recettes <em>du chef</em>.</h1>
+        <p class="lede">Sélectionnez une recette pour découvrir les boissons qui s'accordent le mieux selon les 16 règles de sommellerie.</p>
+      </div>
+      <div class="right">
+        {{ countToutes() }}&nbsp;recettes<br>
+        {{ countEntrees() }}&nbsp;Entrées · {{ countPlats() }}&nbsp;Plats · {{ countDesserts() }}&nbsp;Desserts
+      </div>
     </div>
-  }
 
-  <div class="recettes-grid">
-    @for (recette of recettesAffichees(); track recette.idRecette) {
+    @if (loading) {
+      <p style="text-align:center; padding:40px; color:var(--ink-500);">Chargement...</p>
+    }
 
-      <a
-        class="recette-card"
-        [class.incompatible]="recette.contraintesViolees && recette.contraintesViolees.length > 0"
-        [routerLink]="['/recettes', recette.idRecette]"
-      >
-        <button
-          type="button"
-          class="btn-favori"
-          [class.active]="favorisService.isFavori(recette.idRecette)"
-          (click)="onToggleFavori($event, recette.idRecette)"
-          [attr.aria-label]="favorisService.isFavori(recette.idRecette) ? 'Retirer des favoris' : 'Ajouter aux favoris'"
-        >
-          {{ favorisService.isFavori(recette.idRecette) ? '★' : '☆' }}
-        </button>
+    @if (error) {
+      <p class="err" style="text-align:center; padding:40px;">{{ error }}</p>
+    }
 
-        @if (recette.contraintesViolees && recette.contraintesViolees.length > 0) {
-          <div
-            class="badge-incompatible"
-            [title]="'Contraintes violées : ' + contraintesLabel(recette)"
-          >
-            ⚠️ {{ contraintesLabel(recette) }}
+    @if (!loading && !error) {
+
+      <!-- Barre de filtres -->
+      <div class="filterbar">
+        <div class="filter-chips">
+          <button class="fchip" [class.active]="filtreType() === 'Toutes'" (click)="setFiltreType('Toutes')">
+            Toutes <span class="count">{{ countToutes() }}</span>
+          </button>
+          <button class="fchip" [class.active]="filtreType() === 'Entrée'" (click)="setFiltreType('Entrée')">
+            Entrées <span class="count">{{ countEntrees() }}</span>
+          </button>
+          <button class="fchip" [class.active]="filtreType() === 'Plat'" (click)="setFiltreType('Plat')">
+            Plats <span class="count">{{ countPlats() }}</span>
+          </button>
+          <button class="fchip" [class.active]="filtreType() === 'Dessert'" (click)="setFiltreType('Dessert')">
+            Desserts <span class="count">{{ countDesserts() }}</span>
+          </button>
+          <span style="width:1px; height:24px; background:var(--cream-300); margin:0 4px;"></span>
+          <button class="fchip" [class.active]="filtreDifficulte() === 'Toutes'" (click)="setFiltreDifficulte('Toutes')">
+            Toutes difficultés
+          </button>
+          <button class="fchip" [class.active]="filtreDifficulte() === 'Facile'" (click)="setFiltreDifficulte('Facile')">
+            Facile
+          </button>
+          <button class="fchip" [class.active]="filtreDifficulte() === 'Moyen'" (click)="setFiltreDifficulte('Moyen')">
+            Moyen
+          </button>
+          <button class="fchip" [class.active]="filtreDifficulte() === 'Difficile'" (click)="setFiltreDifficulte('Difficile')">
+            Difficile
+          </button>
+        </div>
+
+        @if (toggleVisible()) {
+          <div class="toggle-row">
+            <span>Masquer recettes incompatibles ({{ nbMasquees() }})</span>
+            <span class="toggle" [class.on]="masquerIncompatibles()" (click)="toggleMasquer()"></span>
           </div>
         }
+      </div>
 
-        <div class="card-header">
-          <span class="categorie">{{ recette.categorie }}</span>
-          <span class="difficulte">{{ recette.niveauDifficulte }}</span>
+      <!-- Grille de recettes -->
+      @if (recettesAffichees().length > 0) {
+        <div class="grid-recipes">
+          @for (recette of recettesAffichees(); track recette.idRecette) {
+
+            <a class="recipe-card"
+               [class.is-incompatible]="recette.contraintesViolees && recette.contraintesViolees.length > 0"
+               [routerLink]="['/recettes', recette.idRecette]">
+
+              <div class="img ph-stripes">
+                <span class="lab">[ {{ recette.nom }} ]</span>
+
+                <button type="button"
+                        class="fav"
+                        [class.active]="favorisService.isFavori(recette.idRecette)"
+                        (click)="onToggleFavori($event, recette.idRecette)"
+                        [attr.aria-label]="favorisService.isFavori(recette.idRecette) ? 'Retirer des favoris' : 'Ajouter aux favoris'">
+                  {{ favorisService.isFavori(recette.idRecette) ? '★' : '☆' }}
+                </button>
+
+                @if (recette.contraintesViolees && recette.contraintesViolees.length > 0) {
+                  <span class="incompat" [title]="'Contraintes violées : ' + contraintesLabel(recette)">
+                    Incompatible · {{ contraintesLabel(recette) }}
+                  </span>
+                }
+              </div>
+
+              <div class="body">
+                <div class="meta-top">
+                  <span class="pill pill-neutral">{{ recette.typeRepas }}</span>
+                  <span class="pill pill-neutral">{{ recette.niveauDifficulte }}</span>
+                </div>
+                <h3 class="title">{{ recette.nom }}</h3>
+                <p style="font-size:13px; color:var(--ink-700); margin:0 0 12px; line-height:1.5;">{{ recette.description }}</p>
+                <div class="meta-bot">
+                  <span>⏱ {{ recette.tempsPreparation + recette.tempsCuisson }} min</span>
+                  <span style="margin-left:auto; font-family:var(--font-mono); font-size:11px; color:var(--ink-500); letter-spacing:.1em;">{{ recette.categorie }}</span>
+                </div>
+              </div>
+            </a>
+
+          }
         </div>
-
-        <h2>{{ recette.nom }}</h2>
-        <p>{{ recette.description }}</p>
-
-        <div class="card-footer">
-          <span>⏱ {{ recette.tempsPreparation + recette.tempsCuisson }} min</span>
-          <span>🍴 {{ recette.typeRepas }}</span>
+      } @else {
+        <!-- État vide -->
+        <div style="text-align:center; padding:80px 40px; color:var(--ink-500);">
+          <h3 style="font-family:var(--font-serif); font-size:24px; color:var(--bordeaux-900); margin-bottom:8px;">Aucune recette ne correspond</h3>
+          <p style="font-size:14px;">Essayez d'élargir vos filtres ou retirez quelques contraintes.</p>
         </div>
-      </a>
-
+      }
     }
+
   </div>
 </div>

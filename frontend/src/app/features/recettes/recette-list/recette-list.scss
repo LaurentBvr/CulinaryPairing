@@ -1,140 +1,37 @@
-.recette-list-container {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+/* Styles dans styles/lot2.css (.page-wrap, .page-content, .page-head, .filterbar, .filter-chips, .fchip, .toggle, .grid-recipes, .recipe-card)
+   et styles/base.css (.recipe-card, .ph-stripes, .pill) */
 
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: #1a1a2e;
-  }
-
-  .loading, .error {
-    text-align: center;
-    padding: 2rem;
-    font-size: 1.1rem;
-  }
-
-  .error { color: #e94560; }
+/* Petit ajustement local : style "is-incompatible" pas dans le base.css */
+.recipe-card.is-incompatible {
+  opacity: 0.65;
+}
+.recipe-card.is-incompatible:hover {
+  opacity: 1;
 }
 
-.recettes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.recette-card {
-  display: block;
+.recipe-card .img {
   position: relative;
-  background: white;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.2s, box-shadow 0.2s;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-  }
-
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.75rem;
-
-    span {
-      font-size: 0.75rem;
-      padding: 0.2rem 0.6rem;
-      border-radius: 12px;
-      background: #f0f0f0;
-      color: #555;
-    }
-  }
-
-  h2 {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    color: #1a1a2e;
-  }
-
-  p {
-    font-size: 0.9rem;
-    color: #666;
-    line-height: 1.4;
-    margin-bottom: 1rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .card-footer {
-    display: flex;
-    gap: 1rem;
-    font-size: 0.85rem;
-    color: #888;
-  }
+  overflow: hidden;
 }
 
-.btn-favori {
+.recipe-card .img .incompat {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  border-radius: 50%;
-  width: 2.25rem;
-  height: 2.25rem;
-  font-size: 1.25rem;
-  line-height: 1;
-  cursor: pointer;
-  color: #888;
-  transition: all 0.15s ease;
-  z-index: 2;
-
-  &:hover {
-    transform: scale(1.1);
-    color: #d4af37;
-  }
-
-  &.active {
-    color: #d4af37;
-  }
+  bottom: 12px;
+  left: 12px;
+  background: var(--terracotta-500);
+  color: var(--cream-50);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  max-width: calc(100% - 24px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-// R9/R16 — Filtre + badges incompatibles
-.filtre-incompatibles {
-  background: #fff8e1;
-  border-left: 3px solid #f59e0b;
-  padding: 0.75rem 1rem;
-  margin: 1rem 0 1.5rem;
-  border-radius: 4px;
-
-  label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
-  input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
-  .count { color: #666; font-size: 0.9em; }
-}
-
-.recette-card {
-  position: relative;
-
-  &.incompatible {
-    opacity: 0.65;
-    border: 1px solid #f59e0b;
-  }
-
-  .badge-incompatible {
-    background: #fef3c7;
-    color: #92400e;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.85em;
-    font-weight: 500;
-    margin: 0.5rem 0;
-    display: inline-block;
-  }
+.recipe-card .img .fav.active {
+  color: var(--gold-500);
 }
