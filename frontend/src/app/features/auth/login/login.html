@@ -1,24 +1,67 @@
-<div class="login-container">
-  <h2>Connexion</h2>
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <div>
-      <label>Email</label>
-      <input type="email" formControlName="email" />
-      <span *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
-        Email invalide
-      </span>
+<div class="auth-page">
+
+  <!-- Colonne gauche : hero bordeaux -->
+  <aside class="auth-aside">
+    <div class="top">
+      <a class="brand">
+        <span class="mark">C<em>p</em></span>
+        CulinaryPairing
+      </a>
+      <div class="tag">— Sommelier numérique —</div>
     </div>
-    <div>
-      <label>Mot de passe</label>
-      <input type="password" formControlName="password" />
-      <span *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
-        Minimum 6 caractères
-      </span>
+
+    <div class="lede">
+      <div class="eyebrow">Moteur d'accords · 16 règles</div>
+      <h1>Sublimez vos repas avec les <em>accords parfaits</em>.</h1>
+      <p>De l'apéritif au dessert, CulinaryPairing révèle pour chaque recette la boisson qui l'accompagne — du grand cru au mocktail, en respectant les contraintes de vos invités.</p>
     </div>
-    <p *ngIf="error" class="error">{{ error }}</p>
-    <button type="submit" [disabled]="loading">
-      {{ loading ? 'Connexion...' : 'Se connecter' }}
-    </button>
-    <p>Pas encore de compte ? <a routerLink="/register">S'inscrire</a></p>
-  </form>
+
+    <div class="ph-bottle"></div>
+
+    <div class="footer">
+      <span>EPHEC · 2026</span>
+      <span>V1.3 — Moteur sommelier</span>
+    </div>
+  </aside>
+
+  <!-- Colonne droite : formulaire -->
+  <section class="auth-form-wrap">
+    <div class="auth-form">
+      <div class="eyebrow">— Connexion —</div>
+      <h2>Bon retour parmi nous.</h2>
+      <p class="sub">Renseignez vos identifiants pour reprendre vos accords.</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+
+        <div class="cp-field">
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email" placeholder="marie@email.com" />
+          <span class="err" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+            Email invalide
+          </span>
+        </div>
+
+        <div class="cp-field">
+          <label for="password">Mot de passe</label>
+          <input id="password" type="password" formControlName="password" placeholder="••••••••" />
+          <span class="err" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+            Minimum 6 caractères
+          </span>
+        </div>
+
+        <p class="err" *ngIf="error">{{ error }}</p>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="loading">
+            {{ loading ? 'Connexion...' : 'Se connecter' }}
+          </button>
+        </div>
+
+        <p class="alt">
+          Pas encore de compte ? <a routerLink="/register">S'inscrire</a>
+        </p>
+      </form>
+    </div>
+  </section>
+
 </div>

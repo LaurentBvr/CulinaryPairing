@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'recettes', pathMatch: 'full' },
   {
     path: 'login',
     loadComponent: () => import('./features/auth/login/login').then(m => m.LoginComponent)
@@ -61,5 +61,5 @@ export const routes: Routes = [
   path: 'vide-frigo',
   loadComponent: () => import('./vide-frigo/vide-frigo').then(m => m.VideFrigo)
   },
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'recettes' }
 ];
