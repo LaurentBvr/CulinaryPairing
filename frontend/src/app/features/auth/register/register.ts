@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
 
@@ -18,17 +18,31 @@ export class RegisterComponent {
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.form = this.fb.group({
-      nom: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
-    });
+      prenom: ['', [Validators.required, Validators.maxLength(100)]],
+      nom: ['', [Validators.required, Validators.maxLength(100)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', Validators.required]
+    }, { validators: this.passwordsMatchValidator });
+  }
+
+  private passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const p = group.get('password')?.value;
+    const c = group.get('confirmPassword')?.value;
+    return p && c && p !== c ? { passwordMismatch: true } : null;
   }
 
   submit(): void {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     this.loading = true;
     this.error = '';
-    this.auth.register(this.form.value).subscribe({
+
+    const { prenom, nom, email, password } = this.form.value;
+
+    this.auth.register({ prenom, nom, email, password }).subscribe({
       next: () => this.router.navigate(['/dashboard']),
       error: err => {
         this.error = err.error?.message || 'Erreur lors de l\'inscription';
