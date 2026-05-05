@@ -3,8 +3,11 @@
 
   <div class="search-bar">
     <input
+      id="ingredient-search"
+      name="ingredient-search"
       type="text"
       placeholder="Ajouter un ingrédient..."
+      autocomplete="off"
       [value]="searchQuery"
       (input)="onSearch($event)"
     />
@@ -31,16 +34,16 @@
   </div>
 
   <div class="options">
-    <label>Nombre de recettes à afficher :
-      <select [(ngModel)]="nombreResultats">
+    <label for="nb-resultats">Nombre de recettes à afficher :
+      <select id="nb-resultats" name="nb-resultats" [(ngModel)]="nombreResultats">
         <option [value]="5">5</option>
         <option [value]="10">10</option>
         <option [value]="15">15</option>
         <option [value]="20">20</option>
       </select>
     </label>
-    <label>
-      <input type="checkbox" [(ngModel)]="inclureVeg" /> Inclure versions végé/végan
+    <label for="inclure-veg">
+      <input id="inclure-veg" name="inclure-veg" type="checkbox" [(ngModel)]="inclureVeg" /> Inclure versions végé/végan
     </label>
     <button (click)="rechercher()" [disabled]="selected.length === 0">Rechercher</button>
     <button (click)="reset()">Réinitialiser</button>

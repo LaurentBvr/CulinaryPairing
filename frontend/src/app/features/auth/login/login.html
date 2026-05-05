@@ -35,7 +35,7 @@
 
         <div class="cp-field">
           <label for="email">Email</label>
-          <input id="email" type="email" formControlName="email" placeholder="marie@email.com" />
+          <input id="email" name="email" type="email" formControlName="email" placeholder="marie@email.com" autocomplete="email" />
           @if (form.get('email')?.invalid && form.get('email')?.touched) {
             <span class="err">Email invalide</span>
           }
@@ -43,7 +43,7 @@
 
         <div class="cp-field">
           <label for="password">Mot de passe</label>
-          <input id="password" type="password" formControlName="password" placeholder="••••••••" />
+          <input id="password" name="password" type="password" formControlName="password" placeholder="••••••••" autocomplete="current-password" />
           @if (form.get('password')?.invalid && form.get('password')?.touched) {
             <span class="err">Minimum 6 caractères</span>
           }

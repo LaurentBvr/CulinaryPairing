@@ -41,7 +41,7 @@
         <div class="row-2">
           <div class="cp-field">
             <label for="prenom">Prénom</label>
-            <input id="prenom" type="text" formControlName="prenom" placeholder="Marie" />
+            <input id="prenom" name="prenom" type="text" formControlName="prenom" placeholder="Marie" autocomplete="given-name" />
             @if (form.get('prenom')?.invalid && form.get('prenom')?.touched) {
               <span class="err">Prénom requis</span>
             }
@@ -49,7 +49,7 @@
 
           <div class="cp-field">
             <label for="nom">Nom</label>
-            <input id="nom" type="text" formControlName="nom" placeholder="Dupont" />
+            <input id="nom" name="nom" type="text" formControlName="nom" placeholder="Dupont" autocomplete="family-name" />
             @if (form.get('nom')?.invalid && form.get('nom')?.touched) {
               <span class="err">Nom requis</span>
             }
@@ -58,7 +58,7 @@
 
         <div class="cp-field">
           <label for="email">Email</label>
-          <input id="email" type="email" formControlName="email" placeholder="marie@email.com" />
+          <input id="email" name="email" type="email" formControlName="email" placeholder="marie@email.com" autocomplete="email" />
           @if (form.get('email')?.invalid && form.get('email')?.touched) {
             <span class="err">Email invalide</span>
           }
@@ -66,7 +66,7 @@
 
         <div class="cp-field">
           <label for="password">Mot de passe</label>
-          <input id="password" type="password" formControlName="password" placeholder="8 caractères minimum" />
+          <input id="password" name="password" type="password" formControlName="password" placeholder="8 caractères minimum" autocomplete="new-password" />
           @if (!(form.get('password')?.invalid && form.get('password')?.touched)) {
             <span class="hint">Au moins 8 caractères.</span>
           } @else {
@@ -76,7 +76,7 @@
 
         <div class="cp-field">
           <label for="confirmPassword">Confirmer le mot de passe</label>
-          <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="••••••••" />
+          <input id="confirmPassword" name="confirmPassword" type="password" formControlName="confirmPassword" placeholder="••••••••" autocomplete="new-password" />
           @if (form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.touched) {
             <span class="err">Les mots de passe ne correspondent pas</span>
           }

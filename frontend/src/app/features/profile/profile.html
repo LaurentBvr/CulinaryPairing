@@ -31,6 +31,8 @@
             @for (c of group.items; track c.idContrainte) {
               <label class="checkbox-item">
                 <input
+                  [id]="'profile-contrainte-' + c.idContrainte"
+                  [name]="'profile-contrainte-' + c.idContrainte"
                   type="checkbox"
                   [checked]="isSelected(c.idContrainte)"
                   (change)="toggle(c.idContrainte)"
