@@ -1,228 +1,262 @@
-<div class="recette-detail-container">
-  <a routerLink="/recettes" class="back-link">← Retour aux recettes</a>
+<div class="page-wrap">
+  <div class="detail-content">
 
-  @if (loading) {
-    <p class="loading">Chargement...</p>
-  }
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a routerLink="/recettes">Recettes</a>
+      <span class="sep">/</span>
+      <span style="color: var(--ink-900);">{{ recette()?.nom || 'Chargement…' }}</span>
+    </nav>
 
-  @if (error) {
-    <p class="error">{{ error }}</p>
-  }
+    @if (loading()) {
+      <p style="text-align:center; padding:40px; color:var(--ink-500);">Chargement...</p>
+    }
 
-  @if (recette) {
-    <div class="recette-header">
-      <div class="badges">
-        <span class="badge">{{ recette.categorie }}</span>
-        <span class="badge">{{ recette.niveauDifficulte }}</span>
-        <span class="badge">{{ recette.typeRepas }}</span>
-      </div>
-      <div class="title-row">
-        <h1>{{ recette.nom }}</h1>
-        <button
-          type="button"
-          class="btn-favori-detail"
-          [class.active]="favorisService.isFavori(recette.idRecette)"
-          (click)="onToggleFavori()"
-          [attr.aria-label]="favorisService.isFavori(recette.idRecette) ? 'Retirer des favoris' : 'Ajouter aux favoris'"
-        >
-          {{ favorisService.isFavori(recette.idRecette) ? '★' : '☆' }}
-        </button>
-      </div>
-      <p class="description">{{ recette.description }}</p>
-      <div class="meta">
-        <span>⏱ Préparation : {{ recette.tempsPreparation }} min</span>
-        <span>🔥 Cuisson : {{ recette.tempsCuisson }} min</span>
-      </div>
-    </div>
-    
-    @if (recette.contraintesViolees && recette.contraintesViolees.length > 0) {
-  <div class="warning-contraintes">
-    <strong>⚠️ Recette incompatible avec vos contraintes</strong>
-    <p>Cette recette enfreint :
-      @for (c of recette.contraintesViolees; track c.idContrainte; let last = $last) {
-        <span class="tag-contrainte">{{ c.nom }}</span>{{ last ? '' : ' ' }}
-      }
-    </p>
-  </div>
-}
-    @if (recette.ingredients && recette.ingredients.length > 0) {
-      <div class="ingredients-section">
-        <h2>🥗 Ingrédients</h2>
-        <div class="portions-control">
-          <label for="personnes">Pour</label>
-          <input
-            type="number"
-            id="personnes"
-            min="1"
-            max="10"
-            [ngModel]="personnesAffichees"
-            (ngModelChange)="changePersonnes($event)"
-          />
-          <span>personne(s)</span>
-          @if (
-            recette.nombrePersonnesBase &&
-            personnesAffichees !== recette.nombrePersonnesBase
-          ) {
-            <span class="portions-base"
-              >(base : {{ recette.nombrePersonnesBase }})</span
-            >
-          }
+    @if (error()) {
+      <p class="err" style="text-align:center; padding:40px;">{{ error() }}</p>
+    }
+
+    @if (!loading() && !error() && recette(); as r) {
+
+      <!-- Hero -->
+      <div class="hero-recipe">
+        <span class="ph-label">[ photo · {{ r.nom }} ]</span>
+        <div class="meta-overlay">
+          <div>
+            <div class="eyebrow">— {{ r.typeRepas }} · {{ r.categorie }} —</div>
+            <h1>{{ r.nom }}</h1>
+            <div class="meta-tags">
+              <span class="pill">⏱ {{ tempsTotalFormate() }}</span>
+              <span class="pill">{{ r.niveauDifficulte }}</span>
+              @if (r.nombrePersonnesBase) {
+                <span class="pill">{{ r.nombrePersonnesBase }} personnes</span>
+              }
+            </div>
+          </div>
+          <button type="button"
+                  class="fav-big"
+                  [class.active]="favorisService.isFavori(r.idRecette)"
+                  (click)="onToggleFavori()"
+                  [attr.aria-label]="favorisService.isFavori(r.idRecette) ? 'Retirer des favoris' : 'Ajouter aux favoris'">
+            {{ favorisService.isFavori(r.idRecette) ? '★' : '☆' }}
+          </button>
         </div>
+      </div>
 
-        <div class="mode-toggle" role="group" aria-label="Mode d'adaptation">
-          <button
-            type="button"
-            class="mode-btn"
-            [class.active]="mode === 'original'"
-            (click)="changeMode('original')"
-          >
+      <!-- Description -->
+      <p style="font-size:16px; color:var(--ink-700); line-height:1.6; margin: 0 0 32px; max-width: 70ch;">
+        {{ r.description }}
+      </p>
+
+      <!-- Warning contraintes violées -->
+      @if (r.contraintesViolees && r.contraintesViolees.length > 0) {
+        <div class="warning-contraintes" style="background:var(--terracotta-100); border:1px solid var(--terracotta-500); border-radius:var(--radius-md); padding:16px 20px; margin-bottom:32px;">
+          <strong style="color:var(--terracotta-700); font-size:14px;">⚠ Recette incompatible avec vos contraintes</strong>
+          <p style="font-size:13px; color:var(--ink-700); margin:6px 0 0;">
+            Cette recette enfreint :
+            @for (c of r.contraintesViolees; track c.idContrainte; let last = $last) {
+              <span class="pill"
+                    [class.pill-regime]="c.type === 'Choix'"
+                    [class.pill-allergie]="c.type === 'Sante'"
+                    [class.pill-religieux]="c.type === 'Religieux'"
+                    style="margin-left:6px;">
+                <span class="dot"></span>{{ c.nom }}
+              </span>
+            }
+          </p>
+        </div>
+      }
+
+      <!-- Mode toggle (si adaptable) -->
+      @if (r.adaptableVege || r.adaptableVegan) {
+        <div class="mode-toggle" style="display:flex; gap:8px; margin-bottom:32px;">
+          <button type="button"
+                  class="btn"
+                  [class.btn-primary]="mode() === 'original'"
+                  [class.btn-secondary]="mode() !== 'original'"
+                  (click)="changeMode('original')">
             Original
           </button>
-          <button
-            type="button"
-            class="mode-btn"
-            [class.active]="mode === 'vegetarien'"
-            [disabled]="!recette.adaptableVege"
-            (click)="changeMode('vegetarien')"
-          >
+          <button type="button"
+                  class="btn"
+                  [class.btn-primary]="mode() === 'vegetarien'"
+                  [class.btn-secondary]="mode() !== 'vegetarien'"
+                  [disabled]="!r.adaptableVege"
+                  (click)="changeMode('vegetarien')">
             Végétarien
           </button>
-          <button
-            type="button"
-            class="mode-btn"
-            [class.active]="mode === 'vegan'"
-            [disabled]="!recette.adaptableVegan"
-            (click)="changeMode('vegan')"
-          >
+          <button type="button"
+                  class="btn"
+                  [class.btn-primary]="mode() === 'vegan'"
+                  [class.btn-secondary]="mode() !== 'vegan'"
+                  [disabled]="!r.adaptableVegan"
+                  (click)="changeMode('vegan')">
             Végan
           </button>
         </div>
-        @if (
-          mode !== "original" &&
-          recette.ingredients &&
-          recette.ingredients.length > 0
-        ) {
-          @if (recette.estCompletementAdaptable) {
-            <div class="adaptation-banner adaptation-success">
-              ✓ Recette
-              {{
-                mode === "vegan" ? "adaptable végan" : "adaptable végétarienne"
-              }}
+
+        @if (mode() !== 'original') {
+          @if (r.estCompletementAdaptable) {
+            <div style="background:var(--sage-100); border:1px solid var(--sage-500); border-radius:var(--radius-md); padding:12px 18px; margin-bottom:24px; font-size:14px; color:var(--sage-700);">
+              ✓ Recette {{ mode() === 'vegan' ? 'adaptable végan' : 'adaptable végétarienne' }}
             </div>
           } @else {
-            <div class="adaptation-banner adaptation-warning">
+            <div style="background:var(--gold-100); border:1px solid var(--gold-500); border-radius:var(--radius-md); padding:12px 18px; margin-bottom:24px; font-size:14px; color:var(--gold-700);">
               ⚠ Recette partiellement adaptable :
-              {{ recette.ingredientsSansSubstitution?.length }} ingrédient(s)
-              sans substitution ({{
-                recette.ingredientsSansSubstitution?.join(", ")
-              }})
+              {{ r.ingredientsSansSubstitution?.length }} ingrédient(s) sans substitution ({{ r.ingredientsSansSubstitution?.join(', ') }})
             </div>
           }
         }
-        <ul class="ingredients-list">
-          @for (ing of recette.ingredients; track ing.idIngredient) {
-            <li class="ingredient-item" [class.has-substitut]="ing.substitut">
-              @if (ing.substitut) {
-                <div class="ingredient-original-line">
-                  <span class="ingredient-quantite struck"
-                    >{{ calculerQuantite(ing.quantite, ing.unite) }} {{ ing.unite }}</span
-                  >
-                  <span class="ingredient-nom struck">{{ ing.nom }}</span>
-                  <span class="arrow">→</span>
-                </div>
-                <div class="ingredient-substitut-line">
-                  <span class="ingredient-quantite"
-                    >{{ calculerQuantite(ing.substitut.quantiteAdaptee, ing.substitut.unite) }}
-                    {{ ing.substitut.unite }}</span
-                  >
-                  <span class="ingredient-nom">{{ ing.substitut.nom }}</span>
-                </div>
-                @if (ing.substitut.noteCuisson) {
-                  <p class="substitut-note">
-                    💡 {{ ing.substitut.noteCuisson }}
-                  </p>
-                }
-              } @else {
-                <span class="ingredient-quantite"
-                  >{{ calculerQuantite(ing.quantite, ing.unite) }} {{ ing.unite }}</span
-                >
-                <span class="ingredient-nom">{{ ing.nom }}</span>
-                @if (!ing.estVege) {
-                  <span
-                    class="ingredient-tag tag-non-vege"
-                    title="Non végétarien"
-                    >🥩</span
-                  >
-                } @else if (!ing.estVegan) {
-                  <span class="ingredient-tag tag-non-vegan" title="Non végan"
-                    >🥛</span
-                  >
-                }
-              }
-            </li>
-          }
-        </ul>
-      </div>
-    }
+      }
 
-    @if (recette.etapes && recette.etapes.length > 0) {
-      <div class="etapes-section">
-        <h2>👨‍🍳 Préparation</h2>
-        <ol class="etapes-list">
-          @for (etape of recette.etapes; track etape.numeroEtape) {
-            <li class="etape-item">{{ etape.description }}</li>
-          }
-        </ol>
-      </div>
-    }
+      <!-- Grille Ingrédients + Préparation -->
+      <div class="recipe-grid">
 
-    @if (accords.length > 0) {
-      <div class="accords-section">
-        <h2>🍷 Boissons recommandées</h2>
-        <div class="accords-list">
-          @for (accord of accords; track accord.idAccord) {
-            <div class="accord-card">
-              <div class="accord-header">
-                <span class="accord-boisson">{{ accord.nomBoisson }}</span>
-                <span class="accord-score"
-                  >{{ accord.scoreCompatibilite }}/100</span
-                >
-              </div>
-              <span class="accord-type">{{ accord.typeBoisson }}</span>
-              <p class="accord-justification">{{ accord.justification }}</p>
-
-              <div class="accord-meta">
-                @if (accord.niveauConfiance !== null) {
-                  <span
-                    class="accord-confiance"
-                    [title]="
-                      'Score basé sur ' +
-                      accord.niveauConfiance +
-                      '% des règles applicables'
-                    "
-                  >
-                    Fiabilité : {{ labelConfiance(accord.niveauConfiance) }}
-                  </span>
-                }
-                @if (accord.malusApplique && accord.malusApplique > 0) {
-                  <span class="accord-malus"
-                    >Malus : −{{ accord.malusApplique }}</span
-                  >
-                }
-              </div>
-
-              @if (splitRegles(accord.reglesSatisfaites).length > 0) {
-                <div class="accord-regles">
-                  <span class="regles-label">Règles :</span>
-                  @for (r of splitRegles(accord.reglesSatisfaites); track r) {
-                    <span class="regle-badge">{{ r }}</span>
-                  }
-                </div>
-              }
+        <!-- Ingrédients -->
+        @if (r.ingredients && r.ingredients.length > 0) {
+          <aside class="panel">
+            <div class="panel-head">
+              <h2>Ingrédients</h2>
+              <span class="meta">{{ r.ingredients.length }} LIGNES</span>
             </div>
-          }
-        </div>
+
+            <div class="serving-control" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; padding:12px 14px; background:var(--cream-100); border-radius:var(--radius-md);">
+              <span class="label" style="font-size:13px; color:var(--ink-700); font-weight:500;">Nombre de personnes</span>
+              <div class="stepper" style="display:flex; align-items:center; gap:8px;">
+                <button type="button"
+                        (click)="decrementPersonnes()"
+                        [disabled]="personnesAffichees() <= 1"
+                        style="width:28px; height:28px; border-radius:50%; background:var(--bordeaux-700); color:white; border:none; cursor:pointer; font-size:16px;">
+                  −
+                </button>
+                <b style="font-family:var(--font-serif); font-size:18px; min-width:24px; text-align:center;">{{ personnesAffichees() }}</b>
+                <button type="button"
+                        (click)="incrementPersonnes()"
+                        [disabled]="personnesAffichees() >= 10"
+                        style="width:28px; height:28px; border-radius:50%; background:var(--bordeaux-700); color:white; border:none; cursor:pointer; font-size:16px;">
+                  +
+                </button>
+              </div>
+            </div>
+
+            <ul class="ing-list" style="list-style:none; padding:0; margin:0;">
+              @for (ing of r.ingredients; track ing.idIngredient) {
+                <li class="ingredient-item" style="padding:10px 0; border-bottom:1px solid var(--cream-200);">
+                  @if (ing.substitut) {
+                    <div style="display:flex; gap:8px; opacity:0.6; font-size:13px; margin-bottom:4px;">
+                      <span style="text-decoration:line-through;">{{ calculerQuantite(ing.quantite, ing.unite) }} {{ ing.unite }}</span>
+                      <span style="text-decoration:line-through; flex:1;">{{ ing.nom }}</span>
+                      <span>→</span>
+                    </div>
+                    <div style="display:flex; gap:8px; font-size:14px;">
+                      <span style="font-family:var(--font-mono); color:var(--bordeaux-700); font-weight:500; min-width:80px;">{{ calculerQuantite(ing.substitut.quantiteAdaptee, ing.substitut.unite) }} {{ ing.substitut.unite }}</span>
+                      <span style="flex:1; color:var(--ink-900);">{{ ing.substitut.nom }}</span>
+                    </div>
+                    @if (ing.substitut.noteCuisson) {
+                      <p style="font-size:12px; color:var(--ink-500); font-style:italic; margin:4px 0 0;">
+                        💡 {{ ing.substitut.noteCuisson }}
+                      </p>
+                    }
+                  } @else {
+                    <div style="display:flex; gap:8px; align-items:center; font-size:14px;">
+                      <span style="font-family:var(--font-mono); color:var(--bordeaux-700); font-weight:500; min-width:80px;">{{ calculerQuantite(ing.quantite, ing.unite) }} {{ ing.unite }}</span>
+                      <span style="flex:1; color:var(--ink-900);">{{ ing.nom }}</span>
+                      @if (!ing.estVege) {
+                        <span title="Non végétarien" style="font-size:14px;">🥩</span>
+                      } @else if (!ing.estVegan) {
+                        <span title="Non végan" style="font-size:14px;">🥛</span>
+                      }
+                    </div>
+                  }
+                </li>
+              }
+            </ul>
+          </aside>
+        }
+
+        <!-- Préparation -->
+        @if (r.etapes && r.etapes.length > 0) {
+          <section class="panel">
+            <div class="panel-head">
+              <h2>Préparation</h2>
+              <span class="meta">{{ r.etapes.length.toString().padStart(2, '0') }} ÉTAPES · {{ tempsTotalFormate() }}</span>
+            </div>
+            <ol class="steps" style="list-style:none; padding:0; margin:0; counter-reset:step;">
+              @for (etape of r.etapes; track etape.numeroEtape) {
+                <li class="step" style="display:flex; gap:20px; padding:16px 0; border-bottom:1px solid var(--cream-200);">
+                  <span class="step-num" style="font-family:var(--font-serif); font-style:italic; font-size:24px; color:var(--gold-500); font-weight:500; min-width:48px; line-height:1;">
+                    {{ toRoman(etape.numeroEtape) }}
+                  </span>
+                  <span style="flex:1; font-size:14px; line-height:1.6; color:var(--ink-900);">{{ etape.description }}</span>
+                </li>
+              }
+            </ol>
+          </section>
+        }
       </div>
+
+      <!-- Section accords -->
+      @if (accords().length > 0) {
+        <div style="margin-top:48px;">
+          <div class="sec-head" style="display:flex; align-items:baseline; justify-content:space-between; padding-bottom:14px; margin-bottom:24px; border-bottom:1px solid var(--cream-200);">
+            <h2 style="font-family:var(--font-serif); font-weight:500; font-size:32px; color:var(--bordeaux-900); margin:0;">
+              Accords <em style="font-style:italic; color:var(--gold-500);">boissons</em> recommandés.
+            </h2>
+            <span class="meta" style="font-family:var(--font-mono); font-size:11px; letter-spacing:.18em; color:var(--ink-500); text-transform:uppercase;">
+              {{ accords().length }} suggestions · Moteur V1.3
+            </span>
+          </div>
+
+          <div class="accord-list" style="display:flex; flex-direction:column; gap:14px;">
+            @for (accord of accords(); track accord.idAccord; let i = $index) {
+              <article class="accord-card" [class.featured]="i === 0"
+                       style="display:flex; gap:24px; padding:22px 24px; background:#fff; border:1px solid var(--cream-200); border-radius:var(--radius-lg); align-items:flex-start;"
+                       [style.border-color]="i === 0 ? 'var(--gold-500)' : 'var(--cream-200)'"
+                       [style.box-shadow]="i === 0 ? '0 4px 14px rgba(184,146,58,0.15)' : 'none'">
+
+                <app-score-gauge [score]="accord.scoreCompatibilite" [size]="88"></app-score-gauge>
+
+                <div class="accord-body" style="flex:1; min-width:0;">
+                  <div style="font-family:var(--font-mono); font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-500); margin-bottom:4px;">
+                    {{ accord.typeBoisson }}
+                  </div>
+
+                  <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:8px;">
+                    <h3 style="font-family:var(--font-serif); font-weight:500; font-size:22px; color:var(--bordeaux-900); margin:0;">
+                      {{ accord.nomBoisson }}
+                    </h3>
+                    @if (accord.niveauConfiance !== null) {
+                      <span style="font-size:12px; color:var(--ink-500);">
+                        Fiabilité <b style="color:var(--ink-900);">{{ labelConfiance(accord.niveauConfiance) }}</b>
+                      </span>
+                    }
+                  </div>
+
+                  <p style="font-size:14px; color:var(--ink-700); line-height:1.5; margin:0 0 12px;">
+                    {{ accord.justification }}
+                  </p>
+
+                  <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                    @if (splitRegles(accord.reglesSatisfaites).length > 0) {
+                      <span style="font-family:var(--font-mono); font-size:10px; letter-spacing:.15em; color:var(--ink-500); text-transform:uppercase; margin-right:4px;">Règles ·</span>
+                      @for (regle of splitRegles(accord.reglesSatisfaites); track regle) {
+                        <span class="pill pill-rule">{{ regle }}</span>
+                      }
+                    }
+                    @if (accord.malusApplique && accord.malusApplique > 0) {
+                      <span style="margin-left:auto; font-size:11px; color:var(--terracotta-700); font-family:var(--font-mono);">
+                        Malus −{{ accord.malusApplique }}
+                      </span>
+                    }
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        </div>
+      }
+
     }
-  }
+
+  </div>
 </div>
