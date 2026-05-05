@@ -1,59 +1,86 @@
-<div class="boissons-container">
-  <h1>Boissons</h1>
-  <p class="intro">
-    Sélectionnez une boisson pour découvrir les recettes qui s'accordent le mieux avec elle.
-  </p>
+<div class="page-wrap">
+  <div class="page-content">
 
-  @if (loading) {
-    <p class="loading">Chargement...</p>
-  }
-
-  @if (error) {
-    <p class="error">{{ error }}</p>
-  }
-
-  @if (!loading && !error) {
-    <div class="filtre-section">
-      <label for="filtre-type">Filtrer par type :</label>
-      <select id="filtre-type" [(ngModel)]="filtreType">
-        <option value="tous">Tous ({{ boissons.length }})</option>
-        @for (t of typesDisponibles; track t) {
-          <option [value]="t">{{ t }}</option>
-        }
-      </select>
+    <!-- Header éditorial -->
+    <div class="page-head">
+      <div>
+        <div class="eyebrow">— Cave numérique —</div>
+        <h1>Boissons <em>de la maison</em>.</h1>
+        <p class="lede">Sélectionnez une boisson pour découvrir les recettes qui s'accordent le mieux avec elle. L'accord inversé du moteur sommelier.</p>
+      </div>
+      <div class="right">
+        {{ totalBoissons() }}&nbsp;références<br>
+        {{ totalVins() }}&nbsp;Vins · {{ totalSpiritueux() }}&nbsp;Spiritueux · {{ totalAutres() }}&nbsp;Autres
+      </div>
     </div>
 
-    @if (boissonsFiltrees.length === 0) {
-      <p class="empty">Aucune boisson pour ce filtre.</p>
-    } @else {
-      <ul class="boissons-grid">
-        @for (b of boissonsFiltrees; track b.idBoisson) {
-          <li class="boisson-card">
-            <a [routerLink]="['/boissons', b.idBoisson]" class="boisson-link">
-              <div class="boisson-header">
-                <span class="boisson-nom">{{ b.nom }}</span>
+    @if (loading()) {
+      <p style="text-align:center; padding:40px; color:var(--ink-500);">Chargement...</p>
+    }
+
+    @if (error()) {
+      <p class="err" style="text-align:center; padding:40px;">{{ error() }}</p>
+    }
+
+    @if (!loading() && !error()) {
+
+      <!-- Barre de filtres -->
+      <div class="filterbar">
+        <div class="filter-chips">
+          <button class="fchip"
+                  [class.active]="filtreType() === 'tous'"
+                  (click)="setFiltre('tous')">
+            Tous <span class="count">{{ totalBoissons() }}</span>
+          </button>
+          @for (opt of optionsFiltres(); track opt.value) {
+            <button class="fchip"
+                    [class.active]="filtreType() === opt.value"
+                    (click)="setFiltre(opt.value)">
+              {{ opt.label }} <span class="count">{{ countByType()[opt.value] }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Grille de boissons -->
+      @if (boissonsFiltrees().length > 0) {
+        <div class="grid-boissons">
+          @for (b of boissonsFiltrees(); track b.idBoisson) {
+            <a class="bev-card" [routerLink]="['/boissons', b.idBoisson]">
+              <span class="accent" [class]="'accent ' + (b.typeBoisson ? b.typeBoisson.toLowerCase() : '')"></span>
+
+              <div class="top">
+                <h3 class="name">{{ b.nom }}</h3>
                 @if (b.typeBoisson) {
-                  <span class="boisson-type">{{ b.typeBoisson }}</span>
+                  <span class="badge">{{ formaterLabelType(b.typeBoisson) }}</span>
                 }
               </div>
-              <div class="boisson-meta">
+
+              <div class="meta">
                 @if (b.degreAlcool !== null) {
-                  <span>{{ b.degreAlcool }}°</span>
+                  <span class="deg">{{ b.degreAlcool }}°</span>
                 }
                 @if (b.corps) {
                   <span>{{ b.corps }}</span>
                 }
                 @if (formaterOrigine(b)) {
-                  <span class="origine">{{ formaterOrigine(b) }}</span>
+                  <span style="color:var(--ink-500); font-size:11px;">· {{ formaterOrigine(b) }}</span>
                 }
                 @if (!b.alcoolise) {
-                  <span class="badge-no-alcool">Sans alcool</span>
+                  <span class="sansalc">· Sans alcool</span>
                 }
               </div>
             </a>
-          </li>
-        }
-      </ul>
+          }
+        </div>
+      } @else {
+        <!-- État vide -->
+        <div style="text-align:center; padding:80px 40px; color:var(--ink-500);">
+          <h3 style="font-family:var(--font-serif); font-size:24px; color:var(--bordeaux-900); margin-bottom:8px;">Aucune boisson ne correspond</h3>
+          <p style="font-size:14px;">Essayez un autre filtre.</p>
+        </div>
+      }
     }
-  }
+
+  </div>
 </div>
