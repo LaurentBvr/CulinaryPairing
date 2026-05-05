@@ -12,4 +12,12 @@ import { AuthService } from '../../services/auth';
 })
 export class Navbar {
   auth = inject(AuthService);
+
+  getInitiales(user: any): string {
+  if (!user) return '';
+  const p = user.prenom?.charAt(0) ?? '';
+  const n = user.nom?.charAt(0) ?? '';
+  return (p + n).toUpperCase();
+}
+  
 }

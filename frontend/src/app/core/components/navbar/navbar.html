@@ -1,8 +1,10 @@
-<nav class="navbar">
-  <div class="navbar-brand">
-    <a routerLink="/dashboard">🍷 CulinaryPairing</a>
-  </div>
-  <div class="navbar-menu">
+<header class="cp-navbar">
+  <a class="brand" routerLink="/dashboard">
+    <span class="mark">C<em>p</em></span>
+    CulinaryPairing
+  </a>
+
+  <nav>
     <a routerLink="/recettes" routerLinkActive="active">Recettes</a>
     <a routerLink="/boissons" routerLinkActive="active">Boissons</a>
     <a routerLink="/vide-frigo" routerLinkActive="active">Vide-frigo</a>
@@ -11,11 +13,13 @@
       <a routerLink="/mes-favoris" routerLinkActive="active">Mes favoris</a>
       <a routerLink="/profile" routerLinkActive="active">Mon profil</a>
     }
-  </div>
-  <div class="navbar-user">
+  </nav>
+
+  <div class="user">
     @if (auth.currentUser$ | async; as user) {
-      <span class="user-name">{{ user.prenom }} {{ user.nom }}</span>
-      <button (click)="auth.logout()">Déconnexion</button>
+      <span>{{ user.prenom }} {{ user.nom }}</span>
+      <div class="avatar">{{ getInitiales(user) }}</div>
+      <button class="logout" (click)="auth.logout()">Déconnexion</button>
     }
   </div>
-</nav>
+</header>
