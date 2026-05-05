@@ -100,4 +100,11 @@ export class BoissonDetail implements OnInit {
     }
     return `${total} min`;
   }
+
+  scrollToAccords(): void {
+  const el = document.getElementById('accords-section');
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
 }

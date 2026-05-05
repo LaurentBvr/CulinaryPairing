@@ -75,7 +75,9 @@
           <!-- Boutons -->
           <div style="display:flex; gap:12px;">
             @if (accords().length > 0) {
-              <a href="#accords-section" class="btn btn-primary">Voir les {{ accords().length }} accords ↓</a>
+              <button type="button" (click)="scrollToAccords()" class="btn btn-primary">
+                Voir les {{ accords().length }} accords ↓
+              </button>
             }
           </div>
         </div>
