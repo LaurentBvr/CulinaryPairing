@@ -21,7 +21,7 @@ export class FavorisService {
   private auth = inject(AuthService);
   private apiUrl = `${environment.apiUrl}/api/favoris`;
 
-  // Set d'IDs en signal → permet *ngIf="favoris.has(id)" en O(1) sur RecetteList
+  // Set d'IDs en signal → permet @if (favoris.has(id)) en O(1) sur RecetteList
   private favorisIds = signal<Set<number>>(new Set());
   readonly ids = this.favorisIds.asReadonly();
 

@@ -8,18 +8,26 @@
       [value]="searchQuery"
       (input)="onSearch($event)"
     />
-    <ul class="suggestions" *ngIf="suggestions.length > 0">
-      <li *ngFor="let s of suggestions" (click)="addIngredient(s)">{{ s.nom }}</li>
-    </ul>
+    @if (suggestions.length > 0) {
+      <ul class="suggestions">
+        @for (s of suggestions; track s.idIngredient) {
+          <li (click)="addIngredient(s)">{{ s.nom }}</li>
+        }
+      </ul>
+    }
   </div>
 
   <div class="chips">
-    <div class="chip-wrapper" *ngFor="let i of selected">
-      <span class="chip">
-        {{ i.nom }} <button (click)="removeIngredient(i)">×</button>
-      </span>
-      <small class="chip-info" *ngIf="i.info">{{ formatInfo(i.info) }}</small>
-    </div>
+    @for (i of selected; track i.idIngredient) {
+      <div class="chip-wrapper">
+        <span class="chip">
+          {{ i.nom }} <button (click)="removeIngredient(i)">×</button>
+        </span>
+        @if (i.info) {
+          <small class="chip-info">{{ formatInfo(i.info) }}</small>
+        }
+      </div>
+    }
   </div>
 
   <div class="options">
@@ -38,22 +46,32 @@
     <button (click)="reset()">Réinitialiser</button>
   </div>
 
-  <p class="error" *ngIf="error">{{ error }}</p>
+  @if (error) {
+    <p class="error">{{ error }}</p>
+  }
 
-  <div class="results" *ngIf="results.length > 0">
-    <div class="result-card" *ngFor="let r of results" [routerLink]="['/recettes', r.recetteId]">
-      <div class="result-header">
-        <span class="titre">{{ r.titre }}</span>
-        <span class="score">{{ r.score }}%</span>
-        <span class="badge-veg" *ngIf="r.badgeVeg">🌿 Version végé possible</span>
-      </div>
-      <div class="manquants" *ngIf="r.ingredientsManquants.length > 0">
-        Manquants : {{ r.ingredientsManquants.join(', ') }}
-      </div>
+  @if (results.length > 0) {
+    <div class="results">
+      @for (r of results; track r.recetteId) {
+        <div class="result-card" [routerLink]="['/recettes', r.recetteId]">
+          <div class="result-header">
+            <span class="titre">{{ r.titre }}</span>
+            <span class="score">{{ r.score }}%</span>
+            @if (r.badgeVeg) {
+              <span class="badge-veg">🌿 Version végé possible</span>
+            }
+          </div>
+          @if (r.ingredientsManquants.length > 0) {
+            <div class="manquants">
+              Manquants : {{ r.ingredientsManquants.join(', ') }}
+            </div>
+          }
+        </div>
+      }
     </div>
-  </div>
+  }
 
-  <p *ngIf="searched && results.length === 0 && !error">
-    Aucune recette possible. Essayez d'ajouter des ingrédients de base.
-  </p>
+  @if (searched && results.length === 0 && !error) {
+    <p>Aucune recette possible. Essayez d'ajouter des ingrédients de base.</p>
+  }
 </div>

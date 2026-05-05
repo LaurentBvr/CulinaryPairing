@@ -122,33 +122,37 @@
         <a routerLink="/recettes">Voir toutes les recettes →</a>
       </div>
 
-      <div class="recipes-row" *ngIf="!loading() && recettesRecentes().length > 0">
-        <a *ngFor="let r of recettesRecentes()" class="recipe-card" [routerLink]="['/recettes', r.idRecette]">
-          <div class="img ph-stripes">
-            <span class="lab">[ {{ r.nom }} ]</span>
-          </div>
-          <div class="body">
-            <div class="meta-top">
-              <span class="pill pill-neutral">{{ r.typeRepas }}</span>
-              <span class="pill pill-neutral">{{ r.niveauDifficulte }}</span>
-            </div>
-            <h3 class="title">{{ r.nom }}</h3>
-            <p style="font-size:13px; color:var(--ink-700); margin:0 0 12px; line-height:1.5;">{{ r.description }}</p>
-            <div class="meta-bot">
-              <span>⏱ {{ r.tempsPreparation }} min</span>
-              <span style="margin-left:auto; font-family:var(--font-mono); font-size:11px; color:var(--ink-500); letter-spacing:.1em;">{{ r.categorie }}</span>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div *ngIf="loading()" style="text-align:center; padding:40px; color:var(--ink-500);">
-        Chargement...
-      </div>
-
-      <div *ngIf="!loading() && recettesRecentes().length === 0" style="text-align:center; padding:40px; color:var(--ink-500);">
-        Aucune recette pour le moment.
-      </div>
+      @if (loading()) {
+        <div style="text-align:center; padding:40px; color:var(--ink-500);">
+          Chargement...
+        </div>
+      } @else if (recettesRecentes().length > 0) {
+        <div class="recipes-row">
+          @for (r of recettesRecentes(); track r.idRecette) {
+            <a class="recipe-card" [routerLink]="['/recettes', r.idRecette]">
+              <div class="img ph-stripes">
+                <span class="lab">[ {{ r.nom }} ]</span>
+              </div>
+              <div class="body">
+                <div class="meta-top">
+                  <span class="pill pill-neutral">{{ r.typeRepas }}</span>
+                  <span class="pill pill-neutral">{{ r.niveauDifficulte }}</span>
+                </div>
+                <h3 class="title">{{ r.nom }}</h3>
+                <p style="font-size:13px; color:var(--ink-700); margin:0 0 12px; line-height:1.5;">{{ r.description }}</p>
+                <div class="meta-bot">
+                  <span>⏱ {{ r.tempsPreparation }} min</span>
+                  <span style="margin-left:auto; font-family:var(--font-mono); font-size:11px; color:var(--ink-500); letter-spacing:.1em;">{{ r.categorie }}</span>
+                </div>
+              </div>
+            </a>
+          }
+        </div>
+      } @else {
+        <div style="text-align:center; padding:40px; color:var(--ink-500);">
+          Aucune recette pour le moment.
+        </div>
+      }
 
     </section>
 

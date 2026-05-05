@@ -42,48 +42,49 @@
           <div class="cp-field">
             <label for="prenom">Prénom</label>
             <input id="prenom" type="text" formControlName="prenom" placeholder="Marie" />
-            <span class="err" *ngIf="form.get('prenom')?.invalid && form.get('prenom')?.touched">
-              Prénom requis
-            </span>
+            @if (form.get('prenom')?.invalid && form.get('prenom')?.touched) {
+              <span class="err">Prénom requis</span>
+            }
           </div>
 
           <div class="cp-field">
             <label for="nom">Nom</label>
             <input id="nom" type="text" formControlName="nom" placeholder="Dupont" />
-            <span class="err" *ngIf="form.get('nom')?.invalid && form.get('nom')?.touched">
-              Nom requis
-            </span>
+            @if (form.get('nom')?.invalid && form.get('nom')?.touched) {
+              <span class="err">Nom requis</span>
+            }
           </div>
         </div>
 
         <div class="cp-field">
           <label for="email">Email</label>
           <input id="email" type="email" formControlName="email" placeholder="marie@email.com" />
-          <span class="err" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
-            Email invalide
-          </span>
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <span class="err">Email invalide</span>
+          }
         </div>
 
         <div class="cp-field">
           <label for="password">Mot de passe</label>
           <input id="password" type="password" formControlName="password" placeholder="8 caractères minimum" />
-          <span class="hint" *ngIf="!(form.get('password')?.invalid && form.get('password')?.touched)">
-            Au moins 8 caractères.
-          </span>
-          <span class="err" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
-            Mot de passe trop court (8 caractères minimum)
-          </span>
+          @if (!(form.get('password')?.invalid && form.get('password')?.touched)) {
+            <span class="hint">Au moins 8 caractères.</span>
+          } @else {
+            <span class="err">Mot de passe trop court (8 caractères minimum)</span>
+          }
         </div>
 
         <div class="cp-field">
           <label for="confirmPassword">Confirmer le mot de passe</label>
           <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="••••••••" />
-          <span class="err" *ngIf="form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.touched">
-            Les mots de passe ne correspondent pas
-          </span>
+          @if (form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.touched) {
+            <span class="err">Les mots de passe ne correspondent pas</span>
+          }
         </div>
 
-        <p class="err" *ngIf="error">{{ error }}</p>
+        @if (error) {
+          <p class="err">{{ error }}</p>
+        }
 
         <div class="actions">
           <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="loading">
