@@ -1,0 +1,155 @@
+/* ============================================
+   Responsive overrides v1.3
+   Transforme les layouts desktop en mobile
+   ============================================ */
+
+/* === Tablette et mobile (< 768px) === */
+@media (max-width: 768px) {
+
+  /* --- AUTH (Login / Register) --- */
+  .auth-page { grid-template-columns: 1fr; }
+  .auth-aside { display: none; }
+  .auth-form-wrap { padding: 32px 22px; min-height: 100vh; }
+  .auth-form h2 { font-size: 28px; }
+  .row-2 { grid-template-columns: 1fr; }
+
+  /* --- DASHBOARD --- */
+  .dash-content { padding: 22px 18px 60px; }
+  .dash-greeting {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .dash-greeting h1 { font-size: 30px; }
+  .dash-greeting .right { text-align: left; }
+
+  .dash-grid { grid-template-columns: 1fr; gap: 18px; }
+
+  .accord-hero {
+    padding: 24px 22px;
+    min-height: 0;
+    border-radius: var(--radius-lg);
+  }
+  .accord-hero h2 { font-size: 24px; }
+  .accord-hero .row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .accord-hero .item .ph { width: 64px; height: 64px; }
+  .accord-hero .item .name { font-size: 17px; }
+  .accord-hero .score-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .quick-stats { gap: 12px; }
+  .shortcuts { grid-template-columns: 1fr; gap: 12px; }
+  .recipes-row { grid-template-columns: 1fr; gap: 14px; }
+  .section-block { margin-top: 32px; }
+  .section-block-head h3 { font-size: 20px; }
+
+  /* --- LISTES (Recettes / Boissons / Favoris) --- */
+  .page-content { padding: 22px 18px 60px; }
+  .page-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .page-head h1 { font-size: 30px; }
+  .page-head .right { text-align: left; }
+
+  .grid-recipes,
+  .grid-boissons {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* --- RECETTE DÉTAIL --- */
+  .detail-content { padding: 18px 16px 60px; }
+
+  .hero-recipe {
+    height: 220px;
+    padding: 22px;
+    margin-bottom: 22px;
+  }
+  .hero-recipe .meta-overlay {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .hero-recipe .meta-overlay h1 { font-size: 28px; }
+  .hero-recipe .meta-overlay .fav-big {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .recipe-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    margin-bottom: 32px;
+  }
+  .panel { padding: 20px 22px; }
+
+  .sec-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .sec-head h2 { font-size: 24px; }
+
+  /* Accord card empilée */
+  .accord-card {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 18px 20px;
+  }
+  .accord-actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* --- BOISSON DÉTAIL --- */
+  .bev-hero {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 24px;
+  }
+  .bev-hero .bottle { max-width: 200px; margin: 0 auto; }
+  .bev-hero .info h1 { font-size: 36px; }
+  .bev-stats { grid-template-columns: 1fr; gap: 14px; }
+
+  /* --- NAVBAR DESKTOP (fallback scrollable) --- */
+  .cp-navbar {
+    padding: 0 16px;
+    height: 56px;
+    overflow-x: auto;
+    gap: 12px;
+  }
+  .cp-navbar nav { flex-shrink: 0; }
+  .cp-navbar nav a {
+    padding: 8px 10px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .cp-navbar .user { flex-shrink: 0; }
+
+  /* --- TYPO GLOBALE --- */
+  .h1 { font-size: 30px; }
+  .h2 { font-size: 22px; }
+}
+
+/* === iPhone SE et très petits écrans (< 400px) === */
+@media (max-width: 400px) {
+  .auth-form-wrap { padding: 28px 18px; }
+  .dash-content,
+  .page-content { padding-left: 14px; padding-right: 14px; }
+  .dash-greeting h1,
+  .page-head h1 { font-size: 26px; }
+}
