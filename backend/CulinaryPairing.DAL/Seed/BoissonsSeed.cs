@@ -177,6 +177,104 @@ public static class BoissonsSeed
                 NiveauFume = 0, NiveauAmertume = 7, TemperatureOptimale = 10, ToleranceTemperature = 2,
                 Pays = "Italie", Region = "Florence"
             }
+            ,
+
+            // ===== 12 nouvelles boissons V1.3 (couverture règles + diversité enum) =====
+
+            // id = 21 : Sancerre - acidité maximale (Loire), cible R14bis et R10
+            new() {
+                Nom = "Sancerre", TypeBoisson = TypeBoisson.VinBlanc, Alcoolise = true,
+                NiveauAcidite = 9, NiveauSucre = 1, NiveauTannins = 0, CoutMoyen = 22.00m,
+                DegreAlcool = 12.5m, IntensiteAromatique = 7, Corps = CorpsBoisson.Leger,
+                NiveauFume = 0, NiveauAmertume = 1, TemperatureOptimale = 10, ToleranceTemperature = 2,
+                Pays = "France", Region = "Loire", Appellation = "Sancerre AOC", Cepage = "Sauvignon Blanc"
+            },
+            // id = 22 : Riesling d'Alsace - profil épicé, cible R25bis
+            new() {
+                Nom = "Riesling d'Alsace", TypeBoisson = TypeBoisson.VinBlanc, Alcoolise = true,
+                NiveauAcidite = 8, NiveauSucre = 4, NiveauTannins = 0, CoutMoyen = 16.00m,
+                DegreAlcool = 12.5m, IntensiteAromatique = 7, Corps = CorpsBoisson.Moyen,
+                NiveauFume = 0, NiveauAmertume = 1, TemperatureOptimale = 9, ToleranceTemperature = 2,
+                Pays = "France", Region = "Alsace", Appellation = "Alsace Grand Cru AOC", Cepage = "Riesling"
+            },
+            // id = 23 : Côtes de Provence Rosé - comble vin_rose absent du seed
+            new() {
+                Nom = "Côtes de Provence Rosé", TypeBoisson = TypeBoisson.VinRose, Alcoolise = true,
+                NiveauAcidite = 6, NiveauSucre = 2, NiveauTannins = 1, CoutMoyen = 12.00m,
+                DegreAlcool = 12.5m, IntensiteAromatique = 5, Corps = CorpsBoisson.Leger,
+                NiveauFume = 0, NiveauAmertume = 1, TemperatureOptimale = 10, ToleranceTemperature = 2,
+                Pays = "France", Region = "Provence", Appellation = "Côtes de Provence AOC", Cepage = "Grenache-Cinsault"
+            },
+            // id = 24 : Tavel Rosé - rosé corsé, R20bis grillades
+            new() {
+                Nom = "Tavel Rosé", TypeBoisson = TypeBoisson.VinRose, Alcoolise = true,
+                NiveauAcidite = 5, NiveauSucre = 2, NiveauTannins = 3, CoutMoyen = 14.00m,
+                DegreAlcool = 13.5m, IntensiteAromatique = 7, Corps = CorpsBoisson.Moyen,
+                NiveauFume = 0, NiveauAmertume = 2, TemperatureOptimale = 12, ToleranceTemperature = 2,
+                Pays = "France", Region = "Vallée du Rhône", Appellation = "Tavel AOC", Cepage = "Grenache"
+            },
+            // id = 25 : Pinot Noir Bourgogne - rouge léger compatible R12 (umami pur)
+            new() {
+                Nom = "Pinot Noir Bourgogne", TypeBoisson = TypeBoisson.VinRouge, Alcoolise = true,
+                NiveauAcidite = 6, NiveauSucre = 1, NiveauTannins = 4, CoutMoyen = 18.00m,
+                DegreAlcool = 13.0m, IntensiteAromatique = 7, Corps = CorpsBoisson.Leger,
+                NiveauFume = 1, NiveauAmertume = 2, TemperatureOptimale = 16, ToleranceTemperature = 2,
+                Pays = "France", Region = "Bourgogne", Appellation = "Bourgogne AOC", Cepage = "Pinot Noir"
+            },
+            // id = 26 : Beaujolais Villages - rouge fruité très léger
+            new() {
+                Nom = "Beaujolais Villages", TypeBoisson = TypeBoisson.VinRouge, Alcoolise = true,
+                NiveauAcidite = 6, NiveauSucre = 2, NiveauTannins = 3, CoutMoyen = 11.00m,
+                DegreAlcool = 12.5m, IntensiteAromatique = 6, Corps = CorpsBoisson.Leger,
+                NiveauFume = 0, NiveauAmertume = 2, TemperatureOptimale = 14, ToleranceTemperature = 2,
+                Pays = "France", Region = "Beaujolais", Appellation = "Beaujolais Villages AOC", Cepage = "Gamay"
+            },
+            // id = 27 : Whisky japonais doux - contraste R13 avec le tourbé d'Islay
+            new() {
+                Nom = "Whisky japonais doux", TypeBoisson = TypeBoisson.Whisky, Alcoolise = true,
+                NiveauAcidite = 2, NiveauSucre = 2, NiveauTannins = 3, CoutMoyen = 12.00m,
+                DegreAlcool = 43.0m, IntensiteAromatique = 7, Corps = CorpsBoisson.Moyen,
+                NiveauFume = 1, NiveauAmertume = 2, TemperatureOptimale = 18, ToleranceTemperature = 3,
+                Pays = "Japon", Region = "Yamazaki"
+            },
+            // id = 28 : Margarita - cocktail acide non-vinicole pour R10
+            new() {
+                Nom = "Margarita", TypeBoisson = TypeBoisson.Cocktail, Alcoolise = true,
+                NiveauAcidite = 8, NiveauSucre = 4, NiveauTannins = 0, CoutMoyen = 9.00m,
+                DegreAlcool = 22.0m, IntensiteAromatique = 7, Corps = CorpsBoisson.Moyen,
+                NiveauFume = 0, NiveauAmertume = 2, TemperatureOptimale = 5, ToleranceTemperature = 2,
+                Pays = "Mexique"
+            },
+            // id = 29 : Mocktail gingembre-cardamome - SANS ALCOOL + famille épice (R25bis + R16)
+            new() {
+                Nom = "Mocktail gingembre-cardamome", TypeBoisson = TypeBoisson.Mocktail, Alcoolise = false,
+                NiveauAcidite = 5, NiveauSucre = 5, NiveauTannins = 0, CoutMoyen = 4.50m,
+                DegreAlcool = 0.0m, IntensiteAromatique = 7, Corps = CorpsBoisson.Moyen,
+                NiveauFume = 0, NiveauAmertume = 2, TemperatureOptimale = 5, ToleranceTemperature = 2
+            },
+            // id = 30 : Mocktail fruits rouges - sans alcool + sucré pour desserts (R11bis + R16)
+            new() {
+                Nom = "Mocktail fruits rouges", TypeBoisson = TypeBoisson.Mocktail, Alcoolise = false,
+                NiveauAcidite = 4, NiveauSucre = 7, NiveauTannins = 1, CoutMoyen = 4.00m,
+                DegreAlcool = 0.0m, IntensiteAromatique = 6, Corps = CorpsBoisson.Leger,
+                NiveauFume = 0, NiveauAmertume = 1, TemperatureOptimale = 5, ToleranceTemperature = 2
+            },
+            // id = 31 : Saké Daiginjo - saké premium pour cuisine asiatique raffinée
+            new() {
+                Nom = "Saké Daiginjo", TypeBoisson = TypeBoisson.Sake, Alcoolise = true,
+                NiveauAcidite = 4, NiveauSucre = 3, NiveauTannins = 0, CoutMoyen = 35.00m,
+                DegreAlcool = 16.0m, IntensiteAromatique = 7, Corps = CorpsBoisson.Leger,
+                NiveauFume = 0, NiveauAmertume = 1, TemperatureOptimale = 10, ToleranceTemperature = 2,
+                Pays = "Japon", Region = "Hyōgo", Cepage = "Yamadanishiki"
+            },
+            // id = 32 : Cidre doux fermier - sucre=6 pour déclencher R24bis (canard à l'orange, tajine)
+            new() {
+                Nom = "Cidre doux fermier", TypeBoisson = TypeBoisson.Cidre, Alcoolise = true,
+                NiveauAcidite = 4, NiveauSucre = 6, NiveauTannins = 1, CoutMoyen = 5.50m,
+                DegreAlcool = 3.5m, IntensiteAromatique = 5, Corps = CorpsBoisson.Leger,
+                NiveauFume = 0, NiveauAmertume = 2, TemperatureOptimale = 8, ToleranceTemperature = 2,
+                Pays = "France", Region = "Normandie", Appellation = "Pays d'Auge AOC"
+            }
         };
 
         await context.Boissons.AddRangeAsync(boissons);
