@@ -8,17 +8,17 @@
 
       <div class="field">
         <label for="nbPersonnes">Nombre de personnes *</label>
-        <input id="nbPersonnes" type="number" formControlName="nombrePersonnes" min="1" max="50" />
+        <input id="nbPersonnes" name="nbPersonnes" type="number" formControlName="nombrePersonnes" min="1" max="50" />
       </div>
 
       <div class="field-row">
         <div class="field">
           <label for="nbVeg">Dont végétariens</label>
-          <input id="nbVeg" type="number" formControlName="nombreVegetariens" min="0" />
+          <input id="nbVeg" name="nbVeg" type="number" formControlName="nombreVegetariens" min="0" />
         </div>
         <div class="field">
           <label for="nbVegan">Dont végans</label>
-          <input id="nbVegan" type="number" formControlName="nombreVegans" min="0" />
+          <input id="nbVegan" name="nbVegan" type="number" formControlName="nombreVegans" min="0" />
         </div>
       </div>
       <p class="hint">
@@ -36,8 +36,12 @@
           <div class="contraintes-list">
             @for (c of contraintesParType('Sante'); track c.idContrainte) {
               <label class="contrainte-chip" [class.selected]="estSelectionnee(c.idContrainte)">
-                <input type="checkbox" [checked]="estSelectionnee(c.idContrainte)"
-                       (change)="toggleContrainte(c.idContrainte)" />
+                <input
+                  [id]="'contrainte-sante-' + c.idContrainte"
+                  [name]="'contrainte-sante-' + c.idContrainte"
+                  type="checkbox"
+                  [checked]="estSelectionnee(c.idContrainte)"
+                  (change)="toggleContrainte(c.idContrainte)" />
                 {{ c.nom }}
               </label>
             }
@@ -51,8 +55,12 @@
           <div class="contraintes-list">
             @for (c of contraintesParType('Religieux'); track c.idContrainte) {
               <label class="contrainte-chip" [class.selected]="estSelectionnee(c.idContrainte)">
-                <input type="checkbox" [checked]="estSelectionnee(c.idContrainte)"
-                       (change)="toggleContrainte(c.idContrainte)" />
+                <input
+                  [id]="'contrainte-relig-' + c.idContrainte"
+                  [name]="'contrainte-relig-' + c.idContrainte"
+                  type="checkbox"
+                  [checked]="estSelectionnee(c.idContrainte)"
+                  (change)="toggleContrainte(c.idContrainte)" />
                 {{ c.nom }}
               </label>
             }
@@ -66,8 +74,12 @@
           <div class="contraintes-list">
             @for (c of contraintesParType('Choix'); track c.idContrainte) {
               <label class="contrainte-chip" [class.selected]="estSelectionnee(c.idContrainte)">
-                <input type="checkbox" [checked]="estSelectionnee(c.idContrainte)"
-                       (change)="toggleContrainte(c.idContrainte)" />
+                <input
+                  [id]="'contrainte-choix-' + c.idContrainte"
+                  [name]="'contrainte-choix-' + c.idContrainte"
+                  type="checkbox"
+                  [checked]="estSelectionnee(c.idContrainte)"
+                  (change)="toggleContrainte(c.idContrainte)" />
                 {{ c.nom }}
               </label>
             }
@@ -81,24 +93,24 @@
 
       <div class="field">
         <label for="type">Type de soirée</label>
-        <input id="type" type="text" formControlName="typeSoiree"
+        <input id="type" name="type" type="text" formControlName="typeSoiree"
                placeholder="ex. Anniversaire, Chic, Décontracté..." />
       </div>
 
       <div class="field-row">
         <div class="field">
           <label for="budget">Budget total (€)</label>
-          <input id="budget" type="number" formControlName="budget" min="0" step="0.01" />
+          <input id="budget" name="budget" type="number" formControlName="budget" min="0" step="0.01" />
         </div>
         <div class="field">
           <label for="temps">Temps disponible (min)</label>
-          <input id="temps" type="number" formControlName="tempsDisponible" min="0" />
+          <input id="temps" name="temps" type="number" formControlName="tempsDisponible" min="0" />
         </div>
       </div>
 
       <div class="field">
         <label for="alcool">Préférence alcool *</label>
-        <select id="alcool" formControlName="preferenceAlcool">
+        <select id="alcool" name="alcool" formControlName="preferenceAlcool">
           <option value="Avec">Avec alcool</option>
           <option value="Sans">Sans alcool</option>
         </select>

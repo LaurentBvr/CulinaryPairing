@@ -1,1 +1,160 @@
-<p>dashboard works!</p>
+<div class="dash-page">
+  <div class="dash-content">
+
+    <!-- Greeting -->
+    <header class="dash-greeting">
+      <div>
+        <div class="eyebrow">{{ dateAujourdHui() }}</div>
+        <h1>{{ salutation() }}, <em>{{ user()?.prenom || 'invité' }}</em>.</h1>
+      </div>
+      <div class="right">
+        {{ totalRecettes() }} recettes au catalogue<br>
+        Moteur sommelier · V1.3
+      </div>
+    </header>
+
+    <!-- Grille hero + quick stats -->
+    <div class="dash-grid">
+
+      <!-- Hero accord du jour (placeholder) -->
+      <div class="accord-hero">
+        <div class="label">— Découverte du jour —</div>
+        <h2>Explorez vos <em>accords parfaits</em>.</h2>
+        <p class="pairing">
+          Sélectionnez une recette dans le catalogue pour découvrir les boissons
+          qui s'accordent le mieux selon les 16 règles de sommellerie.
+        </p>
+
+        <div class="cta-row">
+          <a routerLink="/recettes" class="btn btn-primary">Découvrir les recettes</a>
+          <a routerLink="/boissons" class="btn btn-ghost">Parcourir les boissons</a>
+        </div>
+      </div>
+
+      <!-- Quick stats -->
+      <div class="quick-stats">
+        <div class="quick-card">
+          <div class="top">
+            <span class="label">Mes soirées</span>
+          </div>
+          <div class="num">—</div>
+          <p class="desc">Composez un menu entrée / plat / dessert tenant compte des contraintes de vos invités.</p>
+          <a routerLink="/soirees">Voir mes soirées →</a>
+        </div>
+
+        <div class="quick-card">
+          <div class="top">
+            <span class="label">Mes favoris</span>
+          </div>
+          <div class="num">—</div>
+          <p class="desc">Vos recettes et boissons préférées, regroupées pour un accès rapide.</p>
+          <a routerLink="/mes-favoris">Voir mes favoris →</a>
+        </div>
+
+        <div class="quick-card">
+          <div class="top">
+            <span class="label">Profil</span>
+          </div>
+          <div class="num"><em>—</em></div>
+          <p class="desc">Gérez vos régimes, allergies et convictions pour personnaliser le moteur d'accords.</p>
+          <a routerLink="/profile">Modifier mes contraintes →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section explorer (raccourcis) -->
+    <section class="section-block">
+      <div class="section-block-head">
+        <h3>Explorer</h3>
+        <a routerLink="/recettes">Tout voir →</a>
+      </div>
+
+      <div class="shortcuts">
+        <a class="shortcut" routerLink="/recettes">
+          <span class="num">— 01 —</span>
+          <span class="count">{{ totalRecettes() }}</span>
+          <h4 class="title">Recettes</h4>
+          <p class="desc">Parcourez le catalogue complet et filtrez selon vos contraintes alimentaires.</p>
+          <span class="arrow">Découvrir →</span>
+        </a>
+
+        <a class="shortcut" routerLink="/boissons">
+          <span class="num">— 02 —</span>
+          <h4 class="title">Boissons</h4>
+          <p class="desc">Vins, bières, cocktails, mocktails — explorez la cave et ses accords inversés.</p>
+          <span class="arrow">Parcourir →</span>
+        </a>
+
+        <a class="shortcut" routerLink="/vide-frigo">
+          <span class="num">— 03 —</span>
+          <h4 class="title">Vide-frigo</h4>
+          <p class="desc">Listez vos ingrédients et découvrez les recettes que vous pouvez réaliser maintenant.</p>
+          <span class="arrow">Lancer →</span>
+        </a>
+
+        <a class="shortcut" routerLink="/soirees">
+          <span class="num">— 04 —</span>
+          <h4 class="title">Mes soirées</h4>
+          <p class="desc">Composez une entrée, un plat et un dessert qui respectent les contraintes de vos invités.</p>
+          <span class="arrow">Organiser →</span>
+        </a>
+
+        <a class="shortcut" routerLink="/mes-favoris">
+          <span class="num">— 05 —</span>
+          <h4 class="title">Mes favoris</h4>
+          <p class="desc">Vos recettes et boissons préférées, regroupées pour un accès rapide.</p>
+          <span class="arrow">Retrouver →</span>
+        </a>
+
+        <a class="shortcut" routerLink="/profile">
+          <span class="num">— 06 —</span>
+          <h4 class="title">Mon profil</h4>
+          <p class="desc">Gérez vos régimes, allergies et convictions pour personnaliser le moteur d'accords.</p>
+          <span class="arrow">Configurer →</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Section recettes récentes -->
+    <section class="section-block">
+      <div class="section-block-head">
+        <h3>Récemment ajoutées</h3>
+        <a routerLink="/recettes">Voir tout le catalogue →</a>
+      </div>
+
+      @if (loading()) {
+        <div style="text-align:center; padding:40px; color:var(--ink-500);">
+          Chargement...
+        </div>
+      } @else if (recettesRecentes().length > 0) {
+        <div class="recipes-row">
+          @for (r of recettesRecentes(); track r.idRecette) {
+            <a class="recipe-card" [routerLink]="['/recettes', r.idRecette]">
+              <div class="img ph-stripes">
+                <span class="lab">[ {{ r.nom }} ]</span>
+              </div>
+              <div class="body">
+                <div class="meta-top">
+                  <span class="pill pill-neutral">{{ r.typeRepas }}</span>
+                  <span class="pill pill-neutral">{{ r.niveauDifficulte }}</span>
+                </div>
+                <h3 class="title">{{ r.nom }}</h3>
+                <p style="font-size:13px; color:var(--ink-700); margin:0 0 12px; line-height:1.5;">{{ r.description }}</p>
+                <div class="meta-bot">
+                  <span>⏱ {{ r.tempsPreparation }} min</span>
+                  <span style="margin-left:auto; font-family:var(--font-mono); font-size:11px; color:var(--ink-500); letter-spacing:.1em;">{{ r.categorie }}</span>
+                </div>
+              </div>
+            </a>
+          }
+        </div>
+      } @else {
+        <div style="text-align:center; padding:40px; color:var(--ink-500);">
+          Aucune recette pour le moment.
+        </div>
+      }
+
+    </section>
+
+  </div>
+</div>

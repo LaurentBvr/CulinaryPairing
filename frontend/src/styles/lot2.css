@@ -95,9 +95,9 @@
 
 /* Steps */
 .steps{ counter-reset: step; list-style: none; padding: 0; margin: 0; }
-.steps li{ counter-increment: step; padding: 18px 0 18px 60px; position: relative; border-bottom: 1px dashed var(--cream-200); font-size: 15px; line-height: 1.55; color: var(--ink-700); }
+.steps li{ padding: 18px 0 18px 60px; position: relative; border-bottom: 1px dashed var(--cream-200); font-size: 15px; line-height: 1.55; color: var(--ink-700); }
 .steps li:last-child{ border-bottom: none; }
-.steps li::before{ content: counter(step, decimal-leading-zero); position: absolute; left: 0; top: 18px; font-family: var(--font-serif); font-style: italic; font-size: 26px; color: var(--gold-500); font-weight: 500; line-height: 1; }
+/*.steps li::before{ content: counter(step, decimal-leading-zero); position: absolute; left: 0; top: 18px; font-family: var(--font-serif); font-style: italic; font-size: 26px; color: var(--gold-500); font-weight: 500; line-height: 1; }*/
 
 /* Section header */
 .sec-head{ display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 22px; padding-bottom: 14px; border-bottom: 1px solid var(--cream-200); }

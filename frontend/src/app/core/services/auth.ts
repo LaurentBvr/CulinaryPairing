@@ -31,11 +31,12 @@ export class AuthService {
     this.loadUserFromStorage();
   }
 
-  register(data: { email: string; password: string; nom: string }): Observable<AuthResponse> {
+  register(data: { prenom: string; nom: string; email: string; password: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${environment.apiUrl}/api/auth/register`, {
+      prenom: data.prenom,
+      nom: data.nom,
       email: data.email,
-      motDePasse: data.password,
-      nom: data.nom
+      motDePasse: data.password
     }).pipe(tap(res => this.handleAuth(res)));
   }
 

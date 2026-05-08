@@ -1,0 +1,36 @@
+<div class="gauge-wrap" [style.width.px]="size" [style.height.px]="size">
+  <svg viewBox="0 0 100 100" [attr.width]="size" [attr.height]="size">
+    <!-- Cercle de fond -->
+    <circle
+      cx="50" cy="50" [attr.r]="radius"
+      fill="none"
+      stroke="var(--cream-200)"
+      stroke-width="8" />
+
+    <!-- Arc coloré -->
+    <circle
+      cx="50" cy="50" [attr.r]="radius"
+      fill="none"
+      [attr.stroke]="color()"
+      stroke-width="8"
+      stroke-linecap="round"
+      [attr.stroke-dasharray]="circumference"
+      [attr.stroke-dashoffset]="dashOffset()"
+      transform="rotate(-90 50 50)" />
+  </svg>
+
+  <div class="gauge-content">
+    <div class="gauge-num"
+         [style.font-size.px]="fontSize()"
+         [style.color]="color()">
+      {{ _score() }}
+    </div>
+    @if (showLabel) {
+      <div class="gauge-label"
+           [style.font-size.px]="labelFontSize()"
+           [style.color]="color()">
+        {{ label() }}
+      </div>
+    }
+  </div>
+</div>
