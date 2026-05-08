@@ -176,8 +176,7 @@ public static class BoissonsSeed
                 DegreAlcool = 24.0m, IntensiteAromatique = 8, Corps = CorpsBoisson.Corse,
                 NiveauFume = 0, NiveauAmertume = 7, TemperatureOptimale = 10, ToleranceTemperature = 2,
                 Pays = "Italie", Region = "Florence"
-            }
-            ,
+            },
 
             // ===== 12 nouvelles boissons V1.3 (couverture règles + diversité enum) =====
 
