@@ -1,48 +1,96 @@
-<div class="soirees-container">
-  <div class="header">
-    <h1>Mes soirées</h1>
-    <a routerLink="/soirees/nouveau" class="btn-primary">+ Nouvelle soirée</a>
-  </div>
+<div class="page-wrap">
+  <div class="page-content">
 
-  @if (loading) {
-    <p class="loading">Chargement...</p>
-  }
-
-  @if (error) {
-    <p class="error">{{ error }}</p>
-  }
-
-  @if (!loading && !error) {
-    @if (soirees.length === 0) {
-      <p class="empty">
-        Vous n'avez pas encore de soirée. Cliquez sur "Nouvelle soirée" pour commencer.
-      </p>
-    } @else {
-      <ul class="soirees-grid">
-        @for (s of soirees; track s.idSoiree) {
-          <li class="soiree-card">
-            <a [routerLink]="['/soirees', s.idSoiree]" class="soiree-link">
-              <div class="soiree-header">
-                <span class="soiree-titre">
-                  {{ s.typeSoiree || 'Soirée' }} — {{ s.nombrePersonnes }} pers.
-                </span>
-                @if (s.menuComplet) {
-                  <span class="badge-complet">Menu complet</span>
-                } @else {
-                  <span class="badge-incomplet">Menu à composer</span>
-                }
-              </div>
-              <div class="soiree-meta">
-                <span>{{ s.dateCreation | date:'dd/MM/yyyy' }}</span>
-                @if (s.nbContraintes > 0) {
-                  <span>{{ s.nbContraintes }} contrainte(s)</span>
-                }
-              </div>
-            </a>
-            <button class="btn-delete" (click)="supprimer(s)" title="Supprimer">×</button>
-          </li>
+    <!-- Header éditorial -->
+    <div class="page-head">
+      <div>
+        <div class="eyebrow">— Mes soirées —</div>
+        <h1>Composez vos <em>menus</em>.</h1>
+        <p class="lede">Orchestrez une entrée, un plat et un dessert qui respectent les contraintes alimentaires de vos invités. Le moteur sommelier vous suggère ensuite les accords boissons.</p>
+      </div>
+      <div class="right">
+        @if (soirees.length > 0) {
+          {{ soirees.length.toString().padStart(2, '0') }}&nbsp;{{ soirees.length > 1 ? 'soirées' : 'soirée' }}<br>
+          {{ countMenusComplets() }}&nbsp;{{ countMenusComplets() > 1 ? 'menus complets' : 'menu complet' }}
         }
-      </ul>
+      </div>
+    </div>
+
+    <!-- CTA Nouvelle soirée -->
+    <div style="display:flex; justify-content:flex-end; margin-bottom:18px;">
+      <a routerLink="/soirees/nouveau" class="btn btn-primary btn-lg">+ Nouvelle soirée</a>
+    </div>
+
+    @if (loading) {
+      <p style="text-align:center; padding:40px; color:var(--ink-500);">Chargement...</p>
     }
-  }
+
+    @if (error) {
+      <p class="err" style="text-align:center; padding:40px;">{{ error }}</p>
+    }
+
+    @if (!loading && !error) {
+
+      @if (soirees.length === 0) {
+        <!-- État vide -->
+        <div style="text-align:center; padding:80px 40px; color:var(--ink-500); background:#fff; border:1px dashed var(--cream-300); border-radius:var(--radius-lg);">
+          <div style="font-family:var(--font-serif); font-size:48px; color:var(--cream-300); line-height:1; margin-bottom:16px;">✦</div>
+          <h3 style="font-family:var(--font-serif); font-size:24px; color:var(--bordeaux-900); margin:0 0 8px;">Aucune soirée pour le moment.</h3>
+          <p style="font-size:14px; max-width:480px; margin:0 auto 24px;">
+            Créez votre première soirée pour commencer à composer un menu adapté à vos invités. L'app filtre automatiquement les recettes selon leurs contraintes (régimes, allergies, convictions).
+          </p>
+          <a routerLink="/soirees/nouveau" class="btn btn-primary btn-lg">+ Créer ma première soirée</a>
+        </div>
+      } @else {
+
+        <!-- Grille de soirées -->
+        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:18px;">
+          @for (s of soirees; track s.idSoiree) {
+            <article class="soiree-card" style="background:#fff; border:1px solid var(--cream-200); border-radius:var(--radius-lg); padding:22px 24px; position:relative; transition:box-shadow .2s, border-color .2s;">
+
+              <a [routerLink]="['/soirees', s.idSoiree]"
+                 style="display:block; text-decoration:none; color:inherit;">
+
+                <!-- Eyebrow type + statut menu -->
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+                  <span class="eyebrow">— {{ s.typeSoiree || 'Soirée' }} —</span>
+                  @if (s.menuComplet) {
+                    <span class="pill pill-regime"><span class="dot"></span>Menu complet</span>
+                  } @else {
+                    <span class="pill pill-allergie"><span class="dot"></span>À composer</span>
+                  }
+                </div>
+
+                <!-- Titre principal : nb personnes -->
+                <h3 style="font-family:var(--font-serif); font-weight:500; font-size:26px; color:var(--bordeaux-900); margin:0 0 14px; line-height:1.15; letter-spacing:-.01em;">
+                  {{ s.nombrePersonnes }} <em style="font-style:italic; color:var(--gold-500);">personnes</em>
+                </h3>
+
+                <!-- Métadonnées -->
+                <div style="display:flex; align-items:center; gap:14px; padding-top:12px; border-top:1px dashed var(--cream-200); font-family:var(--font-mono); font-size:11px; color:var(--ink-500); letter-spacing:.05em; text-transform:uppercase;">
+                  <span>{{ s.dateCreation | date:'dd MMM yyyy' }}</span>
+                  @if (s.nbContraintes > 0) {
+                    <span style="margin-left:auto;">{{ s.nbContraintes }} contrainte{{ s.nbContraintes > 1 ? 's' : '' }}</span>
+                  } @else {
+                    <span style="margin-left:auto;">aucune contrainte</span>
+                  }
+                </div>
+              </a>
+
+              <!-- Bouton supprimer flottant en haut à droite -->
+              <button type="button"
+                      class="soiree-delete"
+                      (click)="supprimer(s)"
+                      title="Supprimer la soirée"
+                      aria-label="Supprimer"
+                      style="position:absolute; top:12px; right:12px; width:28px; height:28px; border-radius:50%; background:var(--cream-100); color:var(--ink-500); border:none; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:background .15s, color .15s;">
+                ×
+              </button>
+            </article>
+          }
+        </div>
+      }
+    }
+
+  </div>
 </div>

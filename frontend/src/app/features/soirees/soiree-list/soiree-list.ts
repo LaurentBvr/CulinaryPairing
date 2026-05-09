@@ -37,6 +37,10 @@ export class SoireeList implements OnInit {
     });
   }
 
+  countMenusComplets(): number {
+    return this.soirees.filter(s => s.menuComplet).length;
+  }
+
   supprimer(s: SoireeListItem) {
     const label = s.typeSoiree ?? `${s.nombrePersonnes} personnes`;
     if (!confirm(`Supprimer la soirée "${label}" ? Cette action est irréversible.`)) return;

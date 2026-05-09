@@ -1,45 +1,73 @@
-<div class="favoris-list-container">
-  <h1>★ Mes favoris</h1>
+<div class="page-wrap">
+  <div class="page-content">
 
-  @if (loading) {
-    <p class="loading">Chargement...</p>
-  }
-
-  @if (error) {
-    <p class="error">{{ error }}</p>
-  }
-
-  @if (!loading && !error && favoris.length === 0) {
-    <p class="empty">
-      Vous n'avez pas encore de recettes en favoris.
-      <a routerLink="/recettes">Découvrez nos recettes →</a>
-    </p>
-  }
-
-  @if (favoris.length > 0) {
-    <div class="favoris-grid">
-      @for (fav of favoris; track fav.idRecette) {
-        <a class="favori-card" [routerLink]="['/recettes', fav.idRecette]">
-          <button
-            type="button"
-            class="btn-retirer"
-            (click)="onRetirer($event, fav.idRecette)"
-            aria-label="Retirer des favoris"
-            title="Retirer des favoris"
-          >★</button>
-          <div class="card-header">
-            @if (fav.typePlat) { <span class="badge">{{ fav.typePlat }}</span> }
-            @if (fav.difficulte) { <span class="badge">{{ fav.difficulte }}</span> }
-          </div>
-          <h2>{{ fav.titre }}</h2>
-          <div class="card-footer">
-            @if (fav.tempsPreparation) {
-              <span>⏱ {{ (fav.tempsPreparation || 0) + (fav.tempsCuisson || 0) }} min</span>
-            }
-            <span class="date-ajout">Ajouté le {{ fav.dateAjout | date:'dd/MM/yyyy' }}</span>
-          </div>
-        </a>
-      }
+    <!-- Header éditorial -->
+    <div class="page-head">
+      <div>
+        <div class="eyebrow">— Bibliothèque personnelle —</div>
+        <h1>Mes <em>favoris</em>.</h1>
+        <p class="lede">Vos recettes préférées, regroupées pour un accès rapide. Cliquez sur une carte pour retrouver ses accords sommelier.</p>
+      </div>
+      <div class="right">
+        {{ favoris.length }}&nbsp;{{ favoris.length > 1 ? 'recettes' : 'recette' }}<br>
+        triées par date d'ajout
+      </div>
     </div>
-  }
+
+    @if (loading) {
+      <p style="text-align:center; padding:40px; color:var(--ink-500);">Chargement...</p>
+    }
+
+    @if (error) {
+      <p class="err" style="text-align:center; padding:40px;">{{ error }}</p>
+    }
+
+    @if (!loading && !error && favoris.length === 0) {
+      <div style="text-align:center; padding:80px 40px; color:var(--ink-500); background:#fff; border:1px dashed var(--cream-300); border-radius:var(--radius-lg);">
+        <div style="font-family:var(--font-serif); font-size:48px; color:var(--cream-300); line-height:1; margin-bottom:16px;">★</div>
+        <h3 style="font-family:var(--font-serif); font-size:24px; color:var(--bordeaux-900); margin:0 0 8px;">Aucun favori pour le moment.</h3>
+        <p style="font-size:14px; max-width:420px; margin:0 auto 24px;">
+          Parcourez le catalogue et cliquez sur l'étoile en haut à droite des cartes pour conserver vos recettes préférées.
+        </p>
+        <a routerLink="/recettes" class="btn btn-primary">Découvrir les recettes</a>
+        <p style="margin-top:24px; font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-300); text-transform:uppercase;">
+          V1.3 · favoris recettes uniquement
+        </p>
+      </div>
+    }
+
+    @if (favoris.length > 0) {
+      <div class="grid-recipes">
+        @for (fav of favoris; track fav.idRecette) {
+          <a class="recipe-card" [routerLink]="['/recettes', fav.idRecette]">
+            <div class="img ph-stripes">
+              <span class="lab">[ {{ fav.titre }} ]</span>
+              <button type="button"
+                      class="fav active"
+                      (click)="onRetirer($event, fav.idRecette)"
+                      style="color:var(--gold-700);"
+                      aria-label="Retirer des favoris"
+                      title="Retirer des favoris">★</button>
+            </div>
+            <div class="body">
+              <div class="meta-top">
+                @if (fav.typePlat) { <span class="pill pill-neutral">{{ fav.typePlat }}</span> }
+                @if (fav.difficulte) { <span class="pill pill-neutral">{{ fav.difficulte }}</span> }
+              </div>
+              <h3 class="title">{{ fav.titre }}</h3>
+              <div class="meta-bot">
+                @if (fav.tempsPreparation) {
+                  <span>⏱ {{ (fav.tempsPreparation || 0) + (fav.tempsCuisson || 0) }} min</span>
+                }
+                <span style="margin-left:auto; font-family:var(--font-mono); font-size:11px; color:var(--ink-500); letter-spacing:.05em;">
+                  Ajouté le {{ fav.dateAjout | date:'dd/MM/yyyy' }}
+                </span>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    }
+
+  </div>
 </div>

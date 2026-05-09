@@ -1,55 +1,89 @@
-<div class="profile-container">
-  <h1>👤 Mon profil</h1>
+<div class="page-wrap">
+  <div class="page-content">
 
-  @if (auth.currentUser$ | async; as user) {
-    <section class="user-info">
-      <p><strong>{{ user.prenom }} {{ user.nom }}</strong></p>
-      <p class="email">{{ user.email }}</p>
-    </section>
-  }
+    <!-- Header éditorial -->
+    <div class="page-head">
+      <div>
+        <div class="eyebrow">— Mon profil —</div>
+        <h1>Vos <em>préférences</em>.</h1>
+        <p class="lede">Activez vos contraintes alimentaires : régimes, allergies, convictions. Le moteur sommelier s'y adapte automatiquement pour chaque recette et soirée.</p>
+      </div>
+      <div class="right">
+        {{ selectedIds.size }}&nbsp;{{ selectedIds.size > 1 ? 'contraintes actives' : 'contrainte active' }}<br>
+        sur {{ totalContraintes() }}&nbsp;disponibles
+      </div>
+    </div>
 
-  <h2>Mes contraintes alimentaires</h2>
-  <p class="hint">
-    Activez les contraintes qui vous concernent. Les recettes incompatibles seront masquées
-    par défaut sur la liste des recettes (vous pourrez les ré-afficher).
-  </p>
+    <!-- Carte identité utilisateur -->
+    @if (auth.currentUser$ | async; as user) {
+      <section class="cp-fieldset" style="margin-bottom:18px;">
+        <legend><span class="legend-num">— 01 —</span>Identité</legend>
+        <div style="display:flex; align-items:center; gap:18px;">
+          <div style="width:56px; height:56px; border-radius:50%; background:var(--gold-100); color:var(--gold-700); display:flex; align-items:center; justify-content:center; font-family:var(--font-serif); font-size:20px; font-weight:600;">
+            {{ initiales(user) }}
+          </div>
+          <div>
+            <div style="font-family:var(--font-serif); font-size:22px; font-weight:500; color:var(--bordeaux-900); line-height:1.2;">{{ user.prenom }} {{ user.nom }}</div>
+            <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-500); letter-spacing:.05em; margin-top:2px;">{{ user.email }}</div>
+          </div>
+        </div>
+      </section>
+    }
 
-  @if (loading) {
-    <p class="loading">Chargement...</p>
-  }
+    @if (loading) {
+      <p style="text-align:center; padding:40px; color:var(--ink-500);">Chargement...</p>
+    }
 
-  @if (error) {
-    <p class="error">{{ error }}</p>
-  }
+    @if (error) {
+      <p class="err" style="text-align:center; padding:40px;">{{ error }}</p>
+    }
 
-  @if (!loading && !error) {
-    <div class="contraintes-groups">
-      @for (group of groups; track group.type) {
-        <fieldset class="group">
-          <legend>{{ group.label }}</legend>
-          <div class="checkbox-list">
+    @if (!loading && !error) {
+
+      <!-- Fieldsets contraintes par type -->
+      @for (group of groups; track group.type; let i = $index) {
+        <fieldset class="cp-fieldset" [class.is-empty]="!hasSelectedInGroup(group)" style="margin-bottom:18px;">
+          <legend>
+            <span class="legend-num">— 0{{ i + 2 }} —</span>{{ group.label }}
+          </legend>
+          <p class="help">{{ groupHint(group.type) }}</p>
+
+          <div class="check-grid"
+               [class.cols-3]="group.items.length >= 5"
+               [class.cols-1]="group.items.length === 1">
             @for (c of group.items; track c.idContrainte) {
-              <label class="checkbox-item">
+              <label class="cp-check"
+                     [class.is-on]="isSelected(c.idContrainte)"
+                     [class.regime]="isSelected(c.idContrainte) && group.type === 'Choix'"
+                     [class.allergie]="isSelected(c.idContrainte) && group.type === 'Sante'"
+                     [class.religieux]="isSelected(c.idContrainte) && group.type === 'Religieux'">
                 <input
                   [id]="'profile-contrainte-' + c.idContrainte"
                   [name]="'profile-contrainte-' + c.idContrainte"
                   type="checkbox"
                   [checked]="isSelected(c.idContrainte)"
-                  (change)="toggle(c.idContrainte)"
-                />
+                  (change)="toggle(c.idContrainte)" />
                 <span>{{ c.nom }}</span>
               </label>
             }
           </div>
         </fieldset>
       }
-    </div>
 
-    <div class="actions">
-      <button type="button" (click)="save()" [disabled]="saving">
-        {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
-      </button>
-      @if (message) { <span class="success">{{ message }}</span> }
-    </div>
-  }
+      <!-- Barre actions -->
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:18px; margin-top:24px; padding:18px 24px; background:#fff; border:1px solid var(--cream-200); border-radius:var(--radius-lg);">
+        <div style="font-size:13px; color:var(--ink-700);">
+          @if (message) {
+            <span style="color:var(--sage-700); font-weight:500;">✓ {{ message }}</span>
+          } @else {
+            Les modifications s'appliquent aux recettes et soirées dès l'enregistrement.
+          }
+        </div>
+        <button type="button" class="btn btn-primary btn-lg" (click)="save()" [disabled]="saving">
+          {{ saving ? 'Enregistrement...' : 'Enregistrer mes préférences' }}
+        </button>
+      </div>
+    }
+
+  </div>
 </div>

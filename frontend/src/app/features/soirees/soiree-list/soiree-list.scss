@@ -1,116 +1,12 @@
-.soirees-container {
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+/* Styles dans styles/lot2.css (.page-wrap, .page-content, .page-head)
+   et base.css (.btn, .pill, .pill-regime, .pill-allergie, .eyebrow) */
+
+.soiree-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--cream-300);
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-
-  h1 { margin: 0; }
-}
-
-.btn-primary {
-  background: #c0392b;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 500;
-
-  &:hover { background: #a93226; }
-}
-
-.loading, .empty {
-  color: #666;
-  font-style: italic;
-}
-
-.error {
-  color: #c0392b;
-  background: #fadbd8;
-  padding: 0.8rem;
-  border-radius: 6px;
-}
-
-.soirees-grid {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1rem;
-}
-
-.soiree-card {
-  position: relative;
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  transition: box-shadow 0.2s, transform 0.2s;
-
-  &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-  }
-}
-
-.soiree-link {
-  display: block;
-  padding: 1.2rem;
-  text-decoration: none;
-  color: inherit;
-}
-
-.soiree-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 0.6rem;
-  gap: 0.5rem;
-}
-
-.soiree-titre {
-  font-weight: 600;
-  font-size: 1.05rem;
-}
-
-.badge-complet, .badge-incomplet {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  white-space: nowrap;
-}
-
-.badge-complet { background: #d4edda; color: #155724; }
-.badge-incomplet { background: #fff3cd; color: #856404; }
-
-.soiree-meta {
-  display: flex;
-  gap: 1rem;
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.btn-delete {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: transparent;
-  border: none;
-  color: #999;
-  font-size: 1.4rem;
-  cursor: pointer;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-
-  &:hover { background: #fadbd8; color: #c0392b; }
+.soiree-delete:hover {
+  background: var(--terracotta-100);
+  color: var(--terracotta-700);
 }

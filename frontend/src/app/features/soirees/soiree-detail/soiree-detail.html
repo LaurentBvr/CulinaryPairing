@@ -1,148 +1,203 @@
-<div class="detail-container">
+<div class="page-wrap">
+  <div class="detail-content">
 
-  @if (loading) {
-    <p class="loading">Chargement...</p>
-  }
+    @if (loading) {
+      <p style="text-align:center; padding:40px; color:var(--ink-500);">Chargement...</p>
+    }
 
-  @if (error) {
-    <p class="error">{{ error }}</p>
-    <a routerLink="/soirees" class="btn-secondary">← Retour à mes soirées</a>
-  }
-
-  @if (!loading && !error && soiree) {
-    <a routerLink="/soirees" class="back-link">← Mes soirées</a>
-
-    <header class="header">
-      <div>
-        <h1>{{ soiree.typeSoiree || 'Soirée' }}</h1>
-        <p class="subtitle">
-          {{ soiree.nombrePersonnes }} personnes
-          @if (soiree.nombreVegetariens > 0) {
-            · {{ soiree.nombreVegetariens }} végétarien(s)
-          }
-          @if (soiree.nombreVegans > 0) {
-            · {{ soiree.nombreVegans }} végan(s)
-          }
-        </p>
+    @if (error) {
+      <div style="text-align:center; padding:60px 40px;">
+        <p class="err" style="margin-bottom:18px;">{{ error }}</p>
+        <a routerLink="/soirees" class="btn btn-ghost">← Retour à mes soirées</a>
       </div>
-      <button class="btn-delete-large" (click)="supprimer()">Supprimer la soirée</button>
-    </header>
+    }
 
-    <section class="info-section">
-      <div class="info-grid">
-        <div class="info-cell">
-          <span class="info-label">Budget</span>
-          <span class="info-value">
+    @if (!loading && !error && soiree) {
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <a routerLink="/soirees">Mes soirées</a>
+        <span class="sep">/</span>
+        <span style="color: var(--ink-900);">{{ soiree.typeSoiree || 'Soirée' }}</span>
+      </nav>
+
+      <!-- Header éditorial -->
+      <div class="page-head">
+        <div>
+          <div class="eyebrow">— {{ soiree.typeSoiree || 'Soirée' }} · {{ soiree.dateCreation | date:'dd MMM yyyy' }} —</div>
+          <h1>{{ soiree.nombrePersonnes }} <em>convives</em>.</h1>
+          <p class="lede">
+            @if (soiree.nombreVegetariens > 0 || soiree.nombreVegans > 0) {
+              Dont
+              @if (soiree.nombreVegetariens > 0) { {{ soiree.nombreVegetariens }} végétarien{{ soiree.nombreVegetariens > 1 ? 's' : '' }} }
+              @if (soiree.nombreVegetariens > 0 && soiree.nombreVegans > 0) { et }
+              @if (soiree.nombreVegans > 0) { {{ soiree.nombreVegans }} végan{{ soiree.nombreVegans > 1 ? 's' : '' }} }
+              · les régimes seront déduits automatiquement dans les contraintes du menu.
+            } @else {
+              Composez un menu entrée / plat / dessert qui respecte les contraintes alimentaires de vos invités.
+            }
+          </p>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
+          <button type="button" class="btn btn-ghost btn-sm" (click)="supprimer()"
+                  style="color:var(--terracotta-700);">
+            Supprimer la soirée
+          </button>
+        </div>
+      </div>
+
+      <!-- Info-grid : budget / temps / alcool -->
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; margin-bottom:18px;">
+        <div style="background:#fff; border:1px solid var(--cream-200); border-radius:var(--radius-lg); padding:18px 22px;">
+          <div style="font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-500); text-transform:uppercase; margin-bottom:6px;">Budget</div>
+          <div style="font-family:var(--font-serif); font-size:24px; font-weight:500; color:var(--bordeaux-900); line-height:1.1;">
             {{ soiree.budget !== null ? (soiree.budget | number:'1.2-2') + ' €' : '—' }}
-          </span>
+          </div>
         </div>
-        <div class="info-cell">
-          <span class="info-label">Temps disponible</span>
-          <span class="info-value">{{ formaterTemps(soiree.tempsDisponible) }}</span>
+        <div style="background:#fff; border:1px solid var(--cream-200); border-radius:var(--radius-lg); padding:18px 22px;">
+          <div style="font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-500); text-transform:uppercase; margin-bottom:6px;">Temps disponible</div>
+          <div style="font-family:var(--font-serif); font-size:24px; font-weight:500; color:var(--bordeaux-900); line-height:1.1;">
+            {{ formaterTemps(soiree.tempsDisponible) }}
+          </div>
         </div>
-        <div class="info-cell">
-          <span class="info-label">Préférence alcool</span>
-          <span class="info-value">{{ soiree.preferenceAlcool }}</span>
+        <div style="background:#fff; border:1px solid var(--cream-200); border-radius:var(--radius-lg); padding:18px 22px;">
+          <div style="font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-500); text-transform:uppercase; margin-bottom:6px;">Préférence alcool</div>
+          <div style="font-family:var(--font-serif); font-size:24px; font-weight:500; color:var(--bordeaux-900); line-height:1.1;">
+            {{ soiree.preferenceAlcool === 'Avec' ? '🍷 Avec' : '🍵 Sans' }}
+          </div>
         </div>
       </div>
-    </section>
 
-    <section class="contraintes-section">
-      <h2>Contraintes appliquées au menu</h2>
-      @if (soiree.contraintesAgregees.length === 0) {
-        <p class="empty">Aucune contrainte alimentaire.</p>
-      } @else {
-        <p class="hint">
-          Les recettes proposées respecteront automatiquement ces contraintes
-          (incluant les régimes végétarien/végan déduits des cohortes).
-        </p>
-        <div class="tags">
-          @for (c of soiree.contraintesAgregees; track c.idContrainte) {
-            <span class="tag" [class.tag-sante]="c.type === 'Sante'"
-                              [class.tag-religieux]="c.type === 'Religieux'"
-                              [class.tag-choix]="c.type === 'Choix'">
-              {{ c.nom }}
-            </span>
-          }
-        </div>
-      }
-    </section>
+      <!-- Contraintes appliquées -->
+      <section class="cp-fieldset" [class.is-empty]="soiree.contraintesAgregees.length === 0" style="margin-bottom:18px;">
+        <legend><span class="legend-num">— 01 —</span>Contraintes appliquées au menu</legend>
 
-    <section class="menu-section">
-      <div class="menu-header">
-        <h2>Menu de la soirée</h2>
+        @if (soiree.contraintesAgregees.length === 0) {
+          <p class="help">Aucune contrainte alimentaire pour ce menu — toutes les recettes sont éligibles.</p>
+        } @else {
+          <p class="help">Les recettes proposées dans les slots respecteront automatiquement ces contraintes (incluant les régimes végétarien/végan déduits des cohortes).</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            @for (c of soiree.contraintesAgregees; track c.idContrainte) {
+              <span class="pill"
+                    [class.pill-regime]="c.type === 'Choix'"
+                    [class.pill-allergie]="c.type === 'Sante'"
+                    [class.pill-religieux]="c.type === 'Religieux'">
+                <span class="dot"></span>{{ c.nom }}
+              </span>
+            }
+          </div>
+        }
+      </section>
+
+      <!-- Menu : 3 slots -->
+      <div class="sec-head" style="margin-top:24px;">
+        <h2>Menu de la <em>soirée</em>.</h2>
         @if (menu) {
-          <div class="totaux">
-            <span>
-              Coût :
-              <strong>
-                {{ menu.coutTotalEstime !== null
-                    ? (menu.coutTotalEstime | number:'1.2-2') + ' €'
-                    : '—' }}
-              </strong>
-            </span>
-            <span>
-              Temps :
-              <strong>{{ formaterTemps(menu.tempsTotalEstime) }}</strong>
-            </span>
+          <div class="meta">
+            Coût total · <strong style="color:var(--bordeaux-900); font-family:var(--font-serif); font-size:14px; font-style:normal; letter-spacing:0;">
+              {{ menu.coutTotalEstime !== null ? (menu.coutTotalEstime | number:'1.2-2') + ' €' : '—' }}
+            </strong>
+            &nbsp;·&nbsp;
+            Temps total · <strong style="color:var(--bordeaux-900); font-family:var(--font-serif); font-size:14px; font-style:normal; letter-spacing:0;">
+              {{ formaterTemps(menu.tempsTotalEstime) }}
+            </strong>
           </div>
         }
       </div>
 
-      <div class="slots-grid">
-        @for (s of slots; track s.key) {
-          <article class="slot-card" [class.slot-empty]="!recetteDuSlot(s.key)">
-            <header class="slot-header">
-              <span class="slot-icone">{{ s.icone }}</span>
-              <span class="slot-label">{{ s.label }}</span>
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:18px;">
+        @for (s of slots; track s.key; let i = $index) {
+          <article class="slot-card"
+                   [class.is-filled]="recetteDuSlot(s.key)"
+                   style="background:#fff; border:1px solid var(--cream-200); border-radius:var(--radius-lg); padding:22px 24px; display:flex; flex-direction:column; min-height:280px;">
+
+            <!-- Header slot -->
+            <header style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding-bottom:12px; border-bottom:1px dashed var(--cream-200); margin-bottom:14px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:22px;">{{ s.icone }}</span>
+                <span style="font-family:var(--font-mono); font-size:11px; letter-spacing:.2em; color:var(--ink-500); text-transform:uppercase;">
+                  — 0{{ i + 1 }} · {{ s.label }} —
+                </span>
+              </div>
+              @if (recetteDuSlot(s.key)) {
+                <span class="pill pill-regime" style="font-size:10px; padding:3px 8px;"><span class="dot"></span>OK</span>
+              }
             </header>
 
+            <!-- Body -->
             @if (recetteDuSlot(s.key); as r) {
-              <div class="slot-body">
-                <h3 class="recette-titre">{{ r.titre }}</h3>
-                <div class="recette-meta">
+              <div style="flex:1;">
+                <h3 style="font-family:var(--font-serif); font-weight:500; font-size:20px; color:var(--bordeaux-900); margin:0 0 6px; line-height:1.2; letter-spacing:-.01em;">
+                  {{ r.titre }}
+                </h3>
+
+                <a [routerLink]="['/recettes', r.idRecette]"
+                   style="display:inline-flex; align-items:center; gap:4px; font-family:var(--font-mono); font-size:10px; letter-spacing:.15em; color:var(--gold-700); text-transform:uppercase; text-decoration:none; margin-bottom:14px; padding:3px 0; border-bottom:1px solid var(--gold-300); transition:color .15s, border-color .15s;"
+                   onmouseover="this.style.color='var(--bordeaux-700)'; this.style.borderColor='var(--bordeaux-700)';"
+                   onmouseout="this.style.color='var(--gold-700)'; this.style.borderColor='var(--gold-300)';">
+                  Voir la recette et ses accords ↗
+                </a>
+
+                <div style="display:flex; flex-direction:column; gap:6px; font-family:var(--font-mono); font-size:11px; color:var(--ink-700); letter-spacing:.05em;">
                   @if (r.tempsPreparation !== null) {
-                    <span>Prép. {{ r.tempsPreparation }} min</span>
+                    <div style="display:flex; justify-content:space-between;">
+                      <span style="color:var(--ink-500); text-transform:uppercase; letter-spacing:.1em;">Préparation</span>
+                      <span>{{ r.tempsPreparation }} min</span>
+                    </div>
                   }
                   @if (r.tempsCuisson !== null) {
-                    <span>Cuiss. {{ r.tempsCuisson }} min</span>
+                    <div style="display:flex; justify-content:space-between;">
+                      <span style="color:var(--ink-500); text-transform:uppercase; letter-spacing:.1em;">Cuisson</span>
+                      <span>{{ r.tempsCuisson }} min</span>
+                    </div>
                   }
                   @if (r.coutEstime !== null) {
-                    <span>{{ r.coutEstime | number:'1.2-2' }} €</span>
+                    <div style="display:flex; justify-content:space-between; padding-top:6px; border-top:1px dashed var(--cream-200); margin-top:4px;">
+                      <span style="color:var(--ink-500); text-transform:uppercase; letter-spacing:.1em;">Coût estimé</span>
+                      <span style="color:var(--bordeaux-900); font-weight:500;">{{ r.coutEstime | number:'1.2-2' }} €</span>
+                    </div>
                   }
                 </div>
               </div>
-              <footer class="slot-actions">
-                <button class="btn-secondary"
+
+              <footer style="display:flex; gap:8px; margin-top:18px; padding-top:14px; border-top:1px solid var(--cream-200);">
+                <button type="button" class="btn btn-ghost btn-sm" style="flex:1;"
                         [disabled]="slotEnCours === s.key"
                         (click)="desassigner(s.key)">
-                  {{ slotEnCours === s.key ? '...' : 'Retirer' }}
+                  {{ slotEnCours === s.key ? '…' : 'Retirer' }}
                 </button>
-                <button class="btn-primary"
+                <button type="button" class="btn btn-secondary btn-sm" style="flex:1;"
                         [disabled]="slotEnCours === s.key"
                         (click)="ouvrirPicker(s.key)">
                   Changer
                 </button>
               </footer>
+
             } @else {
-              <div class="slot-body slot-vide">
-                <p>Aucune recette assignée.</p>
+
+              <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 12px; border:2px dashed var(--cream-300); border-radius:var(--radius-md); text-align:center;">
+                <div style="font-family:var(--font-serif); font-size:36px; color:var(--cream-300); line-height:1; margin-bottom:8px;">∅</div>
+                <p style="font-size:13px; color:var(--ink-500); margin:0; font-style:italic; font-family:var(--font-serif);">
+                  Aucune recette assignée
+                </p>
               </div>
-              <footer class="slot-actions">
-                <button class="btn-primary"
+
+              <footer style="margin-top:18px;">
+                <button type="button" class="btn btn-primary btn-block"
                         [disabled]="slotEnCours === s.key"
                         (click)="ouvrirPicker(s.key)">
-                  Choisir une recette
+                  + Choisir une recette
                 </button>
               </footer>
             }
           </article>
         }
       </div>
-    </section>
-  }
 
-  @if (slotPickerOuvert && soiree) {
+    }
+
+    <!-- Modale RecettePicker -->
+    @if (slotPickerOuvert && soiree) {
       <app-recette-picker
         [idSoiree]="soiree.idSoiree"
         [slot]="slotPickerOuvert"
@@ -151,4 +206,6 @@
         (ferme)="fermerPicker()">
       </app-recette-picker>
     }
+
+  </div>
 </div>

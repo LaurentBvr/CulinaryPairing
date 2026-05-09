@@ -27,15 +27,19 @@ export class Profile implements OnInit {
   message = '';
   error = '';
 
-  // Mapping type DB -> libellé UI (vu cohérence DB actuelle : Choix/Sante/Religieux)
   private readonly typeLabels: Record<string, string> = {
-    'Choix': 'Régimes',
+    'Choix': 'Régimes & choix personnels',
     'Sante': 'Allergies & santé',
-    'Religieux': 'Convictions'
+    'Religieux': 'Convictions religieuses'
+  };
+
+  private readonly typeHints: Record<string, string> = {
+    'Choix': 'Régimes que vous suivez par choix : végétarien, vegan, etc. Influence le filtre R9 sur les recettes.',
+    'Sante': 'Allergies et intolérances alimentaires. Les recettes incompatibles seront masquées (R9 strict).',
+    'Religieux': 'Convictions et restrictions religieuses : casher, halal, etc. Mêmes règles de filtrage.'
   };
 
   ngOnInit(): void {
-    // Chargement parallèle catalogue + mes contraintes
     this.contraintesService.getCatalogue().subscribe({
       next: catalogue => {
         this.groups = this.groupByType(catalogue);
@@ -57,7 +61,6 @@ export class Profile implements OnInit {
       if (!map.has(c.type)) map.set(c.type, []);
       map.get(c.type)!.push(c);
     }
-    // Ordre fixe : régimes -> santé -> conviction
     const order = ['Choix', 'Sante', 'Religieux'];
     return order
       .filter(t => map.has(t))
@@ -75,6 +78,24 @@ export class Profile implements OnInit {
 
   isSelected(id: number): boolean {
     return this.selectedIds.has(id);
+  }
+
+  hasSelectedInGroup(group: ContrainteGroup): boolean {
+    return group.items.some(c => this.selectedIds.has(c.idContrainte));
+  }
+
+  groupHint(type: string): string {
+    return this.typeHints[type] ?? '';
+  }
+
+  totalContraintes(): number {
+    return this.groups.reduce((acc, g) => acc + g.items.length, 0);
+  }
+
+  initiales(user: { prenom: string; nom: string }): string {
+    const p = user.prenom?.charAt(0) ?? '';
+    const n = user.nom?.charAt(0) ?? '';
+    return (p + n).toUpperCase();
   }
 
   save(): void {

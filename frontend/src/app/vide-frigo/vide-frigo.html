@@ -1,80 +1,160 @@
-<div class="vide-frigo">
-  <h2>🧊 Vide-frigo</h2>
+<div class="page-wrap">
+  <div class="page-content">
 
-  <div class="search-bar">
-    <input
-      id="ingredient-search"
-      name="ingredient-search"
-      type="text"
-      placeholder="Ajouter un ingrédient..."
-      autocomplete="off"
-      [value]="searchQuery"
-      (input)="onSearch($event)"
-    />
-    @if (suggestions.length > 0) {
-      <ul class="suggestions">
-        @for (s of suggestions; track s.idIngredient) {
-          <li (click)="addIngredient(s)">{{ s.nom }}</li>
-        }
-      </ul>
-    }
-  </div>
-
-  <div class="chips">
-    @for (i of selected; track i.idIngredient) {
-      <div class="chip-wrapper">
-        <span class="chip">
-          {{ i.nom }} <button (click)="removeIngredient(i)">×</button>
-        </span>
-        @if (i.info) {
-          <small class="chip-info">{{ formatInfo(i.info) }}</small>
-        }
+    <!-- Header éditorial -->
+    <div class="page-head">
+      <div>
+        <div class="eyebrow">— Recherche par ingrédients —</div>
+        <h1>Vide-<em>frigo</em>.</h1>
+        <p class="lede">Listez ce qu'il vous reste, on vous propose les recettes que vous pouvez réaliser maintenant — classées par taux de couverture.</p>
       </div>
-    }
-  </div>
+      <div class="right">
+        {{ selected.length.toString().padStart(2, '0') }}&nbsp;{{ selected.length > 1 ? 'ingrédients' : 'ingrédient' }}<br>
+        R8 · couverture %
+      </div>
+    </div>
 
-  <div class="options">
-    <label for="nb-resultats">Nombre de recettes à afficher :
-      <select id="nb-resultats" name="nb-resultats" [(ngModel)]="nombreResultats">
-        <option [value]="5">5</option>
-        <option [value]="10">10</option>
-        <option [value]="15">15</option>
-        <option [value]="20">20</option>
-      </select>
-    </label>
-    <label for="inclure-veg">
-      <input id="inclure-veg" name="inclure-veg" type="checkbox" [(ngModel)]="inclureVeg" /> Inclure versions végé/végan
-    </label>
-    <button (click)="rechercher()" [disabled]="selected.length === 0">Rechercher</button>
-    <button (click)="reset()">Réinitialiser</button>
-  </div>
+    <!-- Zone de saisie + panier -->
+    <div class="section-card" style="padding:24px 28px;">
 
-  @if (error) {
-    <p class="error">{{ error }}</p>
-  }
+      <!-- Input + ajout -->
+      <div class="vf-input">
+        <input
+          id="ingredient-search"
+          name="ingredient-search"
+          type="text"
+          placeholder="Ajouter un ingrédient — ex. parmesan, tomate, basilic…"
+          autocomplete="off"
+          [value]="searchQuery"
+          (input)="onSearch($event)" />
+      </div>
 
-  @if (results.length > 0) {
-    <div class="results">
-      @for (r of results; track r.recetteId) {
-        <div class="result-card" [routerLink]="['/recettes', r.recetteId]">
-          <div class="result-header">
-            <span class="titre">{{ r.titre }}</span>
-            <span class="score">{{ r.score }}%</span>
-            @if (r.badgeVeg) {
-              <span class="badge-veg">🌿 Version végé possible</span>
-            }
-          </div>
-          @if (r.ingredientsManquants.length > 0) {
-            <div class="manquants">
-              Manquants : {{ r.ingredientsManquants.join(', ') }}
+      @if (suggestions.length > 0) {
+        <div style="margin-top:10px; background:#fff; border:1px solid var(--cream-300); border-radius:var(--radius-md); padding:6px; max-height:240px; overflow-y:auto;">
+          @for (s of suggestions; track s.idIngredient) {
+            <div (click)="addIngredient(s)"
+                 style="padding:10px 14px; font-size:14px; color:var(--ink-900); cursor:pointer; border-radius:var(--radius-sm); transition:background .12s;"
+                 onmouseover="this.style.background='var(--cream-100)'"
+                 onmouseout="this.style.background='transparent'">
+              + {{ s.nom }}
             </div>
           }
         </div>
       }
-    </div>
-  }
 
-  @if (searched && results.length === 0 && !error) {
-    <p>Aucune recette possible. Essayez d'ajouter des ingrédients de base.</p>
-  }
+      <!-- Mon panier -->
+      @if (selected.length > 0) {
+        <div class="vf-bag">
+          <div class="lbl">— Mon panier · {{ selected.length }} {{ selected.length > 1 ? 'ingrédients' : 'ingrédient' }} —</div>
+          <div class="chips">
+            @for (i of selected; track i.idIngredient) {
+              <span class="vf-chip">
+                {{ i.nom }}
+                <button class="x" type="button" (click)="removeIngredient(i)" aria-label="Retirer">×</button>
+              </span>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="vf-bag" style="border-style:dashed;">
+          <div class="lbl">— Votre panier est vide —</div>
+          <p style="font-size:13px; color:var(--ink-500); margin:0; line-height:1.5;">
+            Tapez le nom d'un ingrédient ci-dessus pour commencer. Le moteur R8 vous suggérera les recettes que vous pouvez préparer.
+          </p>
+        </div>
+      }
+
+      <!-- Contrôles -->
+      <div class="vf-controls">
+        <span class="lbl">Afficher</span>
+        <div class="cp-select" style="width:90px;">
+          <select id="nb-resultats" name="nb-resultats" [(ngModel)]="nombreResultats">
+            <option [value]="5">5</option>
+            <option [value]="10">10</option>
+            <option [value]="15">15</option>
+            <option [value]="20">20</option>
+          </select>
+        </div>
+        <label for="inclure-veg" class="cp-check" style="padding:8px 14px;" [class.is-on]="inclureVeg">
+          <input id="inclure-veg" name="inclure-veg" type="checkbox" [(ngModel)]="inclureVeg" />
+          Inclure versions végé/végan
+        </label>
+        <span class="spacer"></span>
+        <button type="button" class="btn btn-ghost btn-sm" (click)="reset()">Réinitialiser</button>
+        <button type="button" class="btn btn-primary" [disabled]="selected.length === 0" (click)="rechercher()">
+          Rechercher les recettes
+        </button>
+      </div>
+    </div>
+
+    @if (error) {
+      <p class="err" style="text-align:center; padding:24px;">{{ error }}</p>
+    }
+
+    <!-- Résultats -->
+    @if (results.length > 0) {
+      <div class="sec-head" style="margin-top:8px;">
+        <h2>Résultats <em>matchés</em></h2>
+        <div class="meta">{{ results.length.toString().padStart(2, '0') }} {{ results.length > 1 ? 'recettes' : 'recette' }} · triées par couverture</div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        @for (r of results; track r.recetteId) {
+          <a class="vf-result" [routerLink]="['/recettes', r.recetteId]">
+            <div class="ph">[ photo ]</div>
+
+            <div class="body">
+              <div class="title">{{ r.titre }}</div>
+
+              @if (r.ingredientsManquants.length > 0) {
+                <p class="ings">
+                  <span class="miss"><b>Manquants ({{ r.ingredientsManquants.length }}) :</b> {{ r.ingredientsManquants.join(', ') }}</span>
+                </p>
+              } @else {
+                <p class="ings">
+                  <span class="ok"><b>✓ Vous avez tous les ingrédients nécessaires.</b></span>
+                </p>
+              }
+
+              @if (r.badgeVeg) {
+                <p style="font-size:12px; color:var(--sage-700); margin:8px 0 0; display:inline-flex; align-items:center; gap:6px; font-style:italic; font-family:var(--font-serif);">
+                  ✿ Version végé/végan possible
+                </p>
+              }
+            </div>
+
+            <div class="pct">
+              <div class="num"
+                   [class.high]="r.score >= 75"
+                   [class.mid]="r.score >= 50 && r.score < 75"
+                   [class.low]="r.score < 50">
+                {{ r.score }}<span style="font-size:18px; color:var(--ink-500); font-family:var(--font-mono); margin-left:2px;">%</span>
+              </div>
+              <div class="lab">Couverture</div>
+            </div>
+          </a>
+        }
+      </div>
+    }
+
+    <!-- État vide après recherche -->
+    @if (searched && results.length === 0 && !error) {
+      <div class="vf-empty" style="margin-top:24px;">
+        <div class="glyph">∅</div>
+        <h3>Aucune recette ne correspond.</h3>
+        <p>Avec ces ingrédients, aucune recette ne peut être préparée. Essayez d'ajouter des produits de base (œufs, pâtes, riz, oignon…) ou activez l'option <b>« Inclure versions végé/végan »</b>.</p>
+      </div>
+    }
+
+    <!-- État vide initial (jamais cherché) -->
+    @if (!searched && selected.length === 0) {
+      <div class="vf-empty" style="margin-top:24px;">
+        <div class="glyph">∅</div>
+        <h3>Que reste-t-il dans votre frigo ?</h3>
+        <p>Ajoutez au moins <b>un ingrédient</b> dans votre panier ci-dessus pour découvrir les recettes que vous pouvez préparer maintenant.</p>
+        <p style="margin-top:18px; font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-300); text-transform:uppercase;">R8 · Moteur de recherche par ingrédients</p>
+      </div>
+    }
+
+  </div>
 </div>

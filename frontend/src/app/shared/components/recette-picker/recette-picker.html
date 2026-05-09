@@ -1,60 +1,120 @@
-<div class="modale-backdrop" (click)="fermer()">
-  <div class="modale" (click)="stopPropagation($event)">
+<div class="picker-backdrop"
+     (click)="fermer()"
+     style="position:fixed; inset:0; background:rgba(31,26,20,0.55); backdrop-filter:blur(2px); z-index:1000; display:flex; align-items:flex-start; justify-content:center; padding:60px 20px; overflow-y:auto;">
 
-    <header class="modale-header">
-      <h2>Choisir une recette — {{ slotLabel }}</h2>
-      <button class="btn-close" (click)="fermer()" aria-label="Fermer">×</button>
+  <div class="picker-modal"
+       (click)="stopPropagation($event)"
+       style="background:var(--cream-50); border:1px solid var(--cream-300); border-radius:var(--radius-xl); width:100%; max-width:760px; box-shadow:var(--shadow-lg); display:flex; flex-direction:column; max-height:calc(100vh - 120px);">
+
+    <!-- Header -->
+    <header style="padding:24px 28px 20px; border-bottom:1px solid var(--cream-200); display:flex; align-items:flex-start; justify-content:space-between; gap:18px;">
+      <div>
+        <div class="eyebrow">— Sélection · Slot {{ slot }} —</div>
+        <h2 style="font-family:var(--font-serif); font-weight:500; font-size:28px; color:var(--bordeaux-900); margin:6px 0 0; line-height:1.15; letter-spacing:-.01em;">
+          Choisir une <em style="font-style:italic; color:var(--gold-500);">{{ slotLabel.toLowerCase() }}</em>.
+        </h2>
+        <p style="font-size:13px; color:var(--ink-500); margin:6px 0 0; line-height:1.5;">
+          Recettes filtrées par type ({{ slotLabel.toLowerCase() }}) et compatibles avec les contraintes de la soirée.
+        </p>
+      </div>
+      <button type="button"
+              (click)="fermer()"
+              aria-label="Fermer"
+              style="width:36px; height:36px; border-radius:50%; background:var(--cream-100); color:var(--ink-700); border:1px solid var(--cream-300); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .15s, color .15s;"
+              onmouseover="this.style.background='var(--terracotta-100)'; this.style.color='var(--terracotta-700)';"
+              onmouseout="this.style.background='var(--cream-100)'; this.style.color='var(--ink-700)';">
+        ×
+      </button>
     </header>
 
-    <div class="modale-body">
+    <!-- Body -->
+    <div style="padding:24px 28px; overflow-y:auto; flex:1;">
+
       @if (loading) {
-        <p class="loading">Chargement des recettes éligibles...</p>
+        <p style="text-align:center; padding:40px; color:var(--ink-500);">
+          <span style="font-family:var(--font-mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase;">Chargement des recettes éligibles…</span>
+        </p>
       }
 
       @if (error) {
-        <p class="error">{{ error }}</p>
+        <div style="background:var(--terracotta-100); border:1px solid var(--terracotta-500); border-radius:var(--radius-md); padding:14px 18px; color:var(--terracotta-700); font-size:13px; text-align:center;">
+          ⚠ {{ error }}
+        </div>
       }
 
       @if (!loading && !error) {
-        <p class="hint">
-          Recettes filtrées selon le slot et les contraintes alimentaires de la soirée.
-        </p>
 
         @if (recettes.length === 0) {
-          <p class="empty">
-            Aucune recette ne correspond à ce slot avec les contraintes définies.
-            Essayez de réduire les contraintes de la soirée.
-          </p>
+          <!-- État vide -->
+          <div style="text-align:center; padding:60px 24px; color:var(--ink-500); background:#fff; border:1px dashed var(--cream-300); border-radius:var(--radius-lg);">
+            <div style="font-family:var(--font-serif); font-size:42px; color:var(--cream-300); line-height:1; margin-bottom:14px;">∅</div>
+            <h3 style="font-family:var(--font-serif); font-size:20px; color:var(--bordeaux-900); margin:0 0 8px;">Aucune recette éligible.</h3>
+            <p style="font-size:13px; max-width:420px; margin:0 auto; line-height:1.55;">
+              Aucune recette de type <b>{{ slotLabel.toLowerCase() }}</b> ne correspond aux contraintes de cette soirée. Vous pouvez modifier les contraintes de la soirée pour élargir le choix.
+            </p>
+          </div>
         } @else {
-          <ul class="recettes-list">
+
+          <div style="font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-500); text-transform:uppercase; margin-bottom:12px;">
+            — {{ recettes.length.toString().padStart(2, '0') }} {{ recettes.length > 1 ? 'recettes éligibles' : 'recette éligible' }} · triées alphabétiquement —
+          </div>
+
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;">
             @for (r of recettes; track r.idRecette) {
-              <li class="recette-item"
-                  [class.recette-courante]="r.idRecette === idRecetteCourante">
-                <div class="recette-info">
-                  <h3>{{ r.titre }}</h3>
-                  <div class="recette-meta">
+              <li class="picker-item"
+                  [class.is-current]="r.idRecette === idRecetteCourante"
+                  style="background:#fff; border:1px solid var(--cream-200); border-radius:var(--radius-lg); padding:16px 20px; display:flex; align-items:center; gap:18px; transition:box-shadow .15s, border-color .15s;">
+
+                <!-- Placeholder image -->
+                <div class="ph-stripes" style="width:64px; height:64px; border-radius:var(--radius-md); flex-shrink:0;">
+                  <span class="lab" style="font-size:9px; padding:3px 6px;">{{ slotLabel.charAt(0) }}</span>
+                </div>
+
+                <!-- Info -->
+                <div style="flex:1; min-width:0;">
+                  <h3 style="font-family:var(--font-serif); font-weight:500; font-size:18px; color:var(--bordeaux-900); margin:0 0 6px; line-height:1.2;">
+                    {{ r.titre }}
+                  </h3>
+                  <div style="display:flex; gap:14px; flex-wrap:wrap; font-family:var(--font-mono); font-size:11px; color:var(--ink-500); letter-spacing:.05em;">
                     @if (r.tempsPreparation !== null) {
-                      <span>Prép. {{ r.tempsPreparation }} min</span>
+                      <span>Prép · <b style="color:var(--ink-900); font-family:var(--font-serif); font-weight:500; font-size:13px;">{{ r.tempsPreparation }} min</b></span>
                     }
                     @if (r.tempsCuisson !== null) {
-                      <span>Cuiss. {{ r.tempsCuisson }} min</span>
+                      <span>Cuiss · <b style="color:var(--ink-900); font-family:var(--font-serif); font-weight:500; font-size:13px;">{{ r.tempsCuisson }} min</b></span>
                     }
                     @if (r.coutEstime !== null) {
-                      <span>{{ r.coutEstime | number:'1.2-2' }} €</span>
+                      <span>Coût · <b style="color:var(--bordeaux-900); font-family:var(--font-serif); font-weight:500; font-size:13px;">{{ r.coutEstime | number:'1.2-2' }} €</b></span>
                     }
                   </div>
                 </div>
-                <button class="btn-choisir"
-                        [disabled]="r.idRecette === idRecetteCourante"
-                        (click)="choisir(r)">
-                  {{ r.idRecette === idRecetteCourante ? 'Sélectionnée' : 'Choisir' }}
-                </button>
+
+                <!-- Action -->
+                @if (r.idRecette === idRecetteCourante) {
+                  <span class="pill pill-regime" style="flex-shrink:0;">
+                    <span class="dot"></span>Sélectionnée
+                  </span>
+                } @else {
+                  <button type="button"
+                          class="btn btn-primary btn-sm"
+                          style="flex-shrink:0;"
+                          (click)="choisir(r)">
+                    Choisir
+                  </button>
+                }
               </li>
             }
           </ul>
         }
       }
     </div>
+
+    <!-- Footer -->
+    <footer style="padding:16px 28px; border-top:1px solid var(--cream-200); display:flex; align-items:center; justify-content:space-between; gap:18px;">
+      <span style="font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-300); text-transform:uppercase;">
+        ESC pour annuler · Cliquez en dehors pour fermer
+      </span>
+      <button type="button" class="btn btn-ghost btn-sm" (click)="fermer()">Annuler</button>
+    </footer>
 
   </div>
 </div>
