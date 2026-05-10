@@ -9,7 +9,7 @@ namespace CulinaryPairing.BLL.PairingEngine;
 /// </summary>
 public class PairingEngineService : IPairingEngineService
 {
-    private const string VersionMoteur = "1.3";
+    private const string VersionMoteur = "1.3.1";
     private const int PoidsTotalMaximum = 260; // 25+25 + 20×4 + 15×6 + 10×4 (cf. CdC §2.5)
 
     private readonly IEnumerable<IPairingRule> _regles;
