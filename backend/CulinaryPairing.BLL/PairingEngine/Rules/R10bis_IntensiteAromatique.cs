@@ -23,8 +23,8 @@ public class R10bis_IntensiteAromatique : IPairingRule
 
         return ecart <= 2
             ? PairingResult.Satisfait(
-                $"Intensités aromatiques équilibrées (écart = {ecart} ≤ 2).")
+                "Plat et boisson ont une intensité aromatique comparable : aucun ne domine l'autre.")
             : PairingResult.NonSatisfait(
-                $"Écart d'intensité trop important ({ecart} > 2) : l'un masque l'autre.");
+                "Écart d'intensité trop marqué : l'un des deux écrase l'autre en bouche.");
     }
 }

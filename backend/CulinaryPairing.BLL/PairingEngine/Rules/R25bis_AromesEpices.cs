@@ -37,10 +37,8 @@ public class R25bis_AromesEpices : IPairingRule
 
         return boissonEstEpicee
             ? PairingResult.Satisfait(
-                $"Plat aux arômes épicés (niveau {recette.NiveauAromeEpice}/10) "
-                + "résonant avec une boisson épicée.")
+                "Les arômes épicés du plat (cannelle, cardamome, poivre…) trouvent un écho dans la boisson épicée : harmonie par résonance.")
             : PairingResult.NonSatisfait(
-                $"Plat aux arômes épicés (niveau {recette.NiveauAromeEpice}/10) "
-                + "sans boisson de la famille 'epice' pour résonner.");
+                "Les arômes épicés du plat n'ont pas d'écho dans la boisson : occasion manquée.");
     }
 }

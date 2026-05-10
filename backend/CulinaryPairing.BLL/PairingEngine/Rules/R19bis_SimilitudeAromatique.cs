@@ -38,12 +38,13 @@ public class R19bis_SimilitudeAromatique : IPairingRule
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var communes = famillesRecette.Intersect(famillesBoisson, StringComparer.OrdinalIgnoreCase)
+            .Select(f => f.Replace('_', ' '))
             .ToList();
 
         return communes.Count > 0
             ? PairingResult.Satisfait(
-                $"Familles partagées : {{{string.Join(", ", communes)}}} → similitude.")
+                $"Notes aromatiques communes ({string.Join(", ", communes)}) : harmonie immédiate par résonance.")
             : PairingResult.NonSatisfait(
-                "Aucune famille aromatique commune entre le plat et la boisson.");
+                "Aucune note aromatique commune : pas d'écho entre le plat et la boisson.");
     }
 }

@@ -28,16 +28,15 @@ public class R13bis_AffiniteTannins : IPairingRule
         {
             AffiniteTannins.Friendly => tannins >= 6
                 ? PairingResult.Satisfait(
-                    $"Plat tannin-friendly bonifié par une boisson tannique ({tannins}/10).")
+                    "Les viandes rouges et fromages affinés du plat appellent les tannins : la boisson tannique sublime l'accord.")
                 : PairingResult.NonSatisfait(
-                    $"Plat tannin-friendly : la boisson manque de tannins ({tannins}/10)."),
+                    "Le plat appelle des tannins structurants, mais la boisson en est dépourvue : structure absente."),
 
             AffiniteTannins.Hostile => tannins <= 5
                 ? PairingResult.Satisfait(
-                    $"Plat tannin-hostile compatible avec une boisson peu tannique ({tannins}/10).")
+                    "Le plat (poisson cru, œuf, asperge…) ne supporte pas les tannins : la boisson légère lui convient parfaitement.")
                 : PairingResult.NonSatisfait(
-                    $"Plat tannin-hostile + boisson tannique ({tannins}/10) : "
-                    + "goût métallique attendu."),
+                    "Le plat redoute les tannins, mais la boisson est tannique : risque de goût métallique en bouche."),
 
             _ => PairingResult.NonApplicable()  // Neutre
         };

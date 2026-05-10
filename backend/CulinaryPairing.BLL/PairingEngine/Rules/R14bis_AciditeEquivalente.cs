@@ -21,10 +21,8 @@ public class R14bis_AciditeEquivalente : IPairingRule
 
         return boisson.NiveauAcidite >= recette.NiveauAcidite
             ? PairingResult.Satisfait(
-                $"Acidité boisson ({boisson.NiveauAcidite}) ≥ acidité plat "
-                + $"({recette.NiveauAcidite}) : équilibre respecté.")
+                "La boisson a au moins autant de vivacité que le plat : équilibre respecté en bouche.")
             : PairingResult.NonSatisfait(
-                $"Boisson moins acide ({boisson.NiveauAcidite}) que le plat "
-                + $"({recette.NiveauAcidite}) : risque d'effet plat.");
+                "La boisson est moins vive que le plat : elle risque de paraître plate à la dégustation.");
     }
 }

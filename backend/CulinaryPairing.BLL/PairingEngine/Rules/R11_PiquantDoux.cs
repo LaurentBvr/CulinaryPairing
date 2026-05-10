@@ -25,10 +25,8 @@ public class R11_PiquantDoux : IPairingRule
 
         return boisson.NiveauSucre >= 4
             ? PairingResult.Satisfait(
-                $"Plat très piquant ({recette.NiveauPiquant}/10) tempéré par "
-                + $"une boisson sucrée ({boisson.NiveauSucre}/10).")
+                "Le piquant marqué du plat est apaisé par la douceur de la boisson : harmonie en bouche.")
             : PairingResult.NonSatisfait(
-                $"Plat très piquant ({recette.NiveauPiquant}/10) : la boisson "
-                + $"manque de sucre ({boisson.NiveauSucre}/10) pour apaiser.");
+                "Le piquant du plat n'est pas adouci par la boisson, qui manque de douceur résiduelle.");
     }
 }

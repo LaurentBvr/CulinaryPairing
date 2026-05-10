@@ -35,12 +35,18 @@ public class R20bis_CuissonTanninsStructures : IPairingRule
                       || boisson.Corps == CorpsBoisson.Corse;
         var tanninsOk = boisson.NiveauTannins >= 6;
 
+        var libelleCuisson = recette.ModeCuisson.Value switch
+        {
+            ModeCuisson.Grille => "La cuisson au gril",
+            ModeCuisson.Roti => "La cuisson rôtie",
+            ModeCuisson.Four => "La cuisson au four",
+            _ => "La cuisson"
+        };
+
         return tanninsOk && corpsOk
             ? PairingResult.Satisfait(
-                $"Cuisson {recette.ModeCuisson} + plat tannin-friendly accordés "
-                + $"à un vin structuré (tannins {boisson.NiveauTannins}, corps {boisson.Corps}).")
+                $"{libelleCuisson} appelle un vin structuré : accord classique avec un vin tannique.")
             : PairingResult.NonSatisfait(
-                $"Cuisson {recette.ModeCuisson} + plat tannin-friendly attendent un vin "
-                + $"structuré ; ici tannins {boisson.NiveauTannins}, corps {boisson.Corps}.");
+                $"{libelleCuisson} appelle un vin structuré, mais la boisson manque de corps ou de tannins.");
     }
 }

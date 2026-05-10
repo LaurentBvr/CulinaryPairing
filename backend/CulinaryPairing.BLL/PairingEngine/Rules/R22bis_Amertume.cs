@@ -26,21 +26,21 @@ public class R22bis_Amertume : IPairingRule
         // Exclusion : plat délicat (l'amertume dominerait)
         if (recette.IntensiteAromatique is not null && recette.IntensiteAromatique < 4)
             return PairingResult.NonSatisfait(
-                $"Boisson amère ({boisson.NiveauAmertume}/10) sur plat délicat "
-                + $"(intensité {recette.IntensiteAromatique}) : l'amertume domine.");
+                "La boisson amère dominerait le plat délicat : l'accord serait déséquilibré.");
 
         // Bonification : plat gras/frit OU umami pur
         var bonifie = (recette.NiveauGras is not null && recette.NiveauGras >= 6)
                       || recette.ContientUmamiPur;
 
-        return bonifie
-            ? PairingResult.Satisfait(
-                $"Boisson amère ({boisson.NiveauAmertume}/10) bonifiée par "
-                + (recette.ContientUmamiPur
-                    ? "umami pur du plat."
-                    : $"plat gras ({recette.NiveauGras}/10) : l'amertume nettoie le palais."))
-            : PairingResult.NonSatisfait(
-                $"Boisson amère ({boisson.NiveauAmertume}/10) sans plat gras "
-                + "ni umami pour la valoriser.");
+        if (bonifie)
+        {
+            return PairingResult.Satisfait(
+                recette.ContientUmamiPur
+                    ? "L'amertume de la boisson est mise en valeur par l'umami du plat : accord par contraste."
+                    : "L'amertume de la boisson nettoie le palais du gras du plat : équilibre rafraîchissant.");
+        }
+
+        return PairingResult.NonSatisfait(
+            "La boisson amère manque d'un plat gras ou umami pour être mise en valeur.");
     }
 }

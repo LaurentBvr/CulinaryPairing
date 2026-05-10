@@ -25,10 +25,8 @@ public class R10_AciditeGras : IPairingRule
 
         return boisson.NiveauAcidite >= 6
             ? PairingResult.Satisfait(
-                $"Plat gras+peu acide (gras {recette.NiveauGras}, acidité {recette.NiveauAcidite}) "
-                + $"équilibré par une boisson acide ({boisson.NiveauAcidite}/10).")
+                "Le gras du plat est tranché par la fraîcheur acidulée de la boisson : équilibre retrouvé.")
             : PairingResult.NonSatisfait(
-                $"Plat gras+peu acide : la boisson manque d'acidité ({boisson.NiveauAcidite}/10) "
-                + "pour couper le gras.");
+                "Le gras du plat n'est pas compensé : la boisson manque de vivacité pour le trancher.");
     }
 }

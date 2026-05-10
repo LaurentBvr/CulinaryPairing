@@ -27,7 +27,6 @@ public class R23bis_SelTannins : IPairingRule
 
         // Combinaison observée → bonification (toujours satisfaite quand applicable)
         return PairingResult.Satisfait(
-            $"Plat salé ({recette.NiveauSel}/10) + boisson tannique "
-            + $"({boisson.NiveauTannins}/10) : le sel adoucit les tannins.");
+            "Le sel du plat assouplit les tannins de la boisson : harmonie classique des charcuteries et fromages affinés.");
     }
 }

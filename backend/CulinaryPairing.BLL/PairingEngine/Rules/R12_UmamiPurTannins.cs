@@ -24,10 +24,8 @@ public class R12_UmamiPurTannins : IPairingRule
 
         return boisson.NiveauTannins <= 5
             ? PairingResult.Satisfait(
-                $"Plat à umami pur compatible avec une boisson peu tannique "
-                + $"({boisson.NiveauTannins}/10 ≤ 5).")
+                "L'umami du plat (champignons, parmesan, soja) s'accorde avec une boisson peu tannique : aucun arrière-goût métallique.")
             : PairingResult.NonSatisfait(
-                $"Plat à umami pur + boisson tannique ({boisson.NiveauTannins}/10) "
-                + ": amertume métallique attendue.");
+                "L'umami du plat se heurte aux tannins de la boisson : risque d'amertume métallique en bouche.");
     }
 }

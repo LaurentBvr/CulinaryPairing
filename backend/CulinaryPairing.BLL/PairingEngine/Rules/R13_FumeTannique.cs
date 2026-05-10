@@ -24,10 +24,8 @@ public class R13_FumeTannique : IPairingRule
 
         return boisson.NiveauFume >= 4
             ? PairingResult.Satisfait(
-                $"Plat fumé harmonisé avec une boisson aux notes fumées "
-                + $"({boisson.NiveauFume}/10).")
+                "Les notes fumées du plat trouvent un écho dans la boisson : accord par résonance.")
             : PairingResult.NonSatisfait(
-                $"Plat fumé : la boisson n'a pas assez de notes fumées "
-                + $"({boisson.NiveauFume}/10) pour résonner.");
+                "Le caractère fumé du plat ne trouve pas d'écho dans la boisson : occasion manquée.");
     }
 }

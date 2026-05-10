@@ -25,10 +25,8 @@ public class R11bis_SucreDessert : IPairingRule
 
         return boisson.NiveauSucre >= recette.NiveauSucre
             ? PairingResult.Satisfait(
-                $"Dessert (sucre {recette.NiveauSucre}) accompagné d'une boisson "
-                + $"au moins aussi sucrée ({boisson.NiveauSucre}).")
+                "La douceur de la boisson égale ou dépasse celle du dessert : harmonie sucrée préservée.")
             : PairingResult.NonSatisfait(
-                $"Boisson moins sucrée ({boisson.NiveauSucre}) que le dessert "
-                + $"({recette.NiveauSucre}) : effet acide et amer.");
+                "La boisson est moins sucrée que le dessert : elle paraîtra acide et amère en bouche.");
     }
 }

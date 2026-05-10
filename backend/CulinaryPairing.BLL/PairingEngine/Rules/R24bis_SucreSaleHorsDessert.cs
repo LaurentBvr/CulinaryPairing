@@ -27,10 +27,8 @@ public class R24bis_SucreSaleHorsDessert : IPairingRule
 
         return boisson.NiveauSucre >= 4
             ? PairingResult.Satisfait(
-                $"Plat sucré-salé (sucre {recette.NiveauSucre}) accompagné d'une "
-                + $"boisson à douceur résiduelle ({boisson.NiveauSucre}).")
+                "Le caractère sucré-salé du plat (canard à l'orange, porc au caramel…) est respecté par une boisson à douceur résiduelle.")
             : PairingResult.NonSatisfait(
-                $"Plat sucré-salé (sucre {recette.NiveauSucre}) : la boisson "
-                + $"({boisson.NiveauSucre}) paraîtra trop sèche.");
+                "Le plat sucré-salé attend une boisson avec douceur, mais celle-ci paraîtra trop sèche en bouche.");
     }
 }

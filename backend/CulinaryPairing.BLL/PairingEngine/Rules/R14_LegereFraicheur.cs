@@ -28,10 +28,8 @@ public class R14_LegereFraicheur : IPairingRule
 
         return estLegere
             ? PairingResult.Satisfait(
-                $"Plat délicat (gras {recette.NiveauGras}, intensité "
-                + $"{recette.IntensiteAromatique}) accordé à une boisson légère.")
+                "La délicatesse du plat est respectée par une boisson légère qui n'écrase pas les saveurs.")
             : PairingResult.NonSatisfait(
-                $"Plat délicat : la boisson est trop lourde (corps {boisson.Corps}) "
-                + "et masquera les saveurs.");
+                "La boisson est trop corsée pour la délicatesse du plat : elle masquera ses saveurs subtiles.");
     }
 }
