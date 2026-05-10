@@ -3,11 +3,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BoissonsService, BoissonDetail as BoissonDetailDto, AccordInverse } from '../../../core/services/boissons';
 import { ScoreGauge } from '../../../shared/components/score-gauge/score-gauge';
+import { CorpsLabelPipe } from '../../../shared/pipes/corps-label.pipe';
 
 @Component({
   selector: 'app-boisson-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, ScoreGauge],
+  imports: [CommonModule, RouterLink, ScoreGauge, CorpsLabelPipe],
   templateUrl: './boisson-detail.html',
   styleUrl: './boisson-detail.scss'
 })

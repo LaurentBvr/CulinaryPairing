@@ -42,7 +42,7 @@
           </div>
 
           <h1 style="font-family:var(--font-serif); font-weight:500; font-size:48px; line-height:1.05; color:var(--bordeaux-900); margin:0 0 16px; letter-spacing:-.01em;">
-            {{ b.nom }}@if (b.corps) {<em style="font-style:italic; color:var(--gold-500);"> {{ b.corps.toLowerCase() }}</em>}.
+            {{ b.nom }}.
           </h1>
 
           <!-- Métadonnées en mono -->
@@ -164,7 +164,7 @@
             @if (b.corps) {
               <li style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--cream-200);">
                 <span style="color:var(--ink-700);">Corps</span>
-                <strong style="color:var(--ink-900);">{{ b.corps }}</strong>
+                <strong style="color:var(--ink-900);">{{ b.corps | corpsLabel }}</strong>
               </li>
             }
             @if (b.region) {
