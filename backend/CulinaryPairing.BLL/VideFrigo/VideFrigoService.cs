@@ -22,12 +22,17 @@ public class VideFrigoService(CulinaryPairingDbContext db)
             var total = recette.Ingredients.Count;
             if (total == 0) continue;
 
+           var presents = recette.Ingredients
+                .Where(ri => req.IngredientIds.Contains(ri.IdIngredient))
+                .Select(ri => ri.Ingredient.Nom)
+                .ToList();
+
             var manquants = recette.Ingredients
                 .Where(ri => !req.IngredientIds.Contains(ri.IdIngredient))
                 .Select(ri => ri.Ingredient.Nom)
                 .ToList();
 
-            var disponibles = total - manquants.Count;
+            var disponibles = presents.Count;
 
             // Au moins un ingrédient utilisateur doit être présent
             if (disponibles == 0) continue;
@@ -40,6 +45,7 @@ public class VideFrigoService(CulinaryPairingDbContext db)
                 RecetteId = recette.IdRecette,
                 Titre = recette.Titre,
                 Score = score,
+                IngredientsPresents = presents,
                 IngredientsManquants = manquants,
                 BadgeVeg = badgeVeg
             });

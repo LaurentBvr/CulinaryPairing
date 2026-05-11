@@ -17,6 +17,7 @@ export interface VideFrigoResultDto {
   recetteId: number;
   titre: string;
   score: number;
+  ingredientsPresents: string[];
   ingredientsManquants: string[];
   badgeVeg: boolean;
 }

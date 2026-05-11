@@ -105,7 +105,11 @@
 
             <div class="body">
               <div class="title">{{ r.titre }}</div>
-
+              @if (r.ingredientsPresents.length > 0) {
+                <p class="ings">
+                  <span class="have"><b>Contient ({{ r.ingredientsPresents.length }}) :</b> {{ r.ingredientsPresents.join(', ') }}</span>
+                </p>
+              }
               @if (r.ingredientsManquants.length > 0) {
                 <p class="ings">
                   <span class="miss"><b>Manquants ({{ r.ingredientsManquants.length }}) :</b> {{ r.ingredientsManquants.join(', ') }}</span>
