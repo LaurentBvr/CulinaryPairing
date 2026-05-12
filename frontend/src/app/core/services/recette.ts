@@ -48,6 +48,7 @@ export interface Recette {
   estCompletementAdaptable?: boolean;
   etapes?: Etape[];
   contraintesViolees?: ContrainteDto[];
+  statutCompatibilite?: 'Compatible' | 'Adaptable' | 'Incompatible';
 }
 
 @Injectable({ providedIn: 'root' })

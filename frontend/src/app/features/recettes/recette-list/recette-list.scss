@@ -35,3 +35,26 @@
 .recipe-card .img .fav.active {
   color: var(--gold-500);
 }
+
+/* État "Adaptable" : la recette n'est pas directement compatible, mais les contraintes
+   violées peuvent être résolues par substitution (R17/R18/R19). On garde la carte
+   100% lisible (pas d'opacité réduite, contrairement à .is-incompatible) et on affiche
+   un badge bordeaux/or distinct du badge terracotta des incompatibles. */
+.recipe-card .img .adaptable {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: var(--bordeaux-900);
+  color: var(--gold-500);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  max-width: calc(100% - 24px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: 1px solid var(--gold-500);
+}

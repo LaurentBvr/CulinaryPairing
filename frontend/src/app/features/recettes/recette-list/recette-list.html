@@ -56,7 +56,12 @@
 
         @if (toggleVisible()) {
           <div class="toggle-row">
-            <span>Masquer recettes incompatibles ({{ nbMasquees() }})</span>
+            <span>
+              Masquer recettes incompatibles ({{ nbMasquees() }})
+              @if (nbAdaptables() > 0) {
+                <em style="font-style:normal; color:var(--ink-500); font-size:12px;">— {{ nbAdaptables() }} adaptable(s) restent visibles</em>
+              }
+            </span>
             <span class="toggle" [class.on]="masquerIncompatibles()" (click)="toggleMasquer()"></span>
           </div>
         }
@@ -68,7 +73,8 @@
           @for (recette of recettesAffichees(); track recette.idRecette) {
 
             <a class="recipe-card"
-               [class.is-incompatible]="recette.contraintesViolees && recette.contraintesViolees.length > 0"
+               [class.is-incompatible]="recette.statutCompatibilite === 'Incompatible'"
+               [class.is-adaptable]="recette.statutCompatibilite === 'Adaptable'"
                [routerLink]="['/recettes', recette.idRecette]">
 
               <div class="img ph-stripes">
@@ -82,9 +88,13 @@
                   {{ favorisService.isFavori(recette.idRecette) ? '★' : '☆' }}
                 </button>
 
-                @if (recette.contraintesViolees && recette.contraintesViolees.length > 0) {
+                @if (recette.statutCompatibilite === 'Incompatible') {
                   <span class="incompat" [title]="'Contraintes violées : ' + contraintesLabel(recette)">
                     Incompatible · {{ contraintesLabel(recette) }}
+                  </span>
+                } @else if (recette.statutCompatibilite === 'Adaptable') {
+                  <span class="adaptable" [title]="'Contraintes résolvables par substitution : ' + contraintesLabel(recette)">
+                    ⚙ {{ statutLabel(recette) }}
                   </span>
                 }
               </div>

@@ -52,9 +52,9 @@ recettesAffichees = computed(() => {
     result = result.filter(r => this.normalize(r.niveauDifficulte) === target);
   }
 
-  // Masquer incompatibles
+  // Masquer incompatibles (R9 + R17/R18/R19 : on ne masque que les strictement incompatibles, pas les adaptables)
   if (this.masquerIncompatibles()) {
-    result = result.filter(r => !r.contraintesViolees || r.contraintesViolees.length === 0);
+    result = result.filter(r => r.statutCompatibilite !== 'Incompatible');
   }
 
   return result;
@@ -66,9 +66,14 @@ recettesAffichees = computed(() => {
   countPlats = computed(() => this.recettes().filter(r => this.normalize(r.typeRepas) === 'plat').length);
   countDesserts = computed(() => this.recettes().filter(r => this.normalize(r.typeRepas) === 'dessert').length);
 
-  // Compteur masqué pour info utilisateur
+  // Compteur masqué pour info utilisateur (uniquement les strictement incompatibles)
   nbMasquees = computed(() =>
-    this.recettes().filter(r => r.contraintesViolees && r.contraintesViolees.length > 0).length
+    this.recettes().filter(r => r.statutCompatibilite === 'Incompatible').length
+  );
+
+  // Compteur des recettes adaptables (info utile pour le badge "Adaptable")
+  nbAdaptables = computed(() =>
+    this.recettes().filter(r => r.statutCompatibilite === 'Adaptable').length
   );
 
   // Helper : visible si l'user est connecté ET qu'au moins 1 recette est incompatible
@@ -106,5 +111,18 @@ recettesAffichees = computed(() => {
   // Concatène les noms de contraintes violées pour l'affichage badge
   contraintesLabel(r: Recette): string {
     return (r.contraintesViolees ?? []).map(c => c.nom).join(', ');
+  }
+
+  // Label du badge selon le statut de compatibilité (R9 + R17/R18/R19)
+  statutLabel(r: Recette): string {
+    if (r.statutCompatibilite === 'Adaptable') {
+      // Détecter si c'est végétarien ou végan qui est résolvable
+      const adaptableType = r.adaptableVegan ? 'Végan' : 'Végétarien';
+      return `Adaptable en ${adaptableType}`;
+    }
+    if (r.statutCompatibilite === 'Incompatible') {
+      return 'Incompatible · ' + (r.contraintesViolees ?? []).map(c => c.nom).join(', ');
+    }
+    return '';
   }
 }
