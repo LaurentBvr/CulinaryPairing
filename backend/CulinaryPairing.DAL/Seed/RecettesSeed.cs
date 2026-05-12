@@ -175,7 +175,7 @@ public static class RecettesSeed
                 ContientUmamiPur = false, ContientFume = false,
                 AffiniteTannins = AffiniteTannins.Neutre,
                 ModeCuisson = ModeCuisson.Mijote, TypeSauce = TypeSauce.Creme,
-                Statut = StatutRecette.Publiee, AdaptableVege = false, AdaptableVegan = false,
+                Statut = StatutRecette.Publiee, AdaptableVege = true, AdaptableVegan = true,
                 CoutEstime = 16.00m, IdUtilisateur = 2
             },
 
