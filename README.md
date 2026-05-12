@@ -307,8 +307,8 @@ Planning condensé sur **3 semaines** (du 19 avril au 11 mai 2026). Soumission d
 | Semaine 2 | 2-4 mai | Moteur d'accords à 16 règles + score pondéré + accord inversé | ✅ Terminé |
 | Semaine 2-3 | 5-7 mai | Mode Soirée (V2 anticipée), polish, enrichissement seed | ✅ Terminé |
 | Semaine 3 | 8-10 mai | Vide-frigo, finalisation CdC V1.3, dette technique documentée | ✅ Terminé |
-| **Rendu** | **11 mai** | **Livraison application + cahier des charges V1.3** | 🎯 Imminent |
-| Soutenance | 11 mai - 11 juin | Préparation et oral de défense | ⏳ |
+| **Rendu** | **11 mai** | **Livraison application + cahier des charges V1.3** | ✅ Terminé |
+| Soutenance | 11 mai - 11 juin | Préparation et oral de défense | 🎯 Imminent |
 
 ### Roadmap V2 (post-soutenance)
 
