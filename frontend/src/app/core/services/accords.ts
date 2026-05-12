@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Accord {
   idAccord: number;
@@ -19,7 +20,7 @@ export interface Accord {
 @Injectable({ providedIn: 'root' })
 export class AccordsService {
   private http = inject(HttpClient);
-  private api = 'http://localhost:5011/api';
+  private api = `${environment.apiUrl}/api`;
 
   getByRecette(idRecette: number): Observable<Accord[]> {
     return this.http.get<Accord[]>(`${this.api}/recettes/${idRecette}/accords`);
