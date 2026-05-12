@@ -111,7 +111,12 @@ public static class IngredientsSeed
             // id = 68..70 : sucre et chocolat (pour fondant)
             new() { Nom = "Sucre",                UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.002m },
             new() { Nom = "Chocolat noir 70%",    UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.020m },
-            new() { Nom = "Coulis de fruits rouges", UniteDefaut = "ml",  EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.012m }
+            new() { Nom = "Coulis de fruits rouges", UniteDefaut = "ml",  EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.012m },
+
+            // === Substituts végétaux ajoutés en V1.3.1 pour adapter le Burger ===
+            new() { Nom = "Steak végétal",        UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.040m },
+            new() { Nom = "Bacon végétal",        UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.030m },
+            new() { Nom = "Cheddar végétal",      UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.035m }
         };
 
         await context.Ingredients.AddRangeAsync(ingredients);

@@ -3,8 +3,8 @@ using CulinaryPairing.Entities.Models;
 
 namespace CulinaryPairing.DAL.Seed;
 
-// 9 substitutions du CdC section 3.5.1 : 4 communes (végé + végan),
-// 5 végan-only. Les FK renvoient aux IDs implicites d'IngredientsSeed (1..20).
+// 14 substitutions : 9 du CdC v1.3 + 5 ajoutées en V1.3.1 pour le Burger.
+// Les FK renvoient aux IDs implicites d'IngredientsSeed.
 public static class SubstitutionsSeed
 {
     public static async Task SeedAsync(CulinaryPairingDbContext context)
@@ -50,7 +50,29 @@ public static class SubstitutionsSeed
                     NoteCuisson = "Presser le tofu 30 min avant, puis faire mariner" },
             new() { IdIngredientOriginal = 13, IdIngredientSubstitut = 14,
                     TypeSubstitution = TypeSubstitution.Vegan, RatioConversion = 1.0m,
-                    NoteCuisson = "Presser le tofu 30 min avant, puis faire mariner" }
+                    NoteCuisson = "Presser le tofu 30 min avant, puis faire mariner" },
+
+            // === Substitutions ajoutées en V1.3.1 pour adapter le Burger ===
+            // Boeuf haché (25) → Steak végétal (71) : végé + végan
+            new() { IdIngredientOriginal = 25, IdIngredientSubstitut = 71,
+                    TypeSubstitution = TypeSubstitution.Vegetarien, RatioConversion = 1.0m,
+                    NoteCuisson = "Cuire le steak végétal 3 min par face à feu moyen, ne pas trop saisir" },
+            new() { IdIngredientOriginal = 25, IdIngredientSubstitut = 71,
+                    TypeSubstitution = TypeSubstitution.Vegan, RatioConversion = 1.0m,
+                    NoteCuisson = "Cuire le steak végétal 3 min par face à feu moyen, ne pas trop saisir" },
+
+            // Bacon fumé (24) → Bacon végétal (72) : végé + végan
+            new() { IdIngredientOriginal = 24, IdIngredientSubstitut = 72,
+                    TypeSubstitution = TypeSubstitution.Vegetarien, RatioConversion = 1.0m,
+                    NoteCuisson = "Poêler 2 min de chaque côté pour développer le croustillant" },
+            new() { IdIngredientOriginal = 24, IdIngredientSubstitut = 72,
+                    TypeSubstitution = TypeSubstitution.Vegan, RatioConversion = 1.0m,
+                    NoteCuisson = "Poêler 2 min de chaque côté pour développer le croustillant" },
+
+            // Cheddar (39) → Cheddar végétal (73) : végan-only (le cheddar est déjà végé)
+            new() { IdIngredientOriginal = 39, IdIngredientSubstitut = 73,
+                    TypeSubstitution = TypeSubstitution.Vegan, RatioConversion = 1.0m,
+                    NoteCuisson = "Ajouter en fin de cuisson, le cheddar végétal fond plus rapidement" }
         };
 
         await context.SubstitutionsIngredients.AddRangeAsync(substitutions);
