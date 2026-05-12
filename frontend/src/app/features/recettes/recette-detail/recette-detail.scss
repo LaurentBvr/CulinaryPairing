@@ -29,3 +29,26 @@
   border-radius: var(--radius-sm);
   font-weight: 600;
 }
+
+/* Image hero du détail recette : remplit le conteneur .hero-recipe en
+   couvrant l'espace sans déformation. Positionnée en absolute pour rester
+   sous le gradient ::after et le .meta-overlay (z-index: 1). */
+.hero-recipe .hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Override de l'eyebrow dans le hero : le gold-300 par défaut manque
+   de contraste sur le gradient sombre. On force gold-500 + weight 600
+   + letter-spacing plus marqué pour donner du caractère typographique. */
+.hero-recipe .meta-overlay .eyebrow {
+  color: var(--gold-500);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}

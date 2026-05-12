@@ -53,6 +53,7 @@ public class RecettesController : ControllerBase
                 NiveauDifficulte = r.Difficulte.ToString(),
                 TypeRepas = r.TypePlat.ToString(),
                 Categorie = r.TypePlat.ToString(),
+                r.ImageUrl,
                 r.AdaptableVege,
                 r.AdaptableVegan
             })
@@ -83,6 +84,7 @@ public class RecettesController : ControllerBase
                 r.NiveauDifficulte,
                 r.TypeRepas,
                 r.Categorie,
+                r.ImageUrl,
                 ContraintesViolees = contraintesViolees,
                 StatutCompatibilite = statut
             };
@@ -147,6 +149,7 @@ public class RecettesController : ControllerBase
             NiveauDifficulte = recette.Difficulte.ToString(),
             TypeRepas = recette.TypePlat.ToString(),
             Categorie = recette.TypePlat.ToString(),
+            ImageUrl = recette.ImageUrl,
             NombrePersonnesBase = recette.NombrePersonnesBase ?? 4,
             AdaptableVege = recette.AdaptableVege,
             AdaptableVegan = recette.AdaptableVegan,

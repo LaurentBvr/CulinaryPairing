@@ -20,10 +20,14 @@
 
       <!-- Hero -->
       <div class="hero-recipe">
-        <span class="ph-label">[ photo · {{ r.nom }} ]</span>
+        @if (r.imageUrl) {
+          <img [src]="r.imageUrl" [alt]="r.nom" class="hero-img" />
+        } @else {
+          <span class="ph-label">[ photo · {{ r.nom }} ]</span>
+        }
         <div class="meta-overlay">
           <div>
-            <div class="eyebrow">— {{ r.typeRepas }} · {{ r.categorie }} —</div>
+            <div class="eyebrow">— {{ r.typeRepas }} —</div>
             <h1>{{ r.nom }}</h1>
             <div class="meta-tags">
               <span class="pill">⏱ {{ tempsTotalFormate() }}</span>

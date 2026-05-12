@@ -77,8 +77,12 @@
                [class.is-adaptable]="recette.statutCompatibilite === 'Adaptable'"
                [routerLink]="['/recettes', recette.idRecette]">
 
-              <div class="img ph-stripes">
-                <span class="lab">[ {{ recette.nom }} ]</span>
+              <div class="img" [class.ph-stripes]="!recette.imageUrl">
+                @if (recette.imageUrl) {
+                  <img [src]="recette.imageUrl" [alt]="recette.nom" class="recipe-img" loading="lazy" />
+                } @else {
+                  <span class="lab">[ {{ recette.nom }} ]</span>
+                }
 
                 <button type="button"
                         class="fav"

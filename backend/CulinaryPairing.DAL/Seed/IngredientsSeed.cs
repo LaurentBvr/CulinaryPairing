@@ -116,7 +116,24 @@ public static class IngredientsSeed
             // === Substituts végétaux ajoutés en V1.3.1 pour adapter le Burger ===
             new() { Nom = "Steak végétal",        UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.040m },
             new() { Nom = "Bacon végétal",        UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.030m },
-            new() { Nom = "Cheddar végétal",      UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.035m }
+            new() { Nom = "Cheddar végétal",      UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.035m },
+
+            // === V1.3.1 (suite) : ingrédients pour combler les recettes (Bourguignon, Velouté, César, Tartare, Burger, Panna cotta, Carpaccio, Pho) ===
+            // id = 74..80 : compléments recettes (audit V1.3.1)
+            new() { Nom = "Courge butternut",     UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.004m },
+            new() { Nom = "Bouillon de légumes",  UniteDefaut = "ml",     EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.003m },
+            new() { Nom = "Croûtons",             UniteDefaut = "g",      EstAllergene = true,  EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.012m },
+            new() { Nom = "Anchois",              UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = false, EstVegan = false, Divisible = true,  CoutUnitaire = 0.040m },
+            new() { Nom = "Moutarde",             UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.008m },
+            new() { Nom = "Ketchup",              UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.006m },
+            new() { Nom = "Câpres",               UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.025m },
+
+            // id = 81..85 : enrichissement Panna cotta, Carpaccio, Pho
+            new() { Nom = "Fraises",              UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.015m },
+            new() { Nom = "Ciboulette",           UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.045m },
+            new() { Nom = "Pamplemousse",         UniteDefaut = "pièce",  EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = false, CoutUnitaire = 1.20m  },
+            new() { Nom = "Crème balsamique",     UniteDefaut = "ml",     EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.025m },
+            new() { Nom = "Cebette",              UniteDefaut = "pièce",  EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = false, CoutUnitaire = 0.35m  }
         };
 
         await context.Ingredients.AddRangeAsync(ingredients);

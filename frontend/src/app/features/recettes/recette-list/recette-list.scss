@@ -58,3 +58,13 @@
   white-space: nowrap;
   border: 1px solid var(--gold-500);
 }
+
+/* Image de recette dans la liste : remplit le conteneur .img en couvrant
+   l'espace sans déformation (object-fit cover). Le placeholder rayé .ph-stripes
+   reste en fallback si imageUrl est null. */
+.recipe-card .img .recipe-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
