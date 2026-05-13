@@ -103,6 +103,7 @@ builder.Services.AddScoped<IFavorisService, FavorisService>();
 builder.Services.AddScoped<IContraintesService, ContraintesService>();
 builder.Services.AddScoped<ISoireesService, SoireesService>();
 builder.Services.AddScoped<IMenusService, MenusService>();
+builder.Services.AddScoped<ISearchService, SearchService>();
 
 var app = builder.Build();
 
