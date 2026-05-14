@@ -22,6 +22,8 @@
     }
   </nav>
 
+  <app-search-bar />
+
   <div class="user">
     @if (auth.currentUser$ | async; as user) {
       <span>{{ user.prenom }} {{ user.nom }}</span>

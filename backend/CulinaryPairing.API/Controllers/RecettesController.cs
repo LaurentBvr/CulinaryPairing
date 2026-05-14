@@ -37,12 +37,38 @@ public class RecettesController : ControllerBase
         return int.TryParse(claim, out var id) ? id : null;
     }
 
+    /// <summary>
+    /// Liste des recettes publiées. Accepte des filtres optionnels en query params :
+    ///   - ?ingredient=Tomate   → recettes contenant cet ingrédient (match exact, insensible casse)
+    ///   - ?type=Plat           → recettes du type de plat donné (Entree/Plat/Dessert)
+    /// Combinables (AND). Sans paramètres : comportement legacy inchangé.
+    /// Utilisé par la SearchBar (clic dropdown → /recettes?ingredient=X ou ?type=Y).
+    /// </summary>
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+        [FromQuery] string? ingredient = null,
+        [FromQuery] string? type = null)
     {
-        var recettes = await _context.Recettes
-            .Where(r => r.Statut == StatutRecette.Publiee)
+        var query = _context.Recettes
+            .Where(r => r.Statut == StatutRecette.Publiee);
+
+        // Filtre par ingrédient (match exact insensible à la casse via EF.Functions.Like)
+        if (!string.IsNullOrWhiteSpace(ingredient))
+        {
+            var ingTrim = ingredient.Trim();
+            query = query.Where(r => r.Ingredients
+                .Any(ri => ri.Ingredient!.Nom.ToLower() == ingTrim.ToLower()));
+        }
+
+        // Filtre par type de plat (parse de l'enum, ignore si valeur invalide)
+        if (!string.IsNullOrWhiteSpace(type)
+            && Enum.TryParse<TypePlat>(type.Trim(), ignoreCase: true, out var typePlat))
+        {
+            query = query.Where(r => r.TypePlat == typePlat);
+        }
+
+        var recettes = await query
             .Select(r => new
             {
                 r.IdRecette,

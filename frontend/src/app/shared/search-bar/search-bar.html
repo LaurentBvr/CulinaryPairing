@@ -1,0 +1,83 @@
+<div class="search-bar">
+  <form (submit)="$event.preventDefault(); onSubmit()">
+    <input
+      type="search"
+      [formControl]="query"
+      (focus)="onFocus()"
+      placeholder="Rechercher une recette, boisson, ingrédient..."
+      autocomplete="off"
+      aria-label="Recherche transversale"
+    />
+    <button type="submit" class="search-icon" aria-label="Lancer la recherche">
+      🔍
+    </button>
+  </form>
+
+  @if (isOpen() && (results() || isLoading())) {
+    <div class="dropdown">
+      @if (isLoading()) {
+        <div class="loading">Recherche...</div>
+      } @else if (results(); as r) {
+        @if (r.totalResultats === 0) {
+          <div class="empty">Aucun résultat pour « {{ query.value }} »</div>
+        } @else {
+          @if (r.recettes.length > 0) {
+            <div class="section">
+              <div class="section-title">🍽️ Recettes</div>
+              @for (item of r.recettes; track item.id) {
+                <a [routerLink]="['/recettes', item.id]" (click)="onResultClick()" class="result-item">
+                  <span class="result-name">{{ item.titre }}</span>
+                  @if (item.typePlat) {
+                    <span class="result-meta">{{ item.typePlat }}</span>
+                  }
+                </a>
+              }
+            </div>
+          }
+
+          @if (r.boissons.length > 0) {
+            <div class="section">
+              <div class="section-title">🍷 Boissons</div>
+              @for (item of r.boissons; track item.id) {
+                <a [routerLink]="['/boissons', item.id]" (click)="onResultClick()" class="result-item">
+                  <span class="result-name">{{ item.nom }}</span>
+                  @if (item.type) {
+                    <span class="result-meta">{{ item.type }}</span>
+                  }
+                </a>
+              }
+            </div>
+          }
+
+          @if (r.ingredients.length > 0) {
+            <div class="section">
+              <div class="section-title">🥬 Ingrédients</div>
+              @for (item of r.ingredients; track item.id) {
+                <a [routerLink]="['/recettes']" [queryParams]="{ ingredient: item.nom }" (click)="onResultClick()" class="result-item">
+                  <span class="result-name">{{ item.nom }}</span>
+                  <span class="result-meta">{{ item.nombreRecettes }} recette(s)</span>
+                </a>
+              }
+            </div>
+          }
+
+          @if (r.typesPlat.length > 0) {
+            <div class="section">
+              <div class="section-title">🍴 Types de plat</div>
+              @for (item of r.typesPlat; track item.valeur) {
+                <a [routerLink]="['/recettes']" [queryParams]="{ type: item.valeur }" (click)="onResultClick()" class="result-item">
+                  <span class="result-name">{{ item.valeur }}</span>
+                  <span class="result-meta">{{ item.nombreRecettes }} recette(s)</span>
+                </a>
+              }
+            </div>
+          }
+
+          <a class="see-all" [routerLink]="['/recherche']" [queryParams]="{ q: query.value }" (click)="onResultClick()">
+            Voir tous les résultats →
+          </a>
+        }
+      }
+    </div>
+  }
+</div>

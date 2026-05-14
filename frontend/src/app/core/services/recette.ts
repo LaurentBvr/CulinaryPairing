@@ -56,8 +56,21 @@ export class RecetteService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/api/recettes`;
 
-  getAll(): Observable<Recette[]> {
-    return this.http.get<Recette[]>(this.apiUrl);
+  /**
+   * Liste des recettes publiées. Filtres optionnels (combinables) :
+   *   - ingredient : nom d'ingrédient (match exact insensible casse côté backend)
+   *   - type       : type de plat (Entree/Plat/Dessert)
+   * Sans filtres : comportement legacy inchangé.
+   */
+  getAll(filters?: { ingredient?: string; type?: string }): Observable<Recette[]> {
+    let params = new HttpParams();
+    if (filters?.ingredient) {
+      params = params.set('ingredient', filters.ingredient);
+    }
+    if (filters?.type) {
+      params = params.set('type', filters.type);
+    }
+    return this.http.get<Recette[]>(this.apiUrl, { params });
   }
 
   getById(id: number, mode?: ModeAdaptation): Observable<Recette> {

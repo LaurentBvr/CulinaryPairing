@@ -1,0 +1,116 @@
+<div class="page-wrap">
+  <div class="page-content">
+
+    <div class="page-head">
+      <div>
+        <div class="eyebrow">— Recherche —</div>
+        <h1>Résultats pour <em>« {{ query() }} »</em></h1>
+        @if (results()) {
+          <p class="lede">
+            {{ results()!.totalResultats }} résultat(s) trouvé(s) toutes catégories confondues.
+          </p>
+        }
+      </div>
+    </div>
+
+    @if (query().length < 2) {
+      <p style="text-align:center; padding:80px 40px; color:var(--ink-500);">
+        Tapez au moins 2 caractères dans la barre de recherche.
+      </p>
+    }
+
+    @if (loading()) {
+      <p style="text-align:center; padding:40px; color:var(--ink-500);">Recherche en cours...</p>
+    }
+
+    @if (error()) {
+      <p class="err" style="text-align:center; padding:40px;">{{ error() }}</p>
+    }
+
+    @if (!loading() && !error() && results() && query().length >= 2) {
+      @if (!hasResults()) {
+        <div style="text-align:center; padding:80px 40px; color:var(--ink-500);">
+          <h3 style="font-family:var(--font-serif); font-size:24px; color:var(--bordeaux-900); margin-bottom:8px;">
+            Aucun résultat
+          </h3>
+          <p style="font-size:14px;">
+            Aucun résultat ne correspond à « {{ query() }} ». Essayez avec d'autres mots-clés.
+          </p>
+        </div>
+      } @else {
+
+        @if (results()!.recettes.length > 0) {
+          <section class="cat-section">
+            <h2 class="cat-title">🍽️ Recettes <span class="cat-count">{{ results()!.recettes.length }}</span></h2>
+            <div class="cat-grid">
+              @for (item of results()!.recettes; track item.id) {
+                <a class="cat-card" [routerLink]="['/recettes', item.id]">
+                  <h3>{{ item.titre }}</h3>
+                  <div class="card-meta">
+                    @if (item.typePlat) {
+                      <span class="pill pill-neutral">{{ item.typePlat }}</span>
+                    }
+                    @if (item.difficulte) {
+                      <span class="pill pill-neutral">{{ item.difficulte }}</span>
+                    }
+                  </div>
+                </a>
+              }
+            </div>
+          </section>
+        }
+
+        @if (results()!.boissons.length > 0) {
+          <section class="cat-section">
+            <h2 class="cat-title">🍷 Boissons <span class="cat-count">{{ results()!.boissons.length }}</span></h2>
+            <div class="cat-grid">
+              @for (item of results()!.boissons; track item.id) {
+                <a class="cat-card" [routerLink]="['/boissons', item.id]">
+                  <h3>{{ item.nom }}</h3>
+                  <div class="card-meta">
+                    @if (item.type) {
+                      <span class="pill pill-neutral">{{ item.type }}</span>
+                    }
+                  </div>
+                </a>
+              }
+            </div>
+          </section>
+        }
+
+        @if (results()!.ingredients.length > 0) {
+          <section class="cat-section">
+            <h2 class="cat-title">🥬 Ingrédients <span class="cat-count">{{ results()!.ingredients.length }}</span></h2>
+            <div class="cat-grid">
+              @for (item of results()!.ingredients; track item.id) {
+                <a class="cat-card" [routerLink]="['/recettes']" [queryParams]="{ ingredient: item.nom }">
+                  <h3>{{ item.nom }}</h3>
+                  <div class="card-meta">
+                    <span class="card-sub">{{ item.nombreRecettes }} recette(s)</span>
+                  </div>
+                </a>
+              }
+            </div>
+          </section>
+        }
+
+        @if (results()!.typesPlat.length > 0) {
+          <section class="cat-section">
+            <h2 class="cat-title">🍴 Types de plat <span class="cat-count">{{ results()!.typesPlat.length }}</span></h2>
+            <div class="cat-grid">
+              @for (item of results()!.typesPlat; track item.valeur) {
+                <a class="cat-card" [routerLink]="['/recettes']" [queryParams]="{ type: item.valeur }">
+                  <h3>{{ item.valeur }}</h3>
+                  <div class="card-meta">
+                    <span class="card-sub">{{ item.nombreRecettes }} recette(s)</span>
+                  </div>
+                </a>
+              }
+            </div>
+          </section>
+        }
+      }
+    }
+
+  </div>
+</div>

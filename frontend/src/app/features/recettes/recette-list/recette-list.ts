@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RecetteService, Recette } from '../../../core/services/recette';
 import { FavorisService } from '../../../core/services/favoris';
 import { AuthService } from '../../../core/services/auth';
@@ -20,6 +20,11 @@ export class RecetteList implements OnInit {
   protected favorisService = inject(FavorisService);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  // Filtres URL-driven (depuis SearchBar) — affichés en pilule au-dessus de la grille
+  filtreIngredient = signal<string | null>(null);
+  filtreTypeUrl = signal<string | null>(null);
 
   // Données brutes
   recettes = signal<Recette[]>([]);
@@ -80,10 +85,33 @@ recettesAffichees = computed(() => {
   toggleVisible = computed(() => this.auth.isLoggedIn() && this.nbMasquees() > 0);
 
   ngOnInit() {
-    this.recetteService.getAll().subscribe({
-      next: data => { this.recettes.set(data); this.loading = false; },
-      error: () => { this.error = 'Erreur lors du chargement des recettes.'; this.loading = false; }
+    // Réactif aux changements de queryParams : si l'utilisateur clique sur un autre
+    // ingrédient dans la navbar, on recharge la liste avec le nouveau filtre sans
+    // unmount/remount du composant.
+    this.route.queryParamMap.subscribe(params => {
+      const ingredient = params.get('ingredient');
+      const type = params.get('type');
+
+      this.filtreIngredient.set(ingredient);
+      this.filtreTypeUrl.set(type);
+
+      this.loading = true;
+      this.recetteService.getAll({
+        ingredient: ingredient ?? undefined,
+        type: type ?? undefined
+      }).subscribe({
+        next: data => { this.recettes.set(data); this.loading = false; },
+        error: () => { this.error = 'Erreur lors du chargement des recettes.'; this.loading = false; }
+      });
     });
+  }
+
+  /**
+   * Retire les filtres URL (clic sur la croix de la pilule filtrante).
+   * On reset les queryParams, ce qui déclenche ngOnInit qui rechargera sans filtres.
+   */
+  clearFiltresUrl(): void {
+    this.router.navigate(['/recettes'], { queryParams: {} });
   }
 
   onToggleFavori(event: Event, idRecette: number): void {
