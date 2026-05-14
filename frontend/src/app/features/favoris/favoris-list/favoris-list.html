@@ -40,8 +40,12 @@
       <div class="grid-recipes">
         @for (fav of favoris; track fav.idRecette) {
           <a class="recipe-card" [routerLink]="['/recettes', fav.idRecette]">
-            <div class="img ph-stripes">
-              <span class="lab">[ {{ fav.titre }} ]</span>
+            <div class="img" [class.ph-stripes]="!fav.imageUrl">
+              @if (fav.imageUrl) {
+                <img [src]="fav.imageUrl" [alt]="fav.titre" class="recipe-img" loading="lazy" />
+              } @else {
+                <span class="lab">[ {{ fav.titre }} ]</span>
+              }
               <button type="button"
                       class="fav active"
                       (click)="onRetirer($event, fav.idRecette)"
