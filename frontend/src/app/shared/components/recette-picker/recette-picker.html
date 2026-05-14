@@ -65,9 +65,17 @@
                   [class.is-current]="r.idRecette === idRecetteCourante"
                   style="background:#fff; border:1px solid var(--cream-200); border-radius:var(--radius-lg); padding:16px 20px; display:flex; align-items:center; gap:18px; transition:box-shadow .15s, border-color .15s;">
 
-                <!-- Placeholder image -->
-                <div class="ph-stripes" style="width:64px; height:64px; border-radius:var(--radius-md); flex-shrink:0;">
-                  <span class="lab" style="font-size:9px; padding:3px 6px;">{{ slotLabel.charAt(0) }}</span>
+                <!-- Vignette : image recette si dispo, sinon placeholder lettre du slot -->
+                <div [class.ph-stripes]="!r.imageUrl"
+                     style="width:64px; height:64px; border-radius:var(--radius-md); flex-shrink:0; overflow:hidden;">
+                  @if (r.imageUrl) {
+                    <img [src]="r.imageUrl"
+                         [alt]="r.titre"
+                         loading="lazy"
+                         style="width:100%; height:100%; object-fit:cover; display:block;" />
+                  } @else {
+                    <span class="lab" style="font-size:9px; padding:3px 6px;">{{ slotLabel.charAt(0) }}</span>
+                  }
                 </div>
 
                 <!-- Info -->
