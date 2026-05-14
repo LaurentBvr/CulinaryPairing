@@ -61,5 +61,9 @@ export const routes: Routes = [
   path: 'vide-frigo',
   loadComponent: () => import('./vide-frigo/vide-frigo').then(m => m.VideFrigo)
   },
+  {
+    path: 'recherche',
+    loadComponent: () => import('./features/recherche/recherche-page/recherche-page').then(m => m.RecherchePage)
+  },
   { path: '**', redirectTo: 'recettes' }
 ];

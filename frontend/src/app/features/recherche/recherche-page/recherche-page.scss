@@ -1,0 +1,117 @@
+.page-wrap {
+  background: var(--cream-50);
+  min-height: 100vh;
+}
+
+.page-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 28px 80px;
+}
+
+.page-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 32px;
+  gap: 24px;
+
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 1.15;
+    color: var(--bordeaux-900);
+    margin: 6px 0 8px;
+    letter-spacing: -.01em;
+
+    em {
+      font-style: italic;
+      color: var(--bordeaux-700);
+    }
+  }
+
+  .lede {
+    font-size: 14px;
+    color: var(--ink-700);
+    max-width: 580px;
+    margin: 0;
+  }
+}
+
+.cat-section {
+  margin-bottom: 48px;
+}
+
+.cat-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--bordeaux-900);
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cat-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--cream-100);
+  color: var(--ink-700);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill, 999px);
+  border: 1px solid var(--cream-300);
+  font-weight: 400;
+  letter-spacing: .05em;
+}
+
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.cat-card {
+  display: block;
+  background: #fff;
+  border: 1px solid var(--cream-200);
+  border-radius: var(--radius-md, 8px);
+  padding: 16px 18px;
+  text-decoration: none;
+  color: var(--ink-900);
+  transition: box-shadow .2s, border-color .2s, transform .05s;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--cream-300);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--ink-900);
+    margin: 0 0 10px;
+    line-height: 1.25;
+  }
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--ink-500);
+}
