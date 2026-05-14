@@ -25,7 +25,28 @@
     @if (!loading && !error) {
 
       <!-- Barre de filtres -->
+      <!-- Barre de filtres -->
       <div class="filterbar">
+
+        @if (filtreIngredient() || filtreTypeUrl()) {
+          <div class="filtre-url">
+            <span class="filtre-url-label">Filtré par :</span>
+            @if (filtreIngredient()) {
+              <span class="filtre-url-pill">
+                Ingrédient : <strong>{{ filtreIngredient() }}</strong>
+              </span>
+            }
+            @if (filtreTypeUrl()) {
+              <span class="filtre-url-pill">
+                Type : <strong>{{ filtreTypeUrl() }}</strong>
+              </span>
+            }
+            <button type="button" class="filtre-url-clear" (click)="clearFiltresUrl()" aria-label="Retirer le filtre">
+              ✕ Retirer
+            </button>
+          </div>
+        }
+
         <div class="filter-chips">
           <button class="fchip" [class.active]="filtreType() === 'Toutes'" (click)="setFiltreType('Toutes')">
             Toutes <span class="count">{{ countToutes() }}</span>
