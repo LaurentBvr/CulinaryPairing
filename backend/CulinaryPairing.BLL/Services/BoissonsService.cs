@@ -28,7 +28,8 @@ public class BoissonsService : IBoissonsService
                 Appellation = b.Appellation,
                 Cepage = b.Cepage,
                 DegreAlcool = b.DegreAlcool,
-                Corps = b.Corps != null ? b.Corps.ToString() : null
+                Corps = b.Corps != null ? b.Corps.ToString() : null,
+                ImageUrl = b.ImageUrl
             })
             .ToListAsync();
     }
@@ -64,6 +65,7 @@ public class BoissonsService : IBoissonsService
             Appellation = b.Appellation,
             Cepage = b.Cepage,
             CoutMoyen = b.CoutMoyen,
+            ImageUrl = b.ImageUrl,
             FamillesAromatiques = b.FamillesAromatiques
                 .Where(bf => bf.Famille != null)
                 .Select(bf => bf.Famille!.Nom)

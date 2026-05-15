@@ -76,6 +76,10 @@ public class Boisson
     [Column("cepage")]
     public string? Cepage { get; set; }
 
+    [MaxLength(500)]
+    [Column("image_url")]
+    public string? ImageUrl { get; set; }
+
     // Relations
     public ICollection<Accord> Accords { get; set; } = new List<Accord>();
     public ICollection<BoissonFamilleAromatique> FamillesAromatiques { get; set; } = new List<BoissonFamilleAromatique>();

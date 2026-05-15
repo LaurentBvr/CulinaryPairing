@@ -17,6 +17,7 @@ export interface BoissonListItem {
   cepage: string | null;
   degreAlcool: number | null;
   corps: string | null;
+  imageUrl: string | null;
 }
 
 /**
@@ -49,6 +50,7 @@ export interface BoissonDetail {
   cepage: string | null;
 
   coutMoyen: number | null;
+  imageUrl: string | null;
   famillesAromatiques: string[];
 }
 

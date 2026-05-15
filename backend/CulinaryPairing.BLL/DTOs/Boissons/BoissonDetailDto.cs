@@ -33,6 +33,8 @@ public class BoissonDetailDto
 
     public decimal? CoutMoyen { get; set; }
 
+    public string? ImageUrl { get; set; }
+
     // === Familles aromatiques associées (V1.1) ===
     public List<string> FamillesAromatiques { get; set; } = new();
 }

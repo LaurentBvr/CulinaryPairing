@@ -1,36 +1,100 @@
 <div class="page-wrap">
   <div class="detail-content">
-
     <!-- Breadcrumb -->
     <nav class="breadcrumb">
       <a routerLink="/boissons">Boissons</a>
       <span class="sep">/</span>
-      <span style="color: var(--ink-900);">{{ boisson()?.nom || 'Chargement…' }}</span>
+      <span style="color: var(--ink-900)">{{
+        boisson()?.nom || "Chargement…"
+      }}</span>
     </nav>
 
     @if (loading()) {
-      <p style="text-align:center; padding:40px; color:var(--ink-500);">Chargement...</p>
+      <p style="text-align: center; padding: 40px; color: var(--ink-500)">
+        Chargement...
+      </p>
     }
 
     @if (error()) {
-      <p class="err" style="text-align:center; padding:40px;">{{ error() }}</p>
+      <p class="err" style="text-align: center; padding: 40px">{{ error() }}</p>
     }
 
     @if (!loading() && !error() && boisson(); as b) {
-
       <!-- Hero crème + bouteille placeholder -->
-      <div style="display:grid; grid-template-columns: 240px 1fr; gap:48px; padding:40px; background:var(--cream-100); border:1px solid var(--cream-200); border-radius:var(--radius-xl); margin-bottom:32px;">
-
-        <!-- Bouteille placeholder -->
-        <div style="aspect-ratio: 1/2; max-height: 320px; background: repeating-linear-gradient(135deg, var(--cream-50) 0 12px, var(--cream-200) 12px 24px); border-radius: 50% 50% 14px 14px / 30% 30% 14px 14px; display:flex; align-items:center; justify-content:center; position:relative;">
-          <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--cream-50); padding:8px 14px; border:1px solid var(--cream-300); font-family:var(--font-mono); font-size:10px; color:var(--ink-500); letter-spacing:.1em; white-space:nowrap;">
-            [ étiquette · {{ b.nom }} ]
-          </span>
+      <div
+        style="
+          display: grid;
+          grid-template-columns: 240px 1fr;
+          gap: 48px;
+          padding: 40px;
+          background: var(--cream-100);
+          border: 1px solid var(--cream-200);
+          border-radius: var(--radius-xl);
+          margin-bottom: 32px;
+        "
+      >
+        <!-- Bouteille : image réelle ou placeholder -->
+        <div
+          class="boisson-hero-visual"
+          style="
+            aspect-ratio: 1/2;
+            max-height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+          "
+        >
+          @if (b.imageUrl) {
+            <img
+              [src]="b.imageUrl"
+              [alt]="b.nom"
+              style="
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+                filter: drop-shadow(0 8px 20px rgba(82, 27, 36, 0.18));
+              "
+            />
+          } @else {
+            <div
+              style="
+                width: 100%;
+                height: 100%;
+                background: repeating-linear-gradient(
+                  135deg,
+                  var(--cream-50) 0 12px,
+                  var(--cream-200) 12px 24px
+                );
+                border-radius: 50% 50% 14px 14px / 30% 30% 14px 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <span
+                style="
+                  background: var(--cream-50);
+                  padding: 8px 14px;
+                  border: 1px solid var(--cream-300);
+                  font-family: var(--font-mono);
+                  font-size: 10px;
+                  color: var(--ink-500);
+                  letter-spacing: 0.1em;
+                  white-space: nowrap;
+                "
+              >
+                [ étiquette · {{ b.nom }} ]
+              </span>
+            </div>
+          }
         </div>
 
         <!-- Métadonnées -->
-        <div style="display:flex; flex-direction:column; justify-content:center;">
-          <div class="eyebrow" style="margin-bottom:8px;">
+        <div
+          style="display: flex; flex-direction: column; justify-content: center"
+        >
+          <div class="eyebrow" style="margin-bottom: 8px">
             — {{ typeLabel() }}
             @if (origineFormatee()) {
               · {{ origineFormatee() }}
@@ -41,41 +105,129 @@
             —
           </div>
 
-          <h1 style="font-family:var(--font-serif); font-weight:500; font-size:48px; line-height:1.05; color:var(--bordeaux-900); margin:0 0 16px; letter-spacing:-.01em;">
+          <h1
+            style="
+              font-family: var(--font-serif);
+              font-weight: 500;
+              font-size: 48px;
+              line-height: 1.05;
+              color: var(--bordeaux-900);
+              margin: 0 0 16px;
+              letter-spacing: -0.01em;
+            "
+          >
             {{ b.nom }}.
           </h1>
 
           <!-- Métadonnées en mono -->
-          <div style="display:flex; gap:32px; margin-bottom:24px; font-family:var(--font-mono); font-size:12px; letter-spacing:.05em;">
+          <div
+            style="
+              display: flex;
+              gap: 32px;
+              margin-bottom: 24px;
+              font-family: var(--font-mono);
+              font-size: 12px;
+              letter-spacing: 0.05em;
+            "
+          >
             @if (b.degreAlcool !== null) {
               <div>
-                <div style="font-size:18px; color:var(--bordeaux-700); font-weight:600; font-family:var(--font-serif);">{{ b.degreAlcool }}°</div>
-                <div style="color:var(--ink-500); text-transform:uppercase; font-size:10px; letter-spacing:.15em; margin-top:2px;">Degré</div>
+                <div
+                  style="
+                    font-size: 18px;
+                    color: var(--bordeaux-700);
+                    font-weight: 600;
+                    font-family: var(--font-serif);
+                  "
+                >
+                  {{ b.degreAlcool }}°
+                </div>
+                <div
+                  style="
+                    color: var(--ink-500);
+                    text-transform: uppercase;
+                    font-size: 10px;
+                    letter-spacing: 0.15em;
+                    margin-top: 2px;
+                  "
+                >
+                  Degré
+                </div>
               </div>
             }
             @if (b.temperatureOptimale !== null) {
               <div>
-                <div style="font-size:18px; color:var(--bordeaux-700); font-weight:600; font-family:var(--font-serif);">{{ b.temperatureOptimale }}°C</div>
-                <div style="color:var(--ink-500); text-transform:uppercase; font-size:10px; letter-spacing:.15em; margin-top:2px;">Service</div>
+                <div
+                  style="
+                    font-size: 18px;
+                    color: var(--bordeaux-700);
+                    font-weight: 600;
+                    font-family: var(--font-serif);
+                  "
+                >
+                  {{ b.temperatureOptimale }}°C
+                </div>
+                <div
+                  style="
+                    color: var(--ink-500);
+                    text-transform: uppercase;
+                    font-size: 10px;
+                    letter-spacing: 0.15em;
+                    margin-top: 2px;
+                  "
+                >
+                  Service
+                </div>
               </div>
             }
             @if (b.coutMoyen !== null) {
               <div>
-                <div style="font-size:18px; color:var(--bordeaux-700); font-weight:600; font-family:var(--font-serif);">{{ b.coutMoyen }} €</div>
-                <div style="color:var(--ink-500); text-transform:uppercase; font-size:10px; letter-spacing:.15em; margin-top:2px;">Prix moyen</div>
+                <div
+                  style="
+                    font-size: 18px;
+                    color: var(--bordeaux-700);
+                    font-weight: 600;
+                    font-family: var(--font-serif);
+                  "
+                >
+                  {{ b.coutMoyen }} €
+                </div>
+                <div
+                  style="
+                    color: var(--ink-500);
+                    text-transform: uppercase;
+                    font-size: 10px;
+                    letter-spacing: 0.15em;
+                    margin-top: 2px;
+                  "
+                >
+                  Prix moyen
+                </div>
               </div>
             }
             @if (!b.alcoolise) {
               <div>
-                <div style="font-size:14px; color:var(--sage-700); font-weight:600;">Sans alcool</div>
+                <div
+                  style="
+                    font-size: 14px;
+                    color: var(--sage-700);
+                    font-weight: 600;
+                  "
+                >
+                  Sans alcool
+                </div>
               </div>
             }
           </div>
 
           <!-- Boutons -->
-          <div style="display:flex; gap:12px;">
+          <div style="display: flex; gap: 12px">
             @if (accords().length > 0) {
-              <button type="button" (click)="scrollToAccords()" class="btn btn-primary">
+              <button
+                type="button"
+                (click)="scrollToAccords()"
+                class="btn btn-primary"
+              >
                 Voir les {{ accords().length }} accords ↓
               </button>
             }
@@ -84,66 +236,259 @@
       </div>
 
       <!-- Grille 3 panneaux : Profil / Service / Familles -->
-      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; margin-bottom:48px;">
-
+      <div
+        style="
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 18px;
+          margin-bottom: 48px;
+        "
+      >
         <!-- Profil gustatif -->
         <section class="panel">
           <div class="panel-head">
             <h2>Profil gustatif</h2>
           </div>
-          <ul style="list-style:none; padding:0; margin:0;">
+          <ul style="list-style: none; padding: 0; margin: 0">
             @if (b.niveauAcidite !== null) {
-              <li style="display:flex; align-items:center; gap:12px; padding:8px 0; font-size:13px;">
-                <span style="flex:1; color:var(--ink-700);">Acidité</span>
-                <div style="flex:1; height:6px; background:var(--cream-200); border-radius:3px; position:relative;">
-                  <div [style.width.%]="b.niveauAcidite * 10" style="height:100%; background:var(--bordeaux-700); border-radius:3px;"></div>
+              <li
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  padding: 8px 0;
+                  font-size: 13px;
+                "
+              >
+                <span style="flex: 1; color: var(--ink-700)">Acidité</span>
+                <div
+                  style="
+                    flex: 1;
+                    height: 6px;
+                    background: var(--cream-200);
+                    border-radius: 3px;
+                    position: relative;
+                  "
+                >
+                  <div
+                    [style.width.%]="b.niveauAcidite * 10"
+                    style="
+                      height: 100%;
+                      background: var(--bordeaux-700);
+                      border-radius: 3px;
+                    "
+                  ></div>
                 </div>
-                <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-500); min-width:36px; text-align:right;">{{ b.niveauAcidite }}/10</span>
+                <span
+                  style="
+                    font-family: var(--font-mono);
+                    font-size: 11px;
+                    color: var(--ink-500);
+                    min-width: 36px;
+                    text-align: right;
+                  "
+                  >{{ b.niveauAcidite }}/10</span
+                >
               </li>
             }
             @if (b.niveauSucre !== null) {
-              <li style="display:flex; align-items:center; gap:12px; padding:8px 0; font-size:13px;">
-                <span style="flex:1; color:var(--ink-700);">Sucre</span>
-                <div style="flex:1; height:6px; background:var(--cream-200); border-radius:3px;">
-                  <div [style.width.%]="b.niveauSucre * 10" style="height:100%; background:var(--gold-500); border-radius:3px;"></div>
+              <li
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  padding: 8px 0;
+                  font-size: 13px;
+                "
+              >
+                <span style="flex: 1; color: var(--ink-700)">Sucre</span>
+                <div
+                  style="
+                    flex: 1;
+                    height: 6px;
+                    background: var(--cream-200);
+                    border-radius: 3px;
+                  "
+                >
+                  <div
+                    [style.width.%]="b.niveauSucre * 10"
+                    style="
+                      height: 100%;
+                      background: var(--gold-500);
+                      border-radius: 3px;
+                    "
+                  ></div>
                 </div>
-                <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-500); min-width:36px; text-align:right;">{{ b.niveauSucre }}/10</span>
+                <span
+                  style="
+                    font-family: var(--font-mono);
+                    font-size: 11px;
+                    color: var(--ink-500);
+                    min-width: 36px;
+                    text-align: right;
+                  "
+                  >{{ b.niveauSucre }}/10</span
+                >
               </li>
             }
             @if (b.niveauTannins !== null) {
-              <li style="display:flex; align-items:center; gap:12px; padding:8px 0; font-size:13px;">
-                <span style="flex:1; color:var(--ink-700);">Tannins</span>
-                <div style="flex:1; height:6px; background:var(--cream-200); border-radius:3px;">
-                  <div [style.width.%]="b.niveauTannins * 10" style="height:100%; background:var(--bordeaux-900); border-radius:3px;"></div>
+              <li
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  padding: 8px 0;
+                  font-size: 13px;
+                "
+              >
+                <span style="flex: 1; color: var(--ink-700)">Tannins</span>
+                <div
+                  style="
+                    flex: 1;
+                    height: 6px;
+                    background: var(--cream-200);
+                    border-radius: 3px;
+                  "
+                >
+                  <div
+                    [style.width.%]="b.niveauTannins * 10"
+                    style="
+                      height: 100%;
+                      background: var(--bordeaux-900);
+                      border-radius: 3px;
+                    "
+                  ></div>
                 </div>
-                <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-500); min-width:36px; text-align:right;">{{ b.niveauTannins }}/10</span>
+                <span
+                  style="
+                    font-family: var(--font-mono);
+                    font-size: 11px;
+                    color: var(--ink-500);
+                    min-width: 36px;
+                    text-align: right;
+                  "
+                  >{{ b.niveauTannins }}/10</span
+                >
               </li>
             }
             @if (b.niveauAmertume !== null) {
-              <li style="display:flex; align-items:center; gap:12px; padding:8px 0; font-size:13px;">
-                <span style="flex:1; color:var(--ink-700);">Amertume</span>
-                <div style="flex:1; height:6px; background:var(--cream-200); border-radius:3px;">
-                  <div [style.width.%]="b.niveauAmertume * 10" style="height:100%; background:var(--terracotta-500); border-radius:3px;"></div>
+              <li
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  padding: 8px 0;
+                  font-size: 13px;
+                "
+              >
+                <span style="flex: 1; color: var(--ink-700)">Amertume</span>
+                <div
+                  style="
+                    flex: 1;
+                    height: 6px;
+                    background: var(--cream-200);
+                    border-radius: 3px;
+                  "
+                >
+                  <div
+                    [style.width.%]="b.niveauAmertume * 10"
+                    style="
+                      height: 100%;
+                      background: var(--terracotta-500);
+                      border-radius: 3px;
+                    "
+                  ></div>
                 </div>
-                <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-500); min-width:36px; text-align:right;">{{ b.niveauAmertume }}/10</span>
+                <span
+                  style="
+                    font-family: var(--font-mono);
+                    font-size: 11px;
+                    color: var(--ink-500);
+                    min-width: 36px;
+                    text-align: right;
+                  "
+                  >{{ b.niveauAmertume }}/10</span
+                >
               </li>
             }
             @if (b.intensiteAromatique !== null) {
-              <li style="display:flex; align-items:center; gap:12px; padding:8px 0; font-size:13px;">
-                <span style="flex:1; color:var(--ink-700);">Intensité</span>
-                <div style="flex:1; height:6px; background:var(--cream-200); border-radius:3px;">
-                  <div [style.width.%]="b.intensiteAromatique * 10" style="height:100%; background:var(--gold-700); border-radius:3px;"></div>
+              <li
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  padding: 8px 0;
+                  font-size: 13px;
+                "
+              >
+                <span style="flex: 1; color: var(--ink-700)">Intensité</span>
+                <div
+                  style="
+                    flex: 1;
+                    height: 6px;
+                    background: var(--cream-200);
+                    border-radius: 3px;
+                  "
+                >
+                  <div
+                    [style.width.%]="b.intensiteAromatique * 10"
+                    style="
+                      height: 100%;
+                      background: var(--gold-700);
+                      border-radius: 3px;
+                    "
+                  ></div>
                 </div>
-                <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-500); min-width:36px; text-align:right;">{{ b.intensiteAromatique }}/10</span>
+                <span
+                  style="
+                    font-family: var(--font-mono);
+                    font-size: 11px;
+                    color: var(--ink-500);
+                    min-width: 36px;
+                    text-align: right;
+                  "
+                  >{{ b.intensiteAromatique }}/10</span
+                >
               </li>
             }
             @if (b.niveauFume !== null && b.niveauFume > 0) {
-              <li style="display:flex; align-items:center; gap:12px; padding:8px 0; font-size:13px;">
-                <span style="flex:1; color:var(--ink-700);">Fumé</span>
-                <div style="flex:1; height:6px; background:var(--cream-200); border-radius:3px;">
-                  <div [style.width.%]="b.niveauFume * 10" style="height:100%; background:var(--ink-700); border-radius:3px;"></div>
+              <li
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  padding: 8px 0;
+                  font-size: 13px;
+                "
+              >
+                <span style="flex: 1; color: var(--ink-700)">Fumé</span>
+                <div
+                  style="
+                    flex: 1;
+                    height: 6px;
+                    background: var(--cream-200);
+                    border-radius: 3px;
+                  "
+                >
+                  <div
+                    [style.width.%]="b.niveauFume * 10"
+                    style="
+                      height: 100%;
+                      background: var(--ink-700);
+                      border-radius: 3px;
+                    "
+                  ></div>
                 </div>
-                <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-500); min-width:36px; text-align:right;">{{ b.niveauFume }}/10</span>
+                <span
+                  style="
+                    font-family: var(--font-mono);
+                    font-size: 11px;
+                    color: var(--ink-500);
+                    min-width: 36px;
+                    text-align: right;
+                  "
+                  >{{ b.niveauFume }}/10</span
+                >
               </li>
             }
           </ul>
@@ -154,29 +499,61 @@
           <div class="panel-head">
             <h2>Service</h2>
           </div>
-          <ul style="list-style:none; padding:0; margin:0; font-size:13px;">
+          <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px">
             @if (temperatureServiceFormatee()) {
-              <li style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--cream-200);">
-                <span style="color:var(--ink-700);">Température optimale</span>
-                <strong style="color:var(--ink-900);">{{ temperatureServiceFormatee() }}</strong>
+              <li
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  padding: 10px 0;
+                  border-bottom: 1px solid var(--cream-200);
+                "
+              >
+                <span style="color: var(--ink-700)">Température optimale</span>
+                <strong style="color: var(--ink-900)">{{
+                  temperatureServiceFormatee()
+                }}</strong>
               </li>
             }
             @if (b.corps) {
-              <li style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--cream-200);">
-                <span style="color:var(--ink-700);">Corps</span>
-                <strong style="color:var(--ink-900);">{{ b.corps | corpsLabel }}</strong>
+              <li
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  padding: 10px 0;
+                  border-bottom: 1px solid var(--cream-200);
+                "
+              >
+                <span style="color: var(--ink-700)">Corps</span>
+                <strong style="color: var(--ink-900)">{{
+                  b.corps | corpsLabel
+                }}</strong>
               </li>
             }
             @if (b.region) {
-              <li style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--cream-200);">
-                <span style="color:var(--ink-700);">Région</span>
-                <strong style="color:var(--ink-900);">{{ b.region }}</strong>
+              <li
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  padding: 10px 0;
+                  border-bottom: 1px solid var(--cream-200);
+                "
+              >
+                <span style="color: var(--ink-700)">Région</span>
+                <strong style="color: var(--ink-900)">{{ b.region }}</strong>
               </li>
             }
             @if (b.pays) {
-              <li style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--cream-200);">
-                <span style="color:var(--ink-700);">Pays</span>
-                <strong style="color:var(--ink-900);">{{ b.pays }}</strong>
+              <li
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  padding: 10px 0;
+                  border-bottom: 1px solid var(--cream-200);
+                "
+              >
+                <span style="color: var(--ink-700)">Pays</span>
+                <strong style="color: var(--ink-900)">{{ b.pays }}</strong>
               </li>
             }
           </ul>
@@ -188,82 +565,236 @@
             <div class="panel-head">
               <h2>Familles aromatiques</h2>
             </div>
-            <p style="font-size:12px; color:var(--ink-500); line-height:1.5; margin:0 0 14px;">
-              Notes dominantes utilisées par le moteur d'accord pour évaluer la similitude avec les plats.
+            <p
+              style="
+                font-size: 12px;
+                color: var(--ink-500);
+                line-height: 1.5;
+                margin: 0 0 14px;
+              "
+            >
+              Notes dominantes utilisées par le moteur d'accord pour évaluer la
+              similitude avec les plats.
             </p>
-            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <div style="display: flex; gap: 6px; flex-wrap: wrap">
               @for (f of b.famillesAromatiques; track f) {
                 <span class="pill pill-rule">{{ f }}</span>
               }
             </div>
           </section>
         }
-
       </div>
 
       <!-- Section accords inversés -->
-      <div id="accords-section" style="margin-top:48px;">
-        <div class="sec-head" style="display:flex; align-items:baseline; justify-content:space-between; padding-bottom:14px; margin-bottom:24px; border-bottom:1px solid var(--cream-200);">
-          <h2 style="font-family:var(--font-serif); font-weight:500; font-size:32px; color:var(--bordeaux-900); margin:0;">
-            Recettes qui <em style="font-style:italic; color:var(--gold-500);">s'accordent</em>.
+      <div id="accords-section" style="margin-top: 48px">
+        <div
+          class="sec-head"
+          style="
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding-bottom: 14px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--cream-200);
+          "
+        >
+          <h2
+            style="
+              font-family: var(--font-serif);
+              font-weight: 500;
+              font-size: 32px;
+              color: var(--bordeaux-900);
+              margin: 0;
+            "
+          >
+            Recettes qui
+            <em style="font-style: italic; color: var(--gold-500)"
+              >s'accordent</em
+            >.
           </h2>
-          <span class="meta" style="font-family:var(--font-mono); font-size:11px; letter-spacing:.18em; color:var(--ink-500); text-transform:uppercase;">
+          <span
+            class="meta"
+            style="
+              font-family: var(--font-mono);
+              font-size: 11px;
+              letter-spacing: 0.18em;
+              color: var(--ink-500);
+              text-transform: uppercase;
+            "
+          >
             {{ accords().length }} recettes · triées par score · Moteur V1.3
           </span>
         </div>
 
         @if (loadingAccords()) {
-          <p style="text-align:center; padding:40px; color:var(--ink-500);">Calcul des accords...</p>
+          <p style="text-align: center; padding: 40px; color: var(--ink-500)">
+            Calcul des accords...
+          </p>
         } @else if (accordsError()) {
-          <p class="err" style="text-align:center; padding:40px;">{{ accordsError() }}</p>
+          <p class="err" style="text-align: center; padding: 40px">
+            {{ accordsError() }}
+          </p>
         } @else if (accords().length === 0) {
-          <div style="text-align:center; padding:60px 40px; color:var(--ink-500);">
-            <h3 style="font-family:var(--font-serif); font-size:22px; color:var(--bordeaux-900); margin-bottom:8px;">Aucune recette accordée</h3>
-            <p style="font-size:14px;">Aucune recette publiée ne s'accorde actuellement avec cette boisson.</p>
+          <div
+            style="
+              text-align: center;
+              padding: 60px 40px;
+              color: var(--ink-500);
+            "
+          >
+            <h3
+              style="
+                font-family: var(--font-serif);
+                font-size: 22px;
+                color: var(--bordeaux-900);
+                margin-bottom: 8px;
+              "
+            >
+              Aucune recette accordée
+            </h3>
+            <p style="font-size: 14px">
+              Aucune recette publiée ne s'accorde actuellement avec cette
+              boisson.
+            </p>
           </div>
         } @else {
-          <div class="accord-list" style="display:flex; flex-direction:column; gap:14px;">
+          <div
+            class="accord-list"
+            style="display: flex; flex-direction: column; gap: 14px"
+          >
             @for (a of accords(); track a.idAccord; let i = $index) {
-              <a class="accord-card"
-                 [class.featured]="i === 0"
-                 [routerLink]="['/recettes', a.idRecette]"
-                 style="display:flex; gap:24px; padding:22px 24px; background:#fff; border:1px solid var(--cream-200); border-radius:var(--radius-lg); align-items:flex-start; text-decoration:none; cursor:pointer; transition:box-shadow .2s;"
-                 [style.border-color]="i === 0 ? 'var(--gold-500)' : 'var(--cream-200)'"
-                 [style.box-shadow]="i === 0 ? '0 4px 14px rgba(184,146,58,0.15)' : 'none'">
+              <a
+                class="accord-card"
+                [class.featured]="i === 0"
+                [routerLink]="['/recettes', a.idRecette]"
+                style="
+                  display: flex;
+                  gap: 24px;
+                  padding: 22px 24px;
+                  background: #fff;
+                  border: 1px solid var(--cream-200);
+                  border-radius: var(--radius-lg);
+                  align-items: flex-start;
+                  text-decoration: none;
+                  cursor: pointer;
+                  transition: box-shadow 0.2s;
+                "
+                [style.border-color]="
+                  i === 0 ? 'var(--gold-500)' : 'var(--cream-200)'
+                "
+                [style.box-shadow]="
+                  i === 0 ? '0 4px 14px rgba(184,146,58,0.15)' : 'none'
+                "
+              >
+                <app-score-gauge
+                  [score]="a.scoreCompatibilite"
+                  [size]="88"
+                ></app-score-gauge>
 
-                <app-score-gauge [score]="a.scoreCompatibilite" [size]="88"></app-score-gauge>
-
-                <div class="accord-body" style="flex:1; min-width:0;">
-                  <div style="font-family:var(--font-mono); font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-500); margin-bottom:4px;">
-                    @if (a.typePlat) { {{ a.typePlat }} }
-                    @if (a.difficulte) { · {{ a.difficulte }} }
-                    @if (formatTempsRecette(a.tempsPreparation, a.tempsCuisson)) { · {{ formatTempsRecette(a.tempsPreparation, a.tempsCuisson) }} }
+                <div class="accord-body" style="flex: 1; min-width: 0">
+                  <div
+                    style="
+                      font-family: var(--font-mono);
+                      font-size: 11px;
+                      letter-spacing: 0.15em;
+                      text-transform: uppercase;
+                      color: var(--ink-500);
+                      margin-bottom: 4px;
+                    "
+                  >
+                    @if (a.typePlat) {
+                      {{ a.typePlat }}
+                    }
+                    @if (a.difficulte) {
+                      · {{ a.difficulte }}
+                    }
+                    @if (
+                      formatTempsRecette(a.tempsPreparation, a.tempsCuisson)
+                    ) {
+                      ·
+                      {{
+                        formatTempsRecette(a.tempsPreparation, a.tempsCuisson)
+                      }}
+                    }
                   </div>
 
-                  <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:8px; flex-wrap:wrap;">
-                    <h3 style="font-family:var(--font-serif); font-weight:500; font-size:22px; color:var(--bordeaux-900); margin:0;">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: baseline;
+                      gap: 12px;
+                      margin-bottom: 8px;
+                      flex-wrap: wrap;
+                    "
+                  >
+                    <h3
+                      style="
+                        font-family: var(--font-serif);
+                        font-weight: 500;
+                        font-size: 22px;
+                        color: var(--bordeaux-900);
+                        margin: 0;
+                      "
+                    >
                       {{ a.titre }}
                     </h3>
                     @if (a.niveauConfiance !== null) {
-                      <span style="font-size:12px; color:var(--ink-500);">
-                        Fiabilité <b style="color:var(--ink-900);">{{ labelConfiance(a.niveauConfiance) }}</b>
+                      <span style="font-size: 12px; color: var(--ink-500)">
+                        Fiabilité
+                        <b style="color: var(--ink-900)">{{
+                          labelConfiance(a.niveauConfiance)
+                        }}</b>
                       </span>
                     }
                   </div>
 
-                  <p style="font-size:14px; color:var(--ink-700); line-height:1.5; margin:0 0 12px;">
+                  <p
+                    style="
+                      font-size: 14px;
+                      color: var(--ink-700);
+                      line-height: 1.5;
+                      margin: 0 0 12px;
+                    "
+                  >
                     {{ a.justification }}
                   </p>
 
-                  <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 6px;
+                      flex-wrap: wrap;
+                    "
+                  >
                     @if (splitRegles(a.reglesSatisfaites).length > 0) {
-                      <span style="font-family:var(--font-mono); font-size:10px; letter-spacing:.15em; color:var(--ink-500); text-transform:uppercase; margin-right:4px;">Règles ·</span>
-                      @for (regle of splitRegles(a.reglesSatisfaites); track regle) {
+                      <span
+                        style="
+                          font-family: var(--font-mono);
+                          font-size: 10px;
+                          letter-spacing: 0.15em;
+                          color: var(--ink-500);
+                          text-transform: uppercase;
+                          margin-right: 4px;
+                        "
+                        >Règles ·</span
+                      >
+                      @for (
+                        regle of splitRegles(a.reglesSatisfaites);
+                        track regle
+                      ) {
                         <span class="pill pill-rule">{{ regle }}</span>
                       }
                     }
                     @if (a.malusApplique && a.malusApplique > 0) {
-                      <span style="margin-left:auto; font-size:11px; color:var(--terracotta-700); font-family:var(--font-mono);">
+                      <span
+                        style="
+                          margin-left: auto;
+                          font-size: 11px;
+                          color: var(--terracotta-700);
+                          font-family: var(--font-mono);
+                        "
+                      >
                         Malus −{{ a.malusApplique }}
                       </span>
                     }
@@ -274,8 +805,6 @@
           </div>
         }
       </div>
-
     }
-
   </div>
 </div>

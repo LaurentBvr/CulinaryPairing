@@ -16,4 +16,5 @@ public class BoissonListItemDto
     public string? Cepage { get; set; }
     public decimal? DegreAlcool { get; set; }
     public string? Corps { get; set; }
+    public string? ImageUrl { get; set; }
 }
