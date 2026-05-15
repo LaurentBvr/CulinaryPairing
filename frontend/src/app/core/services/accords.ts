@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 
 export interface Accord {
   idAccord: number;
+  idBoisson: number; 
   typeAccord: string;
   justification: string;
   scoreCompatibilite: number;
