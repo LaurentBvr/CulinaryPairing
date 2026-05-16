@@ -22,6 +22,6 @@ public class PairingEngineResult
     public int MalusApplique { get; init; }         // R16bis
     public bool Eliminatoire { get; init; }         // true si malus > 20
     public List<string> ReglesSatisfaites { get; init; } = new();
-    public string VersionMoteur { get; init; } = "1.3.1";
+    public string VersionMoteur { get; init; } = PairingEngineConstants.VersionMoteur;
     public string Justification { get; init; } = "";
 }

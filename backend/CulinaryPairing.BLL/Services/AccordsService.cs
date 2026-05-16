@@ -20,7 +20,7 @@ public class AccordsService : IAccordsService
 {
     private readonly CulinaryPairingDbContext _context;
     private readonly IPairingEngineService _engine;
-    private const string VersionMoteurCourante = "1.3.1";
+    private const string VersionMoteurCourante = PairingEngineConstants.VersionMoteur;
 
     public AccordsService(
         CulinaryPairingDbContext context,

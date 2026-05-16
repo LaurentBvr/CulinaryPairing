@@ -1,3 +1,5 @@
+using CulinaryPairing.BLL.PairingEngine;
+
 namespace CulinaryPairing.BLL.DTOs.Accords;
 
 public class AccordDto
@@ -12,7 +14,7 @@ public class AccordDto
 
     // V1.3 — traçabilité et invalidation cache
     public DateTime DateCalcul { get; set; }
-    public string VersionMoteur { get; set; } = "1.3.1";
+    public string VersionMoteur { get; set; } = PairingEngineConstants.VersionMoteur;
 
     public int IdBoisson { get; set; }
     public string? NomBoisson { get; set; }
