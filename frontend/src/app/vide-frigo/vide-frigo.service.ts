@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface IngredientDto {
   idIngredient: number;
@@ -24,7 +25,7 @@ export interface VideFrigoResultDto {
 
 @Injectable({ providedIn: 'root' })
 export class VideFrigoService {
-  private api = 'http://localhost:5011/api';
+  private api = `${environment.apiUrl}/api`;
 
   constructor(private http: HttpClient) {}
 
