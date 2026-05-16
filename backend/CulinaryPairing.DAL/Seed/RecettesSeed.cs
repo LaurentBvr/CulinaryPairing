@@ -242,5 +242,13 @@ public static class RecettesSeed
 
         await context.Recettes.AddRangeAsync(recettes);
         await context.SaveChangesAsync();
+
+        // V1.4 : association des images après attribution des IDs par la DB.
+        // Convention : /assets/recipes/{id_recette}.jpg (cf. frontend/public/assets/recipes/).
+        foreach (var r in recettes)
+        {
+            r.ImageUrl = $"/assets/recipes/{r.IdRecette}.jpg";
+        }
+        await context.SaveChangesAsync();
     }
 }
