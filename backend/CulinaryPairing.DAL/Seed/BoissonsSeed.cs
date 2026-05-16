@@ -278,5 +278,13 @@ public static class BoissonsSeed
 
         await context.Boissons.AddRangeAsync(boissons);
         await context.SaveChangesAsync();
+
+        // V1.4 : association des images après attribution des IDs par la DB.
+        // Convention : /assets/boissons/{id_boisson}.jpg (cf. frontend/public/assets/boissons/).
+        foreach (var b in boissons)
+        {
+            b.ImageUrl = $"/assets/boissons/{b.IdBoisson}.jpg";
+        }
+        await context.SaveChangesAsync();
     }
 }
