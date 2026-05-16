@@ -21,7 +21,7 @@ public class Recette
 
     [MaxLength(500)]
     [Column("image_url")]
-    public string ImageUrl { get; set; } = "/images/placeholder.jpg";
+    public string? ImageUrl { get; set; }
 
     [Column("temps_preparation")]
     public int? TempsPreparation { get; set; }
