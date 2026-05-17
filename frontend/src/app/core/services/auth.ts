@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface User {
@@ -27,9 +27,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {
-    this.loadUserFromStorage();
-  }
+  constructor(private http: HttpClient) {}
 
   register(data: { prenom: string; nom: string; email: string; password: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${environment.apiUrl}/api/auth/register`, {
@@ -60,6 +58,28 @@ export class AuthService {
     return !!this.getToken();
   }
 
+  /**
+   * Ré-hydrate l'utilisateur depuis le token JWT stocké en localStorage.
+   * Appelée au bootstrap via provideAppInitializer dans app.config.ts,
+   * ce qui garantit que currentUser$ est résolu AVANT que le router
+   * n'évalue les routes (élimine la race condition guard / composant).
+   * Retourne toujours une Promise résolue, succès ou échec.
+   */
+  async tryRestoreSession(): Promise<void> {
+    const token = this.getToken();
+    if (!token) return;
+
+    try {
+      const user = await firstValueFrom(
+        this.http.get<User>(`${environment.apiUrl}/api/auth/me`)
+      );
+      this.currentUserSubject.next(user);
+    } catch {
+      // Token invalide ou expiré : on nettoie pour éviter une boucle d'erreurs
+      this.logout();
+    }
+  }
+
   private handleAuth(res: AuthResponse): void {
     localStorage.setItem(this.TOKEN_KEY, res.token);
     this.currentUserSubject.next({
@@ -68,15 +88,6 @@ export class AuthService {
       nom: res.nom,
       email: res.email,
       role: res.role
-    });
-  }
-
-  private loadUserFromStorage(): void {
-    const token = this.getToken();
-    if (!token) return;
-    this.http.get<User>(`${environment.apiUrl}/api/auth/me`).subscribe({
-      next: user => this.currentUserSubject.next(user),
-      error: () => this.logout()
     });
   }
 }
