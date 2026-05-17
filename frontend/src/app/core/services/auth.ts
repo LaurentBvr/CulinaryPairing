@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, firstValueFrom, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -26,6 +27,7 @@ export class AuthService {
   private readonly TOKEN_KEY = 'auth_token';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
+  private readonly router = inject(Router);
 
   constructor(private http: HttpClient) {}
 
@@ -48,6 +50,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     this.currentUserSubject.next(null);
+    this.router.navigate(['/recettes']);
   }
 
   getToken(): string | null {
