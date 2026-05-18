@@ -54,9 +54,9 @@
             @for (c of group.items; track c.idContrainte) {
               <label class="cp-check"
                      [class.is-on]="isSelected(c.idContrainte)"
-                     [class.regime]="isSelected(c.idContrainte) && group.type === 'Choix'"
-                     [class.allergie]="isSelected(c.idContrainte) && group.type === 'Sante'"
-                     [class.religieux]="isSelected(c.idContrainte) && group.type === 'Religieux'">
+                     [class.regime]="isSelected(c.idContrainte) && group.type === 'Regime'"
+                     [class.allergie]="isSelected(c.idContrainte) && group.type === 'Allergie'"
+                     [class.conviction]="isSelected(c.idContrainte) && group.type === 'Conviction'">
                 <input
                   [id]="'profile-contrainte-' + c.idContrainte"
                   [name]="'profile-contrainte-' + c.idContrainte"

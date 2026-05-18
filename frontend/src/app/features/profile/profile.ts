@@ -28,15 +28,15 @@ export class Profile implements OnInit {
   error = '';
 
   private readonly typeLabels: Record<string, string> = {
-    'Choix': 'Régimes & choix personnels',
-    'Sante': 'Allergies & santé',
-    'Religieux': 'Convictions religieuses'
+    'Regime': 'Régimes alimentaires',
+    'Allergie': 'Allergies',
+    'Conviction': 'Convictions'
   };
 
   private readonly typeHints: Record<string, string> = {
-    'Choix': 'Régimes que vous suivez par choix : végétarien, vegan, etc. Influence le filtre R9 sur les recettes.',
-    'Sante': 'Allergies et intolérances alimentaires. Les recettes incompatibles seront masquées (R9 strict).',
-    'Religieux': 'Convictions et restrictions religieuses : casher, halal, etc. Mêmes règles de filtrage.'
+    'Regime': 'Régimes que vous suivez : végétarien, végan, sans gluten, sans lactose. Influence le filtre R9 sur les recettes.',
+    'Allergie': 'Allergies alimentaires strictes (arachides, fruits de mer, etc.). Les recettes incompatibles seront masquées (R9 strict).',
+    'Conviction': 'Convictions religieuses ou éthiques : halal, casher, etc. Les recettes non-conformes seront masquées.'
   };
 
   ngOnInit(): void {
@@ -61,7 +61,7 @@ export class Profile implements OnInit {
       if (!map.has(c.type)) map.set(c.type, []);
       map.get(c.type)!.push(c);
     }
-    const order = ['Choix', 'Sante', 'Religieux'];
+    const order = ['Regime', 'Allergie', 'Conviction'];
     return order
       .filter(t => map.has(t))
       .map(t => ({

@@ -22,8 +22,8 @@ html,body{ margin:0; padding:0; background: var(--cream-50); color: var(--ink-90
 .pill-regime .dot{background:var(--sage-500)}
 .pill-allergie{background:var(--terracotta-100);color:var(--terracotta-700);border-color:#ecc5b1}
 .pill-allergie .dot{background:var(--terracotta-500)}
-.pill-religieux{background:var(--indigo-100);color:var(--indigo-700);border-color:#c5cdde}
-.pill-religieux .dot{background:var(--indigo-500)}
+.pill-conviction{background:var(--indigo-100);color:var(--indigo-700);border-color:#c5cdde}
+.pill-conviction .dot{background:var(--indigo-500)}
 .pill-neutral{background:var(--cream-100);color:var(--ink-700);border-color:var(--cream-300)}
 .pill-rule{font-family:var(--font-mono);font-size:11px;padding:3px 8px;background:var(--bordeaux-100);color:var(--bordeaux-900);border-radius:var(--radius-sm);border:1px solid #e6cdd0;letter-spacing:.03em}
 

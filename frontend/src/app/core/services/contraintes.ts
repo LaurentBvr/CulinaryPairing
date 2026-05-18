@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 export interface ContrainteDto {
   idContrainte: number;
   nom: string;
-  type: string; // 'Choix' | 'Sante' | 'Religieux'
+  type: string; // 'Regime' | 'Allergie' | 'Conviction'
 }
 
 @Injectable({ providedIn: 'root' })

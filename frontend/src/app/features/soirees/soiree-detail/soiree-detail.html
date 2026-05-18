@@ -79,9 +79,9 @@
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
             @for (c of soiree.contraintesAgregees; track c.idContrainte) {
               <span class="pill"
-                    [class.pill-regime]="c.type === 'Choix'"
-                    [class.pill-allergie]="c.type === 'Sante'"
-                    [class.pill-religieux]="c.type === 'Religieux'">
+                    [class.pill-regime]="c.type === 'Regime'"
+                    [class.pill-allergie]="c.type === 'Allergie'"
+                    [class.pill-conviction]="c.type === 'Conviction'">
                 <span class="dot"></span>{{ c.nom }}
               </span>
             }
