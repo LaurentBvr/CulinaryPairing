@@ -11,6 +11,7 @@ using CulinaryPairing.BLL.Substitution;
 using CulinaryPairing.BLL.Favoris;
 using CulinaryPairing.BLL.Contraintes;
 using CulinaryPairing.BLL.Soirees;
+using CulinaryPairing.BLL.Historique;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,6 +105,7 @@ builder.Services.AddScoped<IContraintesService, ContraintesService>();
 builder.Services.AddScoped<ISoireesService, SoireesService>();
 builder.Services.AddScoped<IMenusService, MenusService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
+builder.Services.AddScoped<IHistoriqueService, HistoriqueService>();
 
 var app = builder.Build();
 
