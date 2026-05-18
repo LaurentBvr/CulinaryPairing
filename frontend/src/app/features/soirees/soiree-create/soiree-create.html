@@ -6,7 +6,7 @@
       <div>
         <div class="eyebrow">— Création de soirée —</div>
         <h1>Nouvelle <em>soirée</em>.</h1>
-        <p class="lede">Renseignez vos invités, leurs contraintes alimentaires, et vos préférences. Le moteur sommelier filtrera ensuite les recettes adaptées et suggérera les accords boissons.</p>
+        <p class="lede">Renseignez vos invités, leurs contraintes alimentaires, et vos préférences. Le moteur sommelier filtrera ensuite les recettes adaptées et suggèrera les accords boissons.</p>
       </div>
       <div class="right">
         {{ form.value.nombrePersonnes || 0 }}&nbsp;personnes<br>
@@ -46,17 +46,17 @@
         <legend><span class="legend-num">— 02 —</span>Contraintes alimentaires des invités</legend>
         <p class="help">Cochez toutes les contraintes à respecter. Les recettes incompatibles seront masquées du menu.</p>
 
-        @if (contraintesParType('Choix').length > 0) {
+        @if (contraintesParType('Regime').length > 0) {
           <div style="margin-bottom:18px;">
-            <h4 style="font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-500); text-transform:uppercase; margin:0 0 10px;">— Régimes & choix personnels —</h4>
+            <h4 style="font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-500); text-transform:uppercase; margin:0 0 10px;">— Régimes alimentaires —</h4>
             <div class="check-grid">
-              @for (c of contraintesParType('Choix'); track c.idContrainte) {
+              @for (c of contraintesParType('Regime'); track c.idContrainte) {
                 <label class="cp-check"
                        [class.is-on]="estSelectionnee(c.idContrainte)"
                        [class.regime]="estSelectionnee(c.idContrainte)">
                   <input
-                    [id]="'contrainte-choix-' + c.idContrainte"
-                    [name]="'contrainte-choix-' + c.idContrainte"
+                    [id]="'contrainte-regime-' + c.idContrainte"
+                    [name]="'contrainte-regime-' + c.idContrainte"
                     type="checkbox"
                     [checked]="estSelectionnee(c.idContrainte)"
                     (change)="toggleContrainte(c.idContrainte)" />
@@ -67,17 +67,17 @@
           </div>
         }
 
-        @if (contraintesParType('Sante').length > 0) {
+        @if (contraintesParType('Allergie').length > 0) {
           <div style="margin-bottom:18px;">
-            <h4 style="font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-500); text-transform:uppercase; margin:0 0 10px;">— Allergies & santé —</h4>
+            <h4 style="font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-500); text-transform:uppercase; margin:0 0 10px;">— Allergies —</h4>
             <div class="check-grid">
-              @for (c of contraintesParType('Sante'); track c.idContrainte) {
+              @for (c of contraintesParType('Allergie'); track c.idContrainte) {
                 <label class="cp-check"
                        [class.is-on]="estSelectionnee(c.idContrainte)"
                        [class.allergie]="estSelectionnee(c.idContrainte)">
                   <input
-                    [id]="'contrainte-sante-' + c.idContrainte"
-                    [name]="'contrainte-sante-' + c.idContrainte"
+                    [id]="'contrainte-allergie-' + c.idContrainte"
+                    [name]="'contrainte-allergie-' + c.idContrainte"
                     type="checkbox"
                     [checked]="estSelectionnee(c.idContrainte)"
                     (change)="toggleContrainte(c.idContrainte)" />
@@ -88,17 +88,17 @@
           </div>
         }
 
-        @if (contraintesParType('Religieux').length > 0) {
+        @if (contraintesParType('Conviction').length > 0) {
           <div>
-            <h4 style="font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-500); text-transform:uppercase; margin:0 0 10px;">— Convictions religieuses —</h4>
+            <h4 style="font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--ink-500); text-transform:uppercase; margin:0 0 10px;">— Convictions —</h4>
             <div class="check-grid">
-              @for (c of contraintesParType('Religieux'); track c.idContrainte) {
+              @for (c of contraintesParType('Conviction'); track c.idContrainte) {
                 <label class="cp-check"
                        [class.is-on]="estSelectionnee(c.idContrainte)"
-                       [class.religieux]="estSelectionnee(c.idContrainte)">
+                       [class.conviction]="estSelectionnee(c.idContrainte)">
                   <input
-                    [id]="'contrainte-relig-' + c.idContrainte"
-                    [name]="'contrainte-relig-' + c.idContrainte"
+                    [id]="'contrainte-conviction-' + c.idContrainte"
+                    [name]="'contrainte-conviction-' + c.idContrainte"
                     type="checkbox"
                     [checked]="estSelectionnee(c.idContrainte)"
                     (change)="toggleContrainte(c.idContrainte)" />

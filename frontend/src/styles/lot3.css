@@ -17,7 +17,7 @@
 .cp-check.is-on{ background: var(--bordeaux-100); border-color: var(--bordeaux-500); color: var(--bordeaux-900); font-weight: 500; }
 .cp-check.is-on.regime{ background: var(--sage-100); border-color: #cfdcc1; color: var(--sage-700); }
 .cp-check.is-on.allergie{ background: var(--terracotta-100); border-color: #ecc5b1; color: var(--terracotta-700); }
-.cp-check.is-on.religieux{ background: var(--indigo-100); border-color: #c5cdde; color: var(--indigo-700); }
+.cp-check.is-on.conviction{ background: var(--indigo-100); border-color: #c5cdde; color: var(--indigo-700); }
 .cp-check .lab-mini{ font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em; color: var(--ink-500); margin-left: auto; text-transform: uppercase; }
 
 /* Radio group : Avec / Sans alcool */

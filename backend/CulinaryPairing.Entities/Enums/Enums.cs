@@ -23,9 +23,9 @@ public enum NiveauCuisine
 
 public enum TypeContrainte
 {
-    Religieux,
-    Sante,
-    Choix
+    Allergie,
+    Regime,
+    Conviction
 }
 
 public enum Difficulte
