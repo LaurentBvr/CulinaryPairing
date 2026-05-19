@@ -1,0 +1,26 @@
+@if (loading()) {
+  <div class="hist-empty">Chargement de votre historique...</div>
+} @else if (recettes().length > 0) {
+  <section class="hist-section">
+    <div class="hist-head">
+      <h3>Vos dernières recettes consultées</h3>
+    </div>
+    <div class="hist-scroll">
+      @for (r of recettes(); track r.idRecette) {
+        <a class="hist-card" [routerLink]="['/recettes', r.idRecette]">
+          <div class="hist-img" [class.ph-stripes]="!r.imageUrl">
+            @if (r.imageUrl) {
+              <img [src]="r.imageUrl" [alt]="r.titre" loading="lazy" />
+            } @else {
+              <span class="lab">[ {{ r.titre }} ]</span>
+            }
+          </div>
+          <div class="hist-body">
+            <span class="pill pill-neutral">{{ r.typePlat }}</span>
+            <h4 class="hist-title">{{ r.titre }}</h4>
+          </div>
+        </a>
+      }
+    </div>
+  </section>
+}

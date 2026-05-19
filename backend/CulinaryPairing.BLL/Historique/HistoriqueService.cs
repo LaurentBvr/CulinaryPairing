@@ -77,7 +77,7 @@ public class HistoriqueService : IHistoriqueService
                     IdRecette = r.IdRecette,
                     Titre = r.Titre,
                     ImageUrl = r.ImageUrl,
-                    TypePlat = r.TypePlat.ToString(),
+                    TypePlat = r.TypePlat.ToString() ?? string.Empty,
                     DerniereConsultation = x.DerniereConsultation
                 })
             .OrderByDescending(d => d.DerniereConsultation)
