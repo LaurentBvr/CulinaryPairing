@@ -104,6 +104,16 @@ public class CulinaryPairingDbContext : DbContext
             .HasForeignKey(r => r.IdUtilisateur)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // V1.4 - Index de performance Recette : filtre TypePlat (Mode Soirée, RecettePicker)
+        // et filtre Statut (filtrage 'Publiee' sur toutes les pages publiques).
+        modelBuilder.Entity<Recette>()
+            .HasIndex(r => r.TypePlat)
+            .HasDatabaseName("IX_Recette_TypePlat");
+
+        modelBuilder.Entity<Recette>()
+            .HasIndex(r => r.Statut)
+            .HasDatabaseName("IX_Recette_Statut");
+
         // ----- UtilisateurContrainte (M:N) -----
         modelBuilder.Entity<UtilisateurContrainte>()
             .HasOne(uc => uc.Utilisateur)
@@ -164,6 +174,11 @@ public class CulinaryPairingDbContext : DbContext
             .WithMany(c => c.Ingredients)
             .HasForeignKey(ic => ic.IdContrainte)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // V1.4 - Index Boisson : filtre par type_boisson (page boissons, accord inversé filtré)
+        modelBuilder.Entity<Boisson>()
+            .HasIndex(b => b.TypeBoisson)
+            .HasDatabaseName("IX_Boisson_Type");
 
         // ----- Accord -----
         modelBuilder.Entity<Accord>()
@@ -332,5 +347,14 @@ public class CulinaryPairingDbContext : DbContext
             .WithMany(r => r.Historiques)
             .HasForeignKey(h => h.IdRecette)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        // V1.4 - Index composite pour widget historique :
+        //   Q1 dedup AnyAsync(WHERE id_utilisateur=X AND id_recette=Y AND date >= seuil) → seek
+        //   Q2 widget GroupBy(id_recette).Max(date) WHERE id_utilisateur=X → scan ordonné
+        // DESC sur date_consultation = MAX direct sans tri additionnel.
+        modelBuilder.Entity<HistoriqueConsultation>()
+            .HasIndex(h => new { h.IdUtilisateur, h.IdRecette, h.DateConsultation })
+            .IsDescending(false, false, true)
+            .HasDatabaseName("IX_Historique_Utilisateur_Recette_Date");
     }
 }
