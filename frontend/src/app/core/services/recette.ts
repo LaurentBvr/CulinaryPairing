@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ContrainteDto } from './contraintes';
 
-export type ModeAdaptation = 'original' | 'vegetarien' | 'vegan';
+export type ModeAdaptation = 'original' | 'vegetarien' | 'vegan' | 'sans-gluten' | 'sans-lactose';
 
 export interface SubstitutIngredient {
   idIngredient: number;

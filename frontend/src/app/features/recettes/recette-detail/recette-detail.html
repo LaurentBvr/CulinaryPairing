@@ -104,11 +104,11 @@
         </div>
       }
 
-      <!-- Mode toggle (si adaptable) -->
-      @if (r.adaptableVege || r.adaptableVegan) {
+      <!-- Mode toggle (R17/R18 vege/vegan + R17bis/R18bis sans-gluten/sans-lactose V1.4) -->
+      @if (r) {
         <div
           class="mode-toggle"
-          style="display: flex; gap: 8px; margin-bottom: 32px"
+          style="display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap"
         >
           <button
             type="button"
@@ -137,7 +137,25 @@
             [disabled]="!r.adaptableVegan"
             (click)="changeMode('vegan')"
           >
-            Végan
+           Végan
+          </button>
+          <button
+            type="button"
+            class="btn"
+            [class.btn-primary]="mode() === 'sans-gluten'"
+            [class.btn-secondary]="mode() !== 'sans-gluten'"
+            (click)="changeMode('sans-gluten')"
+          >
+            Sans gluten
+          </button>
+          <button
+            type="button"
+            class="btn"
+            [class.btn-primary]="mode() === 'sans-lactose'"
+            [class.btn-secondary]="mode() !== 'sans-lactose'"
+            (click)="changeMode('sans-lactose')"
+          >
+            Sans lactose
           </button>
         </div>
 
@@ -158,7 +176,11 @@
               {{
                 mode() === "vegan"
                   ? "adaptable végan"
-                  : "adaptable végétarienne"
+                  : mode() === "vegetarien"
+                  ? "adaptable végétarienne"
+                  : mode() === "sans-gluten"
+                  ? "adaptable sans gluten"
+                  : "adaptable sans lactose"
               }}
             </div>
           } @else {

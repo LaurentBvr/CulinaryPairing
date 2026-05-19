@@ -5,6 +5,11 @@ namespace CulinaryPairing.BLL.Substitution;
 
 public class SubstitutionService : ISubstitutionService
 {
+    // Noms exacts des contraintes définis dans ContraintesSeed.cs.
+    // Référencés ici pour les modes SansGluten/SansLactose (R17bis/R18bis, V1.4).
+    private const string CONTRAINTE_SANS_GLUTEN = "Sans gluten";
+    private const string CONTRAINTE_SANS_LACTOSE = "Sans lactose";
+
     public RecetteAdapteeDto AdapterRecette(
         IEnumerable<RecetteIngredient> ingredients,
         IEnumerable<SubstitutionIngredient> substitutionsDisponibles,
@@ -26,19 +31,34 @@ public class SubstitutionService : ISubstitutionService
                 EstVegan = ing.EstVegan
             };
 
-            // R17/R18 : substitution requise uniquement si l'ingrédient enfreint le mode demandé
+            // R17/R18 + R17bis/R18bis : détection du besoin de substitution
+            // selon le mode demandé.
+            // - Vege/Vegan : flags EstVege/EstVegan sur Ingredient (V1.0).
+            // - SansGluten/SansLactose : réutilisation de IngredientContrainte
+            //   (table V1.3 R9/R16) pour ne pas dupliquer la connaissance domaine.
+            //   ⚠️ Prérequis : le caller DOIT inclure ing.Contraintes.Contrainte
+            //   via .ThenInclude() pour les modes sans-gluten/sans-lactose.
             bool besoinSub = mode switch
             {
                 ModeAdaptation.Vegetarien => !ing.EstVege,
                 ModeAdaptation.Vegan => !ing.EstVegan,
+                ModeAdaptation.SansGluten => ing.Contraintes
+                    .Any(ic => ic.Contrainte?.Nom == CONTRAINTE_SANS_GLUTEN),
+                ModeAdaptation.SansLactose => ing.Contraintes
+                    .Any(ic => ic.Contrainte?.Nom == CONTRAINTE_SANS_LACTOSE),
                 _ => false
             };
 
             if (besoinSub)
             {
-                var typeAttendu = mode == ModeAdaptation.Vegan
-                    ? TypeSubstitution.Vegan
-                    : TypeSubstitution.Vegetarien;
+                var typeAttendu = mode switch
+                {
+                    ModeAdaptation.Vegetarien => TypeSubstitution.Vegetarien,
+                    ModeAdaptation.Vegan => TypeSubstitution.Vegan,
+                    ModeAdaptation.SansGluten => TypeSubstitution.SansGluten,
+                    ModeAdaptation.SansLactose => TypeSubstitution.SansLactose,
+                    _ => throw new InvalidOperationException($"Mode non géré : {mode}")
+                };
 
                 var sub = subs.FirstOrDefault(s =>
                     s.IdIngredientOriginal == ing.IdIngredient

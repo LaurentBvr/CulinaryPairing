@@ -4,5 +4,7 @@ public enum ModeAdaptation
 {
     Original,
     Vegetarien,
-    Vegan
+    Vegan,
+    SansGluten,
+    SansLactose
 }

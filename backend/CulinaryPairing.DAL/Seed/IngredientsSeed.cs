@@ -1,18 +1,25 @@
+using Microsoft.EntityFrameworkCore;
 using CulinaryPairing.Entities.Models;
 
 namespace CulinaryPairing.DAL.Seed;
 
-// 20 ingrédients du CdC section 3.5.1, couvrant les 6 recettes de base
-// et servant de source pour les 9 substitutions végé/végane.
-// Ordre strict : les IDs implicites (1..20) sont référencés par les seeds
-// RecetteIngredient et SubstitutionIngredient ci-dessous.
+// Catalogue des ingrédients. Pattern différentiel par nom (résilient aux IDs) :
+// charge les noms existants en DB, n'ajoute que ce qui manque. Permet d'étendre
+// le catalogue dans le temps sans purge ni reset DB. Aligné sur le pattern
+// utilisé par IngredientsContraintesSeed et SubstitutionsSeed (homogénéisation V1.4).
+//
+// V1.0 : 20 ingrédients de base + 9 substitutions végé/végan.
+// V1.3 : +50 ingrédients pour les recettes 7..15 (canard, agneau, crevettes, etc.).
+// V1.3.1 : +3 substituts végétaux (Burger) + 12 compléments recettes.
+// V1.4 : +12 substituts pour modes sans-gluten, sans-lactose et compléments Vegan (R17bis/R18bis).
 public static class IngredientsSeed
 {
     public static async Task SeedAsync(CulinaryPairingDbContext context)
     {
-        if (context.Ingredients.Any()) return;
-
-        var ingredients = new List<Ingredient>
+        // Catalogue complet. L'ordre est conservé pour préserver les IDs implicites
+        // V1.0/V1.3 référencés historiquement par les autres seeds (RecetteIngredient, etc.).
+        // Les nouveaux ingrédients V1.4 sont ajoutés à la fin → IDs 86+ (non-bloquants).
+        var catalogue = new List<Ingredient>
         {
             // id = 1..4 : protéines et leurs substituts végé/végan
             new() { Nom = "Boeuf",                UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = false, EstVegan = false, Divisible = true,  CoutUnitaire = 0.025m },
@@ -133,10 +140,43 @@ public static class IngredientsSeed
             new() { Nom = "Ciboulette",           UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.045m },
             new() { Nom = "Pamplemousse",         UniteDefaut = "pièce",  EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = false, CoutUnitaire = 1.20m  },
             new() { Nom = "Crème balsamique",     UniteDefaut = "ml",     EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.025m },
-            new() { Nom = "Cebette",              UniteDefaut = "pièce",  EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = false, CoutUnitaire = 0.35m  }
+            new() { Nom = "Cebette",              UniteDefaut = "pièce",  EstAllergene = false, EstAlcool = false, EstVege = false, EstVegan = false, Divisible = false, CoutUnitaire = 0.35m  },
+
+            // ===== V1.4 — Substituts pour modes sans-gluten et sans-lactose (R17bis/R18bis) =====
+            // id = 86..91 : substituts sans gluten (5)
+            new() { Nom = "Farine de riz",                UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.004m },
+            new() { Nom = "Pâte brisée sans gluten",      UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = false, Divisible = true,  CoutUnitaire = 0.012m },
+            new() { Nom = "Pain à burger sans gluten",    UniteDefaut = "pièce",  EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = false, CoutUnitaire = 1.20m  },
+            new() { Nom = "Pain sans gluten en cubes",    UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.008m },
+            new() { Nom = "Tamari",                       UniteDefaut = "ml",     EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.015m },
+
+            // id = 92..96 : substituts sans lactose (5, produits laitiers délactosés)
+            new() { Nom = "Beurre sans lactose",          UniteDefaut = "g",      EstAllergene = true,  EstAlcool = false, EstVege = true,  EstVegan = false, Divisible = true,  CoutUnitaire = 0.020m },
+            new() { Nom = "Crème fraîche sans lactose",   UniteDefaut = "g",      EstAllergene = true,  EstAlcool = false, EstVege = true,  EstVegan = false, Divisible = true,  CoutUnitaire = 0.015m },
+            new() { Nom = "Lait sans lactose",            UniteDefaut = "ml",     EstAllergene = true,  EstAlcool = false, EstVege = true,  EstVegan = false, Divisible = true,  CoutUnitaire = 0.002m },
+            new() { Nom = "Parmesan sans lactose",        UniteDefaut = "g",      EstAllergene = true,  EstAlcool = false, EstVege = true,  EstVegan = false, Divisible = true,  CoutUnitaire = 0.040m },
+            new() { Nom = "Cheddar sans lactose",         UniteDefaut = "g",      EstAllergene = true,  EstAlcool = false, EstVege = true,  EstVegan = false, Divisible = true,  CoutUnitaire = 0.030m },
+
+            // id = 97 : complément Vegan (Lait d'avoine pour substituer Lait, trou du seed V1.3)
+            new() { Nom = "Lait d'avoine",                UniteDefaut = "ml",     EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.004m },
+
+            // id = 98 : substitut Vegetarien + Vegan pour Gélatine
+            new() { Nom = "Agar-agar",                    UniteDefaut = "g",      EstAllergene = false, EstAlcool = false, EstVege = true,  EstVegan = true,  Divisible = true,  CoutUnitaire = 0.180m }
         };
 
-        await context.Ingredients.AddRangeAsync(ingredients);
+        // Pattern différentiel : charge les noms déjà en DB, n'insère que les manquants.
+        // Idempotent — peut être relancé N fois sans dupliquer ni casser les FK existantes.
+        var nomsExistants = await context.Ingredients
+            .Select(i => i.Nom)
+            .ToListAsync();
+
+        var nouveaux = catalogue
+            .Where(c => !nomsExistants.Contains(c.Nom))
+            .ToList();
+
+        if (nouveaux.Count == 0) return;
+
+        await context.Ingredients.AddRangeAsync(nouveaux);
         await context.SaveChangesAsync();
     }
 }
