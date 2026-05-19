@@ -123,20 +123,25 @@ public class RecettesController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> GetById(int id, [FromQuery] string? mode = null)
     {
-        // R17/R18 : parse du mode d'adaptation (défaut = original, rétrocompat)
-        ModeAdaptation modeAdaptation;
-        if (string.IsNullOrEmpty(mode) || mode.Equals("original", StringComparison.OrdinalIgnoreCase))
-            modeAdaptation = ModeAdaptation.Original;
-        else if (mode.Equals("vegetarien", StringComparison.OrdinalIgnoreCase))
-            modeAdaptation = ModeAdaptation.Vegetarien;
-        else if (mode.Equals("vegan", StringComparison.OrdinalIgnoreCase))
-            modeAdaptation = ModeAdaptation.Vegan;
-        else
-            return BadRequest(new { error = $"Mode invalide : '{mode}'. Valeurs acceptées : original, vegetarien, vegan." });
+        // R17/R18 (V1.0 vege/vegan) + R17bis/R18bis (V1.4 sans-gluten/sans-lactose) :
+        // parse du mode kebab-case. Défaut = original (rétrocompat).
+        if (!ModeAdaptationExtensions.TryParseMode(mode, out var modeAdaptation))
+        {
+            return BadRequest(new
+            {
+                error = $"Mode invalide : '{mode}'. Valeurs acceptées : {string.Join(", ", ModeAdaptationExtensions.AllKebabValues)}."
+            });
+        }
 
+        // Include des contraintes par ingrédient nécessaire pour les modes
+        // SansGluten/SansLactose (le service lit ing.Contraintes.Contrainte.Nom).
+        // Coût négligeable sur GetById (1 recette, ~5-10 ingrédients) → on l'inclut
+        // systématiquement pour garder le code linéaire.
         var recette = await _context.Recettes
             .Include(r => r.Ingredients)
                 .ThenInclude(ri => ri.Ingredient)
+                    .ThenInclude(i => i.Contraintes)
+                        .ThenInclude(ic => ic.Contrainte)
             .Include(r => r.Etapes)
             .FirstOrDefaultAsync(r => r.IdRecette == id && r.Statut == StatutRecette.Publiee);
 
@@ -179,7 +184,7 @@ public class RecettesController : ControllerBase
             NombrePersonnesBase = recette.NombrePersonnesBase ?? 4,
             AdaptableVege = recette.AdaptableVege,
             AdaptableVegan = recette.AdaptableVegan,
-            Mode = modeAdaptation.ToString().ToLowerInvariant(),
+            Mode = modeAdaptation.ToKebabCase(),
             ContraintesViolees = contraintesViolees,
             StatutCompatibilite = CalculerStatutCompatibilite(contraintesViolees, recette.AdaptableVege, recette.AdaptableVegan),
             Ingredients = adaptee.Ingredients
@@ -212,10 +217,14 @@ public class RecettesController : ControllerBase
     /// <summary>
     /// R9 + R17/R18/R19 : statut ternaire de compatibilité d'une recette vis-à-vis des
     /// contraintes d'un utilisateur. Une recette est Adaptable si TOUTES les contraintes
-    /// violées sont résolvables par substitution (Végétarien/Végan uniquement, sous réserve
-    /// que la recette porte les flags AdaptableVege/AdaptableVegan). Les contraintes santé
-    /// (allergies, sans gluten, sans lactose) et religieuses (halal, casher) ne sont jamais
-    /// résolvables par le moteur de substitution V1.3.
+    /// violées sont résolvables par substitution.
+    /// 
+    /// V1.4 — Limitation connue (D23) : les contraintes "Sans gluten" et "Sans lactose"
+    /// peuvent désormais être résolues par substitution (R17bis/R18bis), mais ce statut
+    /// ne le reflète pas encore — il faudrait charger les substitutions par recette
+    /// pour vérifier l'adaptabilité complète, ce qui alourdirait GetAll. À traiter
+    /// en V1.5 (ajout de flags AdaptableSansGluten/AdaptableSansLactose sur Recette
+    /// ou calcul matérialisé en cache).
     /// </summary>
     private static string CalculerStatutCompatibilite(
         List<ContrainteDto> contraintesViolees,
