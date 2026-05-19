@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 import { RecetteService, Recette } from '../../core/services/recette';
+import { HistoriqueWidget } from './historique-widget/historique-widget';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, HistoriqueWidget],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })

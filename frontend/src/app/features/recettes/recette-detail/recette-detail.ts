@@ -7,6 +7,7 @@ import { AuthService } from '../../../core/services/auth';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScoreGauge } from '../../../shared/components/score-gauge/score-gauge';
+import { HistoriqueService } from '../../../core/services/historique';
 
 @Component({
   selector: 'app-recette-detail',
@@ -22,6 +23,7 @@ export class RecetteDetail implements OnInit {
   protected favorisService = inject(FavorisService);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private historiqueService = inject(HistoriqueService);
 
   recette = signal<Recette | null>(null);
   accords = signal<Accord[]>([]);
@@ -90,6 +92,14 @@ export class RecetteDetail implements OnInit {
         this.recette.set(data);
         this.personnesAffichees.set(data.nombrePersonnesBase ?? 4);
         this.loading.set(false);
+
+        // Enregistre la consultation si l'utilisateur est authentifie.
+        // Fire-and-forget : l'echec eventuel ne doit pas degrader l'UX.
+        if (this.auth.isLoggedIn()) {
+          this.historiqueService.enregistrer(this.idRecette).subscribe({
+            error: () => {}
+          });
+        }
       },
       error: () => { this.error.set('Recette introuvable.'); this.loading.set(false); }
     });
